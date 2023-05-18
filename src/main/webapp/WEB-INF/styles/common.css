@@ -74,6 +74,18 @@ body {
     border-right: 0px;
 }
 
+.section_baseline_600 {
+    opacity: 1;
+    margin-top: 16px;
+    margin-bottom: 0px;
+    margin-left: 50px;
+    margin-right: 50px;
+    border-top: 0px;
+    border-bottom: 3px solid #141637;
+    border-left: 0px;
+    border-right: 0px;
+}
+
 
 /* header */
 .header {
