@@ -7,7 +7,7 @@
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" href="..\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
     <link type="text/css" rel="stylesheet" href="..\styles\common.css">
-    <link type="text/css" rel="stylesheet" href="..\styles\index.css">
+    <link type="text/css" rel="stylesheet" href="..\styles\favorite.css">
 
     <!-- JavaScript -->
     <script type="text/javascript" src="..\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
@@ -65,7 +65,10 @@
 <section class="container-xl pad_0 section">
     <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
-        <div class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
+        <div class="col pad_0 section_row1_col1">
+            <span style="color: blue">LYH</span>
+            &nbsp;歡迎光臨~!
+        </div>
     </div>
 
     <!-- 水平分隔線 -->
@@ -219,7 +222,7 @@
             <div class="row mar_0 section_row3_col2_row1">
 
                 <div class="col pad_0">
-                    <span class="pad_0" style="font-size: 20px; color: #141637;">所有商品</span>
+                    <span class="pad_0" style="font-size: 20px; color: #141637;">商品收藏</span>
                     <hr class="mar_pad_0 section_baseline_100">
                 </div>
 
@@ -240,7 +243,7 @@
             <div class="row section_row3_col2_row2">
                 <div class="col d-flex justify-content-start flex-wrap pad_0">
 
-                    <!-- 第一個商品 -->
+                    <!-- 第一個收藏 -->
                     <div class="pad_0 product">
                         <div class="row mar_0">
                             <div class="col d-flex justify-content-center pad_0" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
@@ -262,97 +265,13 @@
                                 <span style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">$42900</span>
                             </div>
                             <div class="col-4 d-flex justify-content-end pad_0">
-                                <img src="../images/heart.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                <img src="../images/heart-fill.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                 <img src="../images/trolley.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                             </div>
                         </div>
                     </div>
 
-                    <!-- 第二個商品 -->
-                    <div class="pad_0 product">
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-center pad_0" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
-                                <img src="../images/2002.jpg" style="width: 206px; height: 298px;" >
-                            </div>
-                        </div>
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-start pad_0">
-                                <span style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px;">電吉他 B - 黑</span>
-                            </div>
-                        </div>
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-end pad_0">
-                                <span style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px;">庫存：3</span>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
-                            <div class="col d-flex justify-content-start pad_0">
-                                <span style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">$55200</span>
-                            </div>
-                            <div class="col-4 d-flex justify-content-end pad_0">
-                                <img src="../images/heart.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                <img src="../images/trolley.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 第三個商品 -->
-                    <div class="pad_0 product">
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-center pad_0" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
-                                <img src="../images/2003.jpg" style="width: 206px; height: 298px;" >
-                            </div>
-                        </div>
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-start pad_0">
-                                <span style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px;">電吉他 C - 白</span>
-                            </div>
-                        </div>
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-end pad_0">
-                                <span style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px;">庫存：5</span>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
-                            <div class="col d-flex justify-content-start pad_0">
-                                <span style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">$39900</span>
-                            </div>
-                            <div class="col-4 d-flex justify-content-end pad_0">
-                                <img src="../images/heart.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                <img src="../images/trolley.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 第四個商品 -->
-                    <div class="pad_0 product">
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-center pad_0" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
-                                <img src="../images/2004.jpg" style="width: 206px; height: 298px;" >
-                            </div>
-                        </div>
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-start pad_0">
-                                <span style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px;">電吉他 D - 白</span>
-                            </div>
-                        </div>
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-end pad_0">
-                                <span style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px;">庫存：6</span>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
-                            <div class="col d-flex justify-content-start pad_0">
-                                <span style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">$52900</span>
-                            </div>
-                            <div class="col-4 d-flex justify-content-end pad_0">
-                                <img src="../images/heart.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                <img src="../images/trolley.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 第五個商品 -->
+                    <!-- 第五個收藏 -->
                     <div class="pad_0 product">
                         <div class="row mar_0">
                             <div class="col d-flex justify-content-center pad_0" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
@@ -374,35 +293,7 @@
                                 <span style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">$22900</span>
                             </div>
                             <div class="col-4 d-flex justify-content-end pad_0">
-                                <img src="../images/heart.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                <img src="../images/trolley.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 第六個商品 -->
-                    <div class="pad_0 product">
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-center pad_0" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
-                                <img src="../images/2006.jpg" style="width: 206px; height: 298px;" >
-                            </div>
-                        </div>
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-start pad_0">
-                                <span style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px;">電吉他 F - 黑</span>
-                            </div>
-                        </div>
-                        <div class="row mar_0">
-                            <div class="col d-flex justify-content-end pad_0">
-                                <span style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px;">庫存：4</span>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
-                            <div class="col d-flex justify-content-start pad_0">
-                                <span style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">$45900</span>
-                            </div>
-                            <div class="col-4 d-flex justify-content-end pad_0">
-                                <img src="../images/heart.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                <img src="../images/heart-fill.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                 <img src="../images/trolley.svg" style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                             </div>
                         </div>
@@ -421,7 +312,7 @@
                             <li><a data-value="2" href="#" class="dropdown-item">第 2 頁</a></li>
                         </ul>
                     </div>
-                    <span class="pad_0" style="margin-top: 3px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; font-size: 16px; color: #141637;">商品數量：7</span>
+                    <span class="pad_0" style="margin-top: 3px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; font-size: 16px; color: #141637;">收藏數量：2</span>
                 </div>
             </div>
 
