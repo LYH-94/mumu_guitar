@@ -7,7 +7,7 @@
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" href="..\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
     <link type="text/css" rel="stylesheet" href="..\styles\common.css">
-    <link type="text/css" rel="stylesheet" href="..\styles\productDescription.css">
+    <link type="text/css" rel="stylesheet" href="..\styles\member_personalInformation.css">
 
     <!-- JavaScript -->
     <script type="text/javascript" src="..\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
@@ -72,7 +72,10 @@
 <section class="container-xl pad_0 section">
     <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
-        <div class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
+        <div class="col pad_0 section_row1_col1">
+            <span style="color: blue">LYH</span>
+            &nbsp;歡迎光臨~!
+        </div>
     </div>
 
     <!-- 水平分隔線 -->
@@ -81,37 +84,58 @@
     </div>
 
     <div class="row mar_0 section_row3">
-        <!-- 商品圖片 -->
-        <div class="col-5 section_row3_col1">
-            <img src="../images/2001.jpg" style="width: 100%; border: 3px solid #CDCDCD; border-radius: 5px;">
+        <!--左側邊欄-->
+        <div class="col-3 pad_0 section_row3_col1">
+            <div class="row mar_0 section_row3_col1_row1">
+                <span class="pad_0" style="font-size: 20px; color: #141637;">會員中心</span>
+                <hr class="mar_pad_0 section_baseline_100">
+
+                <span class="pad_0"
+                      style="margin-top: 10px; margin-bottom: 0px; margin-left: 10px; margin-right: 0px; font-size: 16px; color: #141637;"><a
+                        href="https://...">個人資料</a></span>
+                <span class="pad_0"
+                      style="margin-top: 10px; margin-bottom: 10px; margin-left: 10px; margin-right: 0px; font-size: 16px; color: #141637;"><a
+                        href="https://...">我的訂單</a></span>
+            </div>
         </div>
 
-        <!-- 商品訊息 -->
-        <div class="col section_row3_col2">
+        <div class="col-md section_row3_col2">
             <div class="row mar_0 section_row3_col2_row1">
-                <div class="col-4 pad_0 section_row3_col2_row1_co1">
-                    <span style="font-size: 32px; color: red;">$42900</span><br><br>
-                    <span style="font-size: 20px; color: #141637;">廠牌：A</span><br><br>
-                    <span style="font-size: 20px; color: #141637;">型號：ABC - 粉</span><br><br>
-                    <div class="d-flex align-items-center flex-wrap">
-                        <span style="font-size: 20px; color: #141637; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 50px;">庫存：5</span>
-                        <img src="../images/heart.svg" style="width: 26px; height: 26px;">
-                    </div>
-                </div>
+
                 <div class="col pad_0">
-                    <span style="font-size: 32px; color: #141637;">品名：電吉他 A - 粉</span><br><br>
-                    <span style="font-size: 20px; color: #141637;">粉白配色的電吉他，擁有獨特迷人的外觀和卓越的音樂表現。這款吉他採用了優質的木材和精密的工藝，確保了出色的音質和舒適的演奏體驗。</span>
+                    <span class="pad_0" style="font-size: 20px; color: #141637;">個人資料</span>
+                    <hr class="mar_pad_0 section_baseline_100">
                 </div>
+
             </div>
-            <div class="row justify-content-end section_row3_col2_row2">
-                <div class="col-7 d-flex justify-content-end pad_0">
-                    <div class="d-flex justify-content-center align-items-center" style="width: 120px; height: 42px;">
-                        <img src="../images/dash-circle.svg" style="width: 20px; height: 20px;">
-                        <span class="count">1</span>
-                        <img src="../images/plus-circle.svg" style="width: 20px; height: 20px;">
+            <div class="row section_row3_col2_row2">
+                <div class="pad_0">
+                    <span class="pad_0 form_text">帳號</span><br>
+                    <span class="pad_0 form_text inline" style="margin: 10px 0px 10px 0px">&nbsp;user01</span><br>
+
+                    <span class="pad_0 form_text">密碼</span><br>
+                    <span class="pad_0 form_text inline" style="margin: 10px 0px 10px 0px">&nbsp;******</span><br>
+
+                    <span class="pad_0 form_text">姓名</span><br>
+                    <span class="pad_0 form_text inline" style="margin: 10px 0px 10px 0px">&nbsp;LYH</span><br>
+
+                    <span class="pad_0 form_text">性別</span><br>
+                    <span class="pad_0 form_text inline" style="margin: 10px 0px 10px 0px">&nbsp;男</span><br>
+
+                    <span class="pad_0 form_text">生日</span><br>
+                    <span class="pad_0 form_text inline" style="margin: 10px 0px 10px 0px">&nbsp;yyyy/MM/dd</span><br>
+
+                    <span class="pad_0 form_text">手機號碼</span><br>
+                    <span class="pad_0 form_text inline" style="margin: 10px 0px 10px 0px">&nbsp;0912345678</span><br>
+
+                    <span class="pad_0 form_text">電子信箱</span><br>
+                    <span class="pad_0 form_text inline" style="margin: 10px 0px 10px 0px">&nbsp;abc123@gmail.com</span><br>
+
+                    <div class="d-flex justify-content-start">
+                        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 btn">
+                            修改
+                        </button>
                     </div>
-                    <button type="button" class="bor_pad_0 checkout_btn">立即結帳</button>
-                    <button type="button" class="bor_pad_0 add_btn">加入購物車</button>
                 </div>
             </div>
         </div>
@@ -163,7 +187,7 @@
             <div class="row mar_0">
                 <span class="pad_0"
                       style="width: 270px; margin-top: 0px; margin-bottom: 0px; margin-left: 30px; margin-right: 0px; font-size: 16px; color: #FFFFFF;">
-                    退貨雨取消訂單<br><br>
+                    退貨與取消訂單<br><br>
                     隱私聲明<br><br>
                 </span>
             </div>

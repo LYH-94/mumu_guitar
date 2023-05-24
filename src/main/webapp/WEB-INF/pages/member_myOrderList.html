@@ -7,7 +7,7 @@
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" href="..\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
     <link type="text/css" rel="stylesheet" href="..\styles\common.css">
-    <link type="text/css" rel="stylesheet" href="..\styles\productDescription.css">
+    <link type="text/css" rel="stylesheet" href="..\styles\member_myOrderList.css">
 
     <!-- JavaScript -->
     <script type="text/javascript" src="..\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
@@ -72,7 +72,10 @@
 <section class="container-xl pad_0 section">
     <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
-        <div class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
+        <div class="col pad_0 section_row1_col1">
+            <span style="color: blue">LYH</span>
+            &nbsp;歡迎光臨~!
+        </div>
     </div>
 
     <!-- 水平分隔線 -->
@@ -81,37 +84,97 @@
     </div>
 
     <div class="row mar_0 section_row3">
-        <!-- 商品圖片 -->
-        <div class="col-5 section_row3_col1">
-            <img src="../images/2001.jpg" style="width: 100%; border: 3px solid #CDCDCD; border-radius: 5px;">
+        <!--左側邊欄-->
+        <div class="col-3 pad_0 section_row3_col1">
+            <div class="row mar_0 section_row3_col1_row1">
+                <span class="pad_0" style="font-size: 20px; color: #141637;">會員中心</span>
+                <hr class="mar_pad_0 section_baseline_100">
+
+                <span class="pad_0"
+                      style="margin-top: 10px; margin-bottom: 0px; margin-left: 10px; margin-right: 0px; font-size: 16px; color: #141637;"><a
+                        href="https://...">個人資料</a></span>
+                <span class="pad_0"
+                      style="margin-top: 10px; margin-bottom: 10px; margin-left: 10px; margin-right: 0px; font-size: 16px; color: #141637;"><a
+                        href="https://...">我的訂單</a></span>
+            </div>
         </div>
 
-        <!-- 商品訊息 -->
-        <div class="col section_row3_col2">
+        <div class="col-md section_row3_col2">
             <div class="row mar_0 section_row3_col2_row1">
-                <div class="col-4 pad_0 section_row3_col2_row1_co1">
-                    <span style="font-size: 32px; color: red;">$42900</span><br><br>
-                    <span style="font-size: 20px; color: #141637;">廠牌：A</span><br><br>
-                    <span style="font-size: 20px; color: #141637;">型號：ABC - 粉</span><br><br>
-                    <div class="d-flex align-items-center flex-wrap">
-                        <span style="font-size: 20px; color: #141637; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 50px;">庫存：5</span>
-                        <img src="../images/heart.svg" style="width: 26px; height: 26px;">
+
+                <div class="col pad_0">
+                    <span class="pad_0" style="font-size: 20px; color: #141637;">我的訂單</span>
+                    <hr class="mar_pad_0 section_baseline_100">
+                </div>
+
+                <div class="col pad_0" style="text-align: right;">
+                    <!-- 搜尋訂單編號 -->
+                    <div class="d-flex d-flex justify-content-center align-items-center">
+                        <span class="pad_0" style="font-size: 20px; color: #141637;">搜尋訂單編號</span>
+                        <input type="text" name="search_order" value="" class="input_style">
+                        <button type="button" class="bor_pad_0 search_btn">確定</button>
                     </div>
                 </div>
-                <div class="col pad_0">
-                    <span style="font-size: 32px; color: #141637;">品名：電吉他 A - 粉</span><br><br>
-                    <span style="font-size: 20px; color: #141637;">粉白配色的電吉他，擁有獨特迷人的外觀和卓越的音樂表現。這款吉他採用了優質的木材和精密的工藝，確保了出色的音質和舒適的演奏體驗。</span>
+
+            </div>
+
+            <div class="row section_row3_col2_row2-1">
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 250px;">訂單編號</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">下單日期</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">訂單總額</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">發貨狀態</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">功能</div>
+            </div>
+
+            <div class="row section_row3_col2_row2-2" style="background-color: #FFFFFF">
+                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;">&nbsp;202305040115233278</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">2023-05-04
+                </div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">161600</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">未發貨</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">
+                    訂單詳情
                 </div>
             </div>
-            <div class="row justify-content-end section_row3_col2_row2">
-                <div class="col-7 d-flex justify-content-end pad_0">
-                    <div class="d-flex justify-content-center align-items-center" style="width: 120px; height: 42px;">
-                        <img src="../images/dash-circle.svg" style="width: 20px; height: 20px;">
-                        <span class="count">1</span>
-                        <img src="../images/plus-circle.svg" style="width: 20px; height: 20px;">
+
+            <div class="row section_row3_col2_row2-2" style="background-color: #D8D8D8">
+                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;">&nbsp;202304210835447843</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">2023-04-21
+                </div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">29900</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已發貨</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">
+                    訂單詳情
+                </div>
+            </div>
+
+            <div class="row section_row3_col2_row2-2" style="background-color: #FFFFFF">
+                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;">&nbsp;202302041125347421</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">2023-02-04
+                </div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">42900</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已簽收</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">
+                    訂單詳情
+                </div>
+            </div>
+
+            <div class="row section_row3_col2_row3">
+                <div class="col d-flex justify-content-center pad_0">
+                    <!-- 下拉式選單 - 換頁 -->
+                    <div class="dropdown" style="width: 85px;">
+                        <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                class="btn dropdown-toggle"
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">第
+                            1 頁
+                        </button>
+                        <ul id="dropdown-menu1" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a data-value="1" href="#" class="dropdown-item">第 1 頁</a></li>
+                            <li><a data-value="2" href="#" class="dropdown-item">第 2 頁</a></li>
+                        </ul>
                     </div>
-                    <button type="button" class="bor_pad_0 checkout_btn">立即結帳</button>
-                    <button type="button" class="bor_pad_0 add_btn">加入購物車</button>
+                    <span class="d-flex justify-content-center align-items-center pad_0"
+                          style="font-size: 16px; color: #141637;">訂單數量：3</span>
                 </div>
             </div>
         </div>
@@ -163,7 +226,7 @@
             <div class="row mar_0">
                 <span class="pad_0"
                       style="width: 270px; margin-top: 0px; margin-bottom: 0px; margin-left: 30px; margin-right: 0px; font-size: 16px; color: #FFFFFF;">
-                    退貨雨取消訂單<br><br>
+                    退貨與取消訂單<br><br>
                     隱私聲明<br><br>
                 </span>
             </div>

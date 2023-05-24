@@ -1,7 +1,7 @@
 /* My Custom Styles */
 
 
-/* orderDetail.css */
+/* member_personalInformation.css */
 .section {
     display: block;
 }
@@ -45,91 +45,63 @@
     background-color: #F8F8F8;
 }
 
-.section_row3_col1_row1 {
+.section_row3_col1 {
+    width: 300px;
     margin-top: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 0px;
     margin-left: 0px;
     margin-right: 0px;
+    padding: 0px 10px 0px 0px;
 }
 
-.section_row3_col1_row2 {
-    background-color: #D8D8D8;
-}
-
-.section_row3_col1_row3-1 {
-    margin-top: 0px;
-    margin-bottom: 10px;
-    margin-left: 20px;
-    margin-right: 0px;
-}
-
-.section_row3_col1_row3-2 {
-    margin-top: 0px;
-    margin-bottom: 10px;
-    margin-left: 20px;
-    margin-right: 0px;
+.section_row3_col1_row1 {
     border-top: 0px;
     border-bottom: 1px solid #CDCDCD;
     border-left: 0px;
     border-right: 0px;
 }
 
-.s_r3_c1_r3_div {
-    width: 200px;
-    font-size: 20px;
-    color: #141637;
-    margin: 0px 100px 10px 0px;
-}
-
-.section_row3_col1_row4-1 {
-    margin-top: 0px;
-    margin-bottom: 10px;
-    margin-left: 20px;
+.section_row3_col1_row2 {
+    margin-top: 10px;
+    margin-bottom: 50px;
+    margin-left: 0px;
     margin-right: 0px;
 }
 
-.section_row3_col1_row4-2 {
-    margin-top: 0px;
-    margin-bottom: 10px;
-    margin-left: 20px;
+.section_row3_col2 {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    margin-left: 0px;
     margin-right: 0px;
-}
-
-.s_r3_c1_r4_div {
-    font-size: 20px;
-    color: #141637;
-}
-
-.section_row3_col1_row5 {
-    margin-top: 0px;
-    margin-bottom: 10px;
-    margin-left: 20px;
-    margin-right: 0px;
-    border-top: 1px solid #CDCDCD;
+    border-top: 0px;
     border-bottom: 0px;
-    border-left: 0px;
+    border-left: 1px solid #CDCDCD;
     border-right: 0px;
-    padding-top: 10px;
+    padding-top: 0px;
     padding-bottom: 0px;
-    padding-left: 0px;
+    padding-left: 10px;
     padding-right: 0px;
 }
 
-.s_r3_c1_r5_div {
-    font-size: 20px;
-    color: #141637;
-    margin: 0px 0px 10px 0px;
+.section_row3_col2_row1 {
+    //空的，標記編號用而已。
 }
 
-.back_btn {
+.section_row3_col2_row2 {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    margin-left: 10px;
+    margin-right: 0px;
+}
+
+.btn {
     font-size: 20px;
     color: #FFFFFF;
-    width: 100px;
+    width: 70px;
     height: 42px;
     background-color: #444BBD;
-    border-radius: 5px;
     margin-top: 20px;
     margin-bottom: 30px;
-    margin-left: 0px;
-    margin-right: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
