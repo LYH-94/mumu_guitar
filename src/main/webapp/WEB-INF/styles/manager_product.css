@@ -44,6 +44,19 @@
     border-radius: 5px;
 }
 
+.add_btn {
+    font-size: 20px;
+    color: #FFFFFF;
+    width: 100px;
+    height: 32px;
+    background-color: #444BBD;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
 .search_btn {
     font-size: 20px;
     color: #FFFFFF;
