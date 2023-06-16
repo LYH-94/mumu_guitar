@@ -6,7 +6,7 @@ USE mumu_guitar_db;
 /*===== 建表順序 1 =====*/
 /* 用戶 - t_user */
 CREATE TABLE IF NOT EXISTS `t_user` (
-	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`id` INT NOT NULL AUTO_INCREMENT,
 	`account` VARCHAR(50) UNIQUE NOT NULL,
 	`password` VARCHAR(50) UNIQUE NOT NULL,
 	`username` VARCHAR(20) NOT NULL,
@@ -14,21 +14,23 @@ CREATE TABLE IF NOT EXISTS `t_user` (
 	`birthday` DATE DEFAULT NULL,
 	`phone` VARCHAR(12) NOT NULL,
 	`email` VARCHAR(30) NOT NULL,
+	`identity` VARCHAR(10) NOT NULL DEFAULT 'general',
 	PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
 /* 新增 t_user 數據表的數據。 */
-INSERT  INTO `t_user`(`id`,`account`,`password`,`username`,`gender`,`birthday`,`phone`,`email`) VALUES 
-(0,'user001','pwd001','LYH',1,'1995-09-04','0912345678','user001@gmail.com'),
-(0,'user002','pwd002','阿華',1,'1991-05-05','0987654321','user002@gmail.com'),
-(0,'user003','pwd003','大大',1,'1989-11-21','0943215678','user003@gmail.com'),
-(0,'user004','pwd004','小惠',0,'1999-01-10','0956784321','user004@gmail.com'),
-(0,'user005','pwd005','阿武',1,'2003-07-09','0956781234','user005@gmail.com');
+INSERT  INTO `t_user`(`id`,`account`,`password`,`username`,`gender`,`birthday`,`phone`,`email`,`identity`) VALUES
+(0,'user001','pwd001','LYH',1,'1995-09-04','0912345678','user001@gmail.com','general'),
+(0,'user002','pwd002','阿華',1,'1991-05-05','0987654321','user002@gmail.com','general'),
+(0,'user003','pwd003','大大',1,'1989-11-21','0943215678','user003@gmail.com','general'),
+(0,'user004','pwd004','小惠',0,'1999-01-10','0956784321','user004@gmail.com','general'),
+(0,'user005','pwd005','阿武',1,'2003-07-09','0956781234','user005@gmail.com','general'),
+(0,'root','abc123','管理員',1,'1234-12-12','0999999999','root@gmail.com','manager');
 
 /*===== 建表順序 2 =====*/
 /* 商品 - t_product */
 CREATE TABLE IF NOT EXISTS `t_product` (
-	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`id` INT NOT NULL AUTO_INCREMENT,
 	`number` VARCHAR(10) UNIQUE NOT NULL,
 	`photo` VARCHAR(10) NOT NULL,
 	`name` VARCHAR(50) NOT NULL,
@@ -55,12 +57,12 @@ INSERT  INTO `t_product`(`id`,`number`,`photo`,`name`,`introduce`,`brand`,`model
 /*===== 建表順序 3 =====*/
 /* 訂單 - t_order */
 CREATE TABLE IF NOT EXISTS `t_order` (
-	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`id` INT NOT NULL AUTO_INCREMENT,
 	`number` VARCHAR(20) UNIQUE NOT NULL,
 	`date` DATETIME NOT NULL,
 	`totalAmount` MEDIUMINT UNSIGNED NOT NULL,
 	`status` TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	`owner` INT UNSIGNED NOT NULL,
+	`owner` INT NOT NULL,
 	`purchaser` VARCHAR(20) NOT NULL,
 	`phone` VARCHAR(12) NOT NULL,
 	`payment` VARCHAR(20) NOT NULL DEFAULT '宅配；貨到付款',
@@ -77,10 +79,10 @@ INSERT  INTO `t_order`(`id`,`number`,`date`,`totalAmount`,`status`,`owner`,`purc
 /*===== 建表順序 4 =====*/
 /* 訂單 - t_orderProduct */
 CREATE TABLE IF NOT EXISTS `t_orderProduct` (
-	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	`product` INT UNSIGNED NOT NULL,
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`product` INT NOT NULL,
 	`quantity` MEDIUMINT UNSIGNED NOT NULL DEFAULT 1,
-	`belongOrder` INT UNSIGNED NOT NULL,
+	`belongOrder` INT NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `FK_orderProduct_product` (`product`),
 	CONSTRAINT `FK_orderProduct_product` FOREIGN KEY (`product`) REFERENCES `t_product` (`id`),
@@ -97,10 +99,10 @@ INSERT  INTO `t_orderProduct`(`id`,`product`,`quantity`,`belongOrder`) VALUES
 /*===== 建表順序 5 =====*/
 /* 購物車項 - t_trolleyItem */
 CREATE TABLE IF NOT EXISTS `t_trolleyItem` (
-	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	`product` INT UNSIGNED NOT NULL,
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`product` INT NOT NULL,
 	`quantity` MEDIUMINT UNSIGNED NOT NULL DEFAULT 1,
-	`owner` INT UNSIGNED NOT NULL,
+	`owner` INT NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `FK_trolleyItem_product` (`product`),
 	CONSTRAINT `FK_trolleyItem_product` FOREIGN KEY (`product`) REFERENCES `t_product` (`id`),
@@ -120,9 +122,9 @@ INSERT  INTO `t_trolleyItem`(`id`,`product`,`quantity`,`owner`) VALUES
 /*===== 建表順序 6 =====*/
 /* 商品追蹤 - t_favorite */
 CREATE TABLE IF NOT EXISTS `t_favorite` (
-	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	`product` INT UNSIGNED NOT NULL,
-	`owner` INT UNSIGNED NOT NULL,
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`product` INT NOT NULL,
+	`owner` INT NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `FK_favorite_product` (`product`),
 	CONSTRAINT `FK_favorite_product` FOREIGN KEY (`product`) REFERENCES `t_product` (`id`),
