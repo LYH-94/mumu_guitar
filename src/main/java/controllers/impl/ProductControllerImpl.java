@@ -38,4 +38,14 @@ public class ProductControllerImpl implements ProductController {
             throw new ProductControllerImplException("ProductControllerImpl 的 getHotProduct() 有問題。");
         }
     }
+
+    @Override
+    public Product getProductById(int id) throws ProductControllerImplException {
+        try {
+            return productService.getProductById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductControllerImpl 的 getProductById() 有問題。");
+        }
+    }
 }

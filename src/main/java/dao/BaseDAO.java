@@ -1,6 +1,7 @@
 package dao;
 
 import dao.exception.BaseDAOException;
+import util.DataTransformationUtils;
 import util.JDBCUtils;
 
 import java.lang.reflect.Field;
@@ -71,28 +72,22 @@ public abstract class BaseDAO {
 
                     //因 MySQL 8 的問題，獲取 Datatime 類型的字段時，會被轉化成 LocalDateTime 類型 (正常應該是對應到 Timestamp 類型)，它無法賦予給 POJO 中 Date 類型的屬性，
                     //所以需要在屬性賦值錢進行檢查並轉換，將 LocalDateTime  類型手動轉換成 Date 類型。
-                    /*
                     if ("java.time.LocalDateTime".equals(columnValues.getClass().getName())) {
                         columnValues = DataTransformationUtils.LocalDateTimeToTimestamp(columnValues);
                     }
-                    */
 
                     //獲取字段的字段名。
                     String columnLabel = rsmd.getColumnLabel(i + 1);
 
                     //在 POJO 中存在某些屬性，是根據實體來自定義的類型，但從數據表中獲取的字段為了減少占用的空間都 Integer 類型來替代，
                     //因此要再賦予值之前封裝成對應類型的物件。
-                    /*
-                    if ("author".equals(columnLabel)) {
-                        columnValues = DataTransformationUtils.IntegerToUserBasic(columnValues);
-                    } else if ("topic".equals(columnLabel)) {
-                        columnValues = DataTransformationUtils.IntegerToTopic(columnValues);
-                    } else if ("reply".equals(columnLabel)) {
-                        columnValues = DataTransformationUtils.IntegerToReply(columnValues);
-                    } else if ("hostReply".equals(columnLabel)) {
-                        columnValues = DataTransformationUtils.IntegerToHostReply(columnValues);
+                    if ("owner".equals(columnLabel)) {
+                        columnValues = DataTransformationUtils.IntegerToUser(columnValues);
+                    } else if ("belongOrder".equals(columnLabel)) {
+                        columnValues = DataTransformationUtils.IntegerToOrder(columnValues);
+                    } else if ("product".equals(columnLabel)) {
+                        columnValues = DataTransformationUtils.IntegerToProduct(columnValues);
                     }
-                    */
 
                     //通過反射機制：給 cust 物件當前指定的 columnName 屬性，賦值為 columnValues。
                     Field field = clazz.getDeclaredField(columnLabel);
@@ -150,26 +145,22 @@ public abstract class BaseDAO {
 
                     //因 MySQL 8 的問題，獲取 Datatime 類型的字段時，會被轉化成 LocalDateTime 類型 (正常應該是對應到 Timestamp 類型)，它無法賦予給 POJO 中 Date 類型的屬性，
                     //所以需要在屬性賦值錢進行檢查並轉換，將 LocalDateTime  類型手動轉換成 Date 類型。
-                    /*
                     if ("java.time.LocalDateTime".equals(columnValues.getClass().getName())) {
                         columnValues = DataTransformationUtils.LocalDateTimeToTimestamp(columnValues);
                     }
-                    */
 
                     //獲取每個字段的字段名。
                     String columnLabel = rsmd.getColumnLabel(i + 1);
 
                     //在 POJO 中存在某些屬性，是根據實體來自定義的類型，但從數據表中獲取的字段為了減少占用的空間都 Integer 類型來替代，
                     //因此要再賦予值之前封裝成對應類型的物件。
-                    /*
-                    if ("author".equals(columnLabel)) {
-                        columnValues = DataTransformationUtils.IntegerToUserBasic(columnValues);
-                    } else if ("topic".equals(columnLabel)) {
-                        columnValues = DataTransformationUtils.IntegerToTopic(columnValues);
-                    } else if ("hostReply".equals(columnLabel)) {
-                        columnValues = DataTransformationUtils.IntegerToHostReply(columnValues);
+                    if ("owner".equals(columnLabel)) {
+                        columnValues = DataTransformationUtils.IntegerToUser(columnValues);
+                    } else if ("belongOrder".equals(columnLabel)) {
+                        columnValues = DataTransformationUtils.IntegerToOrder(columnValues);
+                    } else if ("product".equals(columnLabel)) {
+                        columnValues = DataTransformationUtils.IntegerToProduct(columnValues);
                     }
-                    */
 
                     //通過反射機制：給 cust 物件當前指定的 columnName 屬性，賦值為 columnValues。
                     Field field = clazz.getDeclaredField(columnLabel);

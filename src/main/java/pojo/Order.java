@@ -19,6 +19,10 @@ public class Order {
     public Order() {
     }
 
+    public Order(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

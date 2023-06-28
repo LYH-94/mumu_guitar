@@ -9,6 +9,10 @@ public class OrderProduct {
     public OrderProduct() {
     }
 
+    public OrderProduct(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

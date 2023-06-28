@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" href="..\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
-    <link type="text/css" rel="stylesheet" href="..\styles\common.css">
-    <link type="text/css" rel="stylesheet" href="..\styles\register.css">
+    <link type="text/css" rel="stylesheet" href=".\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link type="text/css" rel="stylesheet" href=".\styles\common.css">
+    <link type="text/css" rel="stylesheet" href=".\styles\register.css">
 
     <!-- JavaScript -->
-    <script type="text/javascript" src="..\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
-    <script type="text/javascript" src="..\scripts\dropdown.js" defer></script>
+    <script type="text/javascript" src=".\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
+    <script type="text/javascript" src=".\scripts\common.js" defer></script>
 
     <title>木木吉他</title>
 </head>
@@ -20,7 +20,7 @@
     <div class="row mar_0">
         <div class="col-4 pad_0">
             <!-- Logo -->
-            <img src="../images/mumu_guitar.svg" class="img-fluid img_mumu_guitar">
+            <img src="./images/mumu_guitar.svg" onclick="index()" class="img-fluid img_mumu_guitar">
         </div>
     </div>
 </header>
@@ -41,37 +41,41 @@
                 </div>
 
                 <div class="row mar_0">
-                    <form action="..." method="post" class="pad_0">
+                    <form action="./register.do" method="post" class="pad_0">
+                        <input type="hidden" name="operate" value="register"/>
                         <div style="margin-top: 16px; margin-bottom: 0px; margin-left: 50px; margin-right: 0px;">
+                            <span th:if="${session.duplicateUsers == 'true'}" class="pad_0" style="font-size: 16px; color: red;">帳號已存在或驗證碼錯誤。</span><br>
+
                             <span class="pad_0 form_text">帳號</span><br>
-                            <input type="text" name="account" value="" class="input_style"><br>
+                            <input type="text" name="account" class="input_style"><br>
 
                             <span class="pad_0 form_text">密碼</span><br>
-                            <input type="password" name="password" value="" class="input_style"><br>
+                            <input type="password" name="password" class="input_style"><br>
 
                             <span class="pad_0 form_text">姓名</span><br>
-                            <input type="text" name="name" value="" class="input_style"><br>
+                            <input type="text" name="username" class="input_style"><br>
 
                             <span class="d-flex justify-content-start pad_0 form_text" style="margin-bottom: 10px">性別
-                                <input type="radio" name="screen_inventory" value="1" checked style="margin-left: 50px">&nbsp;男
-                                <input type="radio" name="screen_inventory" value="2" style="margin-left: 50px">&nbsp;女
+                                <input type="radio" name="gender" value="1" checked style="margin-left: 50px">&nbsp;男
+                                <input type="radio" name="gender" value="2" style="margin-left: 50px">&nbsp;女
                             </span>
 
                             <span class="pad_0 form_text">生日</span><br>
-                            <input type="date" name="birthday" value="" class="input_style"><br>
+                            <input type="date" name="birthday" class="input_style"><br>
 
                             <span class="pad_0 form_text">聯絡電話</span><br>
-                            <input type="text" name="phone_number" value="" class="input_style"><br>
+                            <input type="text" name="phone" value="" class="input_style"><br>
 
                             <span class="pad_0 form_text">電子信箱</span><br>
                             <input type="text" name="email" value="" class="input_style"><br>
 
+
                             <span class="pad_0 form_text">驗證</span><br>
-                            <div style="width: 140px; height: 42px; margin-top: 0px; margin-bottom: 10px; margin-left: 0px; margin-right: 40px;">
-                                <img src="../images/verification_code.jpg"
-                                     style="object-fit: none; width: 140%; height: 100%;">
+                            <div style="margin-top: 0px; margin-bottom: 10px; margin-left: 0px; margin-right: 40px;">
+                                <img src="kaptcha.jpg"
+                                     style="object-fit: none;">
                             </div>
-                            <input type="text" name="verification" value="" class="input_style"><br>
+                            <input type="text" name="verification" class="input_style"><br>
 
                             <div class="d-flex justify-content-evenly">
                                 <input type="reset" value="清空" class="bor_0 pad_0 login_btn">

@@ -18,4 +18,34 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>applicationContext.xml</param-value>
     </context-param>
+
+    <!--註冊驗證碼。只有一個 Servlet 類，即 KaptchaServlet。-->
+    <servlet>
+        <servlet-name>KaptchaServlet</servlet-name>
+        <servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+
+        <!--配置驗證碼圖片的屬性-->
+        <!--各種屬性的名稱可從 jar 包中的 Constants.class 找到。(使用字串的部分)-->
+        <init-param>
+            <param-name>kaptcha.border.color</param-name> <!--加上紅色邊框。-->
+            <param-value>red</param-value>
+        </init-param>
+        <init-param>
+            <param-name>kaptcha.noise.color</param-name> <!--將增加雜訊變成藍色。-->
+            <param-value>blue</param-value>
+        </init-param>
+        <init-param>
+            <param-name>kaptcha.image.width</param-name> <!--設置驗證碼圖片寬度為 140。-->
+            <param-value>140</param-value>
+        </init-param>
+        <init-param>
+            <param-name>kaptcha.image.height</param-name> <!--設置驗證碼圖片高度為 42。-->
+            <param-value>42</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>KaptchaServlet</servlet-name>
+        <url-pattern>/kaptcha.jpg</url-pattern>
+    </servlet-mapping>
+
 </web-app>

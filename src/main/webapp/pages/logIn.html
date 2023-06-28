@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" href=".\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link type="text/css" rel="stylesheet" href=".\styles\common.css">
+    <link type="text/css" rel="stylesheet" href=".\styles\login.css">
+
+    <!-- JavaScript -->
+    <script type="text/javascript" src=".\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
+    <script type="text/javascript" src=".\scripts\common.js" defer></script>
+
+    <title>木木吉他</title>
+</head>
+<body>
+<header class="container-xl pad_0 header">
+    <div class="row mar_0">
+        <div class="col-4 pad_0">
+            <!-- Logo -->
+            <img src="./images/mumu_guitar.svg" onclick="logIn_index()" class="img-fluid img_mumu_guitar">
+        </div>
+    </div>
+</header>
+
+<section class="container-xl pad_0 section">
+    <div class="row d-flex justify-content-end mar_0">
+        <div class="col-11 col-sm-10 col-md-9 col-lg-8 col-xl-7 col-xxl-6 pad_0">
+            <div class="login_form">
+
+                <div class="row mar_0">
+                    <div class="col d-flex justify-content-center pad_0">
+                        <span class="d-flex align-items-center pad_0 form_title_text">會員登入</span>
+                    </div>
+                </div>
+
+                <div class="row mar_0">
+                    <hr class="col pad_0 section_baseline_600">
+                </div>
+
+                <div class="row mar_0">
+                    <form action="./index.do" method="post" class="pad_0">
+                        <input type="hidden" name="operate" value="logIn"/>
+                        <div style="margin-top: 16px; margin-bottom: 0px; margin-left: 50px; margin-right: 0px;">
+                            <span class="pad_0 form_text">帳號</span><br>
+                            <input type="text" name="account" class="input_style"><br>
+
+                            <span class="pad_0 form_text">密碼</span><br>
+                            <input type="password" name="password" class="input_style"><br>
+
+                            <span class="pad_0 form_text">驗證</span><br>
+                            <div style="margin-top: 0px; margin-bottom: 10px; margin-left: 0px; margin-right: 40px;">
+                                <img src="kaptcha.jpg"
+                                     style="object-fit: none;">
+                            </div>
+                            <input type="text" name="verification" class="input_style"><br>
+
+                            <div th:if="${session.verification == 'fail'}">
+                                <span class="pad_0"
+                                      style="font-size: 16px; color: red;">帳號、密碼或驗證碼錯誤，請重新輸入。</span><br>
+                            </div>
+
+                            <div class="d-flex justify-content-evenly">
+                                <input type="reset" value="清空" class="bor_0 pad_0 login_btn">
+                                <input type="submit" value="確定" class="bor_0 pad_0 login_btn">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

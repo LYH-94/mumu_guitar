@@ -7,7 +7,6 @@ import dao.impl.ProductDAOImpl;
 import pojo.Product;
 import util.ConnUtils;
 
-import java.sql.Connection;
 import java.util.List;
 
 public class ProductServiceImpl implements ProductService {
@@ -21,6 +20,16 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductServiceImpl 的 getAllProduct() 有問題。");
+        }
+    }
+
+    @Override
+    public Product getProductById(int id) throws ProductServiceImplException {
+        try {
+            return productDAO.getProductById(ConnUtils.getConn(), Product.class , id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductServiceImpl 的 getProductById() 有問題。");
         }
     }
 }

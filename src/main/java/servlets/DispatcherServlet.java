@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 // 使用通配符 * 來配置請求，例如：
 // *.do：表示攔截所有以 .do 結尾的請求。
@@ -113,11 +115,15 @@ public class DispatcherServlet extends ViewBaseServlet {
 
                             Object parameterObj = parameterValue;
                             if (parameterObj != null) {
-                                if ("java.lang.Integer".equals(typeName)) { // 本案例只考慮整數與字串類型。
+                                if ("java.lang.Integer".equals(typeName)) { // 本案例考慮整數、字串與Date類型。
                                     if (StringUtils.isEmpty(parameterValue)) {
                                         parameterValue = "0";
                                     }
                                     parameterObj = Integer.parseInt(parameterValue);
+                                } else if ("java.time.LocalDate".equals(typeName)) {
+                                    //System.out.println("123123");
+                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                                    parameterObj = LocalDate.parse(parameterValue, formatter);
                                 }
                             }
 

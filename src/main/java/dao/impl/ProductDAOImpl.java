@@ -17,7 +17,18 @@ public class ProductDAOImpl extends BaseDAO implements ProductDAO {
             return super.getForList(conn, clazz, sql);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ProductControllerImplException("ProductDAOImplException 的 getAllProduct() 有問題。");
+            throw new ProductControllerImplException("ProductDAOImpl 的 getAllProduct() 有問題。");
+        }
+    }
+
+    @Override
+    public Product getProductById(Connection conn, Class<Product> clazz, int id) throws ProductDAOImplException {
+        try {
+            String sql = "SELECT * FROM t_product WHERE id = ?";
+            return super.getInstance(conn, clazz, sql, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductDAOImpl 的 getProductById() 有問題。");
         }
     }
 }

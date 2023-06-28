@@ -4,37 +4,62 @@
 <!--這裡將標籤取名為 beans，意指多個 javaBean (java 的物件)。-->
 <beans>
     <!--在這裡配置了所有需要的 javaBean。-->
+
+    <!-- Controllers -->
     <bean id="index" class="controllers.impl.UserControllerImpl">
+        <property name="userService" ref="userService"/>
         <property name="productController" ref="productController"/>
+        <property name="orderController" ref="orderController"/>
     </bean>
 
     <bean id="productController" class="controllers.impl.ProductControllerImpl">
         <property name="productService" ref="productService"/>
     </bean>
 
+    <bean id="orderController" class="controllers.impl.OrderControllerImpl">
+        <property name="orderService" ref="orderService"/>
+    </bean>
+
+    <bean id="favorite" class="controllers.impl.FavoriteControllerImpl">
+        <property name="favoriteService" ref="favoriteService"/>
+        <property name="productController" ref="productController"/>
+    </bean>
+
+    <bean id="trolley" class="controllers.impl.TrolleyControllerImpl">
+        <property name="trolleyService" ref="trolleyService"/>
+        <property name="productController" ref="productController"/>
+        <property name="trolleyClass" ref="trolleyClass"/>
+    </bean>
+    <bean id="trolleyClass" class="pojo.TrolleyClass"></bean>
+
+    <!-- Services -->
     <bean id="productService" class="bo.impl.ProductServiceImpl">
         <property name="productDAO" ref="productDAO"/>
     </bean>
 
-    <bean id="productDAO" class="dao.impl.ProductDAOImpl">
+    <bean id="userService" class="bo.impl.UserServiceImpl">
+        <property name="userDAO" ref="userDAO"/>
     </bean>
 
-    <!--
-    <bean id="userBasicService" class="qqzone.bo.impl.UserServiceImpl">
-        <property name="userBasicDAO" ref="userBasicDAO"/>
+    <bean id="orderService" class="bo.impl.OrderServiceImpl">
+        <property name="orderDAO" ref="orderDAO"/>
     </bean>
-    <bean id="userBasicDAO" class="qqzone.dao.impl.UserBasicDAOImpl"/>
 
+    <bean id="favoriteService" class="bo.impl.FavoriteServiceImpl">
+        <property name="favoriteDAO" ref="favoriteDAO"/>
+    </bean>
 
-    <bean id="topic" class="qqzone.controllers.impl.TopicControllerImpl">
-        <property name="topicService" ref="topicService"/>
-        <property name="userBasicService" ref="userBasicService"/>
+    <bean id="trolleyService" class="bo.impl.TrolleyServiceImpl">
+        <property name="trolleyDAO" ref="trolleyDAO"/>
     </bean>
-    <bean id="topicService" class="qqzone.bo.impl.TopicServiceImpl">
-        <property name="topicDAO" ref="topicDAO"/>
-    </bean>
-    <bean id="topicDAO" class="qqzone.dao.impl.TopicDAOImpl"/>
-    -->
+
+    <!-- DAOs -->
+    <bean id="productDAO" class="dao.impl.ProductDAOImpl"></bean>
+    <bean id="userDAO" class="dao.impl.UserDAOImpl"></bean>
+    <bean id="orderDAO" class="dao.impl.OrderDAOImpl"></bean>
+    <bean id="favoriteDAO" class="dao.impl.FavoriteDAOImpl"></bean>
+    <bean id="trolleyDAO" class="dao.impl.TrolleyDAOImpl"></bean>
+
 </beans>
 
         <!--

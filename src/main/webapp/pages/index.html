@@ -11,7 +11,7 @@
 
     <!-- JavaScript -->
     <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
-    <script type="text/javascript" src="./scripts/dropdown.js" defer></script>
+    <script type="text/javascript" src="./scripts/common.js" defer></script>
 
     <title>木木吉他</title>
 </head>
@@ -20,28 +20,29 @@
     <div class="row mar_0">
         <div class="col-4 pad_0">
             <!-- Logo -->
-            <img src="./images/mumu_guitar.svg" class="img-fluid img_mumu_guitar">
+            <img src="./images/mumu_guitar.svg" onclick="index()" class="img-fluid img_mumu_guitar">
         </div>
 
         <div class="col pad_0">
             <div class="row four_functions">
                 <!--會員圖-->
-                <figure class="col pad_0 login_register_favorite_function">
+                <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/person-square.svg" class="img-fluid">
-                    <figcaption class="img_fig_font">會員登入</figcaption>
+                    <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">會員登入</figcaption>
+                    <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">登出</figcaption>
                 </figure>
                 <!--註冊圖-->
-                <figure class="col pad_0 login_register_favorite_function">
+                <figure onclick="register()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/register.svg" class="img-fluid">
                     <figcaption class="img_fig_font">會員註冊</figcaption>
                 </figure>
                 <!--收藏圖-->
-                <figure class="col pad_0 login_register_favorite_function">
+                <figure onclick="favorite()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/heart.svg" class="img-fluid">
                     <figcaption class="img_fig_font">商品收藏</figcaption>
                 </figure>
                 <!--購物車圖-->
-                <figure class="col pad_0 trolley_function">
+                <figure onclick="trolley()" class="col pad_0 trolley_function">
                     <img src="./images/trolley.svg" class="img-fluid">
                     <figcaption class="img_fig_font">購物車</figcaption>
                 </figure>
@@ -72,7 +73,10 @@
 <section class="container-xl pad_0 section">
     <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
-        <div class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
+        <div th:if="${session.user.username == null}" class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
+        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1"><!-- 用戶詳細訊息還沒做。 -->
+            <a th:text="${session.user.username}" th:href="@{/index.do}">用戶名稱</a> 歡迎光臨~!
+        </div>
     </div>
 
     <!-- 水平分隔線 -->
@@ -114,7 +118,7 @@
 
             <!-- 熱門商品輪播 -->
             <div class="row bor_0 section_row3_col1_row2">
-                <span class="pad_0" style="font-size: 20px; color: #141637;">熱門商品123</span>
+                <span class="pad_0" style="font-size: 20px; color: #141637;">熱門商品</span>
                 <hr class="mar_pad_0 section_baseline_100">
 
                 <!-- 輪播元件 -->
@@ -133,18 +137,18 @@
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="${session.hotProductList[0].name}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px; color: #141637;">電吉他 B - 黑</span>
+                                        <span th:text="${session.hotProductList[0].name}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px; color: #141637;">商品名稱</span>
                                     </div>
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-end pad_0">
-                                        <span th:text="'庫存：'+${session.hotProductList[0].inventory}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px; color: #141637;">庫存：3</span>
+                                        <span th:text="'庫存：'+${session.hotProductList[0].inventory}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px; color: #141637;">庫存</span>
                                     </div>
                                 </div>
                                 <div class="row"
                                      style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="'$'+${session.hotProductList[0].price}" style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">$55200</span>
+                                        <span th:text="'$'+${session.hotProductList[0].price}" style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                                     </div>
                                     <div class="col-4 d-flex justify-content-end pad_0">
                                         <img src="./images/heart.svg"
@@ -167,18 +171,18 @@
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="${session.hotProductList[1].name}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px; color: #141637;">電吉他 E - 白</span>
+                                        <span th:text="${session.hotProductList[1].name}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px; color: #141637;">商品名稱</span>
                                     </div>
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-end pad_0">
-                                        <span th:text="${'庫存：'+session.hotProductList[1].inventory}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px; color: #141637;">庫存：2</span>
+                                        <span th:text="${'庫存：'+session.hotProductList[1].inventory}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px; color: #141637;">庫存</span>
                                     </div>
                                 </div>
                                 <div class="row"
                                      style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="'$'+${session.hotProductList[1].price}" style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">$22900</span>
+                                        <span th:text="'$'+${session.hotProductList[1].price}" style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                                     </div>
                                     <div class="col-4 d-flex justify-content-end pad_0">
                                         <img src="./images/heart.svg"
@@ -201,18 +205,18 @@
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="${session.hotProductList[2].name}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px; color: #141637;">電吉他 E - 白</span>
+                                        <span th:text="${session.hotProductList[2].name}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px; color: #141637;">商品名稱</span>
                                     </div>
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-end pad_0">
-                                        <span th:text="${'庫存：'+session.hotProductList[2].inventory}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px; color: #141637;">庫存：2</span>
+                                        <span th:text="${'庫存：'+session.hotProductList[2].inventory}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px; color: #141637;">庫存</span>
                                     </div>
                                 </div>
                                 <div class="row"
                                      style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="'$'+${session.hotProductList[2].price}" style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">$22900</span>
+                                        <span th:text="'$'+${session.hotProductList[2].price}" style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                                     </div>
                                     <div class="col-4 d-flex justify-content-end pad_0">
                                         <img src="./images/heart.svg"
@@ -285,18 +289,18 @@
                         </div>
                         <div class="row mar_0">
                             <div class="col d-flex justify-content-start pad_0">
-                                <span th:text="${product.name}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px;">電吉他 A - 粉</span>
+                                <span th:text="${product.name}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px;">商品名稱</span>
                             </div>
                         </div>
                         <div class="row mar_0">
                             <div class="col d-flex justify-content-end pad_0">
-                                <span th:text="${product.inventory}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px;">庫存：5</span>
+                                <span th:text="'庫存：'+${product.inventory}" style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px;">庫存</span>
                             </div>
                         </div>
                         <div class="row"
                              style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
                             <div class="col d-flex justify-content-start pad_0">
-                                <span th:text="${product.price}" style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">$42900</span>
+                                <span th:text="'$'+${product.price}" style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                             </div>
                             <div class="col-4 d-flex justify-content-end pad_0">
                                 <img src="./images/heart.svg"

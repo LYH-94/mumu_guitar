@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" href="..\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
-    <link type="text/css" rel="stylesheet" href="..\styles\common.css">
-    <link type="text/css" rel="stylesheet" href="..\styles\trolley.css">
+    <link type="text/css" rel="stylesheet" href=".\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link type="text/css" rel="stylesheet" href=".\styles\common.css">
+    <link type="text/css" rel="stylesheet" href=".\styles\trolley.css">
 
     <!-- JavaScript -->
-    <script type="text/javascript" src="..\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
-    <script type="text/javascript" src="..\scripts\dropdown.js" defer></script>
+    <script type="text/javascript" src=".\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
+    <script type="text/javascript" src=".\scripts\common.js" defer></script>
 
     <title>木木吉他</title>
 </head>
@@ -20,29 +20,34 @@
     <div class="row mar_0">
         <div class="col-4 pad_0">
             <!-- Logo -->
-            <img src="../images/mumu_guitar.svg" class="img-fluid img_mumu_guitar">
+            <img src="./images/mumu_guitar.svg" onclick="index()" class="img-fluid img_mumu_guitar">
         </div>
 
         <div class="col pad_0">
             <div class="row four_functions">
                 <!--會員圖-->
-                <figure class="col pad_0 login_register_favorite_function">
-                    <img src="../images/person-square.svg" class="img-fluid">
-                    <figcaption class="img_fig_font">會員登入</figcaption>
+                <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/person-square.svg" class="img-fluid">
+                    <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">
+                        會員登入
+                    </figcaption>
+                    <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">
+                        登出
+                    </figcaption>
                 </figure>
                 <!--註冊圖-->
-                <figure class="col pad_0 login_register_favorite_function">
-                    <img src="../images/register.svg" class="img-fluid">
+                <figure onclick="register()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/register.svg" class="img-fluid">
                     <figcaption class="img_fig_font">會員註冊</figcaption>
                 </figure>
                 <!--收藏圖-->
-                <figure class="col pad_0 login_register_favorite_function">
-                    <img src="../images/heart.svg" class="img-fluid">
+                <figure onclick="favorite()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/heart.svg" class="img-fluid">
                     <figcaption class="img_fig_font">商品收藏</figcaption>
                 </figure>
                 <!--購物車圖-->
-                <figure class="col pad_0 trolley_function">
-                    <img src="../images/trolley.svg" class="img-fluid">
+                <figure onclick="trolley()" class="col pad_0 trolley_function">
+                    <img src="./images/trolley.svg" class="img-fluid">
                     <figcaption class="img_fig_font">購物車</figcaption>
                 </figure>
             </div>
@@ -72,9 +77,9 @@
 <section class="container-xl pad_0 section">
     <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
-        <div class="col pad_0 section_row1_col1">
-            <span style="color: blue">LYH</span>
-            &nbsp;歡迎光臨~!
+        <div th:if="${session.user.username == null}" class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
+        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1"><!-- 用戶詳細訊息還沒做。 -->
+            <a th:text="${session.user.username}" th:href="@{/index.do}">用戶名稱</a> 歡迎光臨~!
         </div>
     </div>
 
@@ -108,77 +113,45 @@
             </div>
 
             <div class="row mar_0 section_row3_col1_row3">
-                <!-- 第一個商品 -->
-                <div class="d-flex pad_0 product" style="background-color: #FFFFFF">
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">2004</div>
-                    <div class="d-flex justify-content-start align-items-center pad_0" style="width: 400px;">
-                        <img src="../images/2004.jpg" class="img_product">
-                        <span>電吉他 D - 白</span>
+                <!-- 展示購物車商品 -->
+                <div th:if="${#lists.isEmpty(session.trolleyClass.product)}">尚無商品。</div>
+                <div th:unless="${#lists.isEmpty(session.trolleyClass.product)}"
+                     th:each="i : ${#numbers.sequence(0, #lists.size(session.trolleyClass.product)-1)}"
+                     th:with="trolleyClass = ${session.trolleyClass}"
+                     class="d-flex pad_0 product" style="background-color: #FFFFFF">
+                    <div th:text="${trolleyClass.product.get(i).number}"
+                         class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">商品編號
                     </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">6</div>
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">52900
+                    <div class="d-flex justify-content-start align-items-center pad_0" style="width: 400px;">
+                        <img th:src="${'./images/' + session.trolleyClass.product[i].photo}" class="img_product">
+                        <span th:text="${trolleyClass.product.get(i).name}">商品名稱</span>
+                    </div>
+                    <div th:text="${trolleyClass.product.get(i).inventory}"
+                         class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">庫存
+                    </div>
+                    <div th:text="${trolleyClass.product.get(i).price}"
+                         class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">單價
                     </div>
                     <div class="d-flex justify-content-center align-items-center pad_0" style="width: 120px;">
-                        <img src="../images/dash-circle.svg" style="width: 20px; height: 20px;">
-                        <span class="count_color1">1</span>
-                        <img src="../images/plus-circle.svg" style="width: 20px; height: 20px;">
+                        <img src="./images/dash-circle.svg" style="width: 20px; height: 20px;">
+                        <span th:text="${trolleyClass.quantity.get(i)}" class="count_color1">數量</span>
+                        <img src="./images/plus-circle.svg" style="width: 20px; height: 20px;">
                     </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">52900
+                    <div th:text="${trolleyClass.subTotal.get(i)}"
+                         class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">小計
                     </div>
                     <div class="d-flex justify-content-center align-items-center pad_0"
                          style="width: 100px; color: red;">移除
                     </div>
                 </div>
 
-                <!-- 第二個商品 -->
-                <div class="d-flex pad_0 product" style="background-color: #D8D8D8;">
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">2001</div>
-                    <div class="d-flex justify-content-start align-items-center pad_0" style="width: 400px;">
-                        <img src="../images/2001.jpg" class="img_product">
-                        <span>電吉他 A - 粉</span>
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">5</div>
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">42900
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 120px;">
-                        <img src="../images/dash-circle.svg" style="width: 20px; height: 20px;">
-                        <span class="count count_color2">2</span>
-                        <img src="../images/plus-circle.svg" style="width: 20px; height: 20px;">
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">85800
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0"
-                         style="width: 100px; color: red;">移除
-                    </div>
-                </div>
-
-                <!-- 第三個商品 -->
-                <div class="d-flex pad_0 product" style="background-color: #FFFFFF">
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">2005</div>
-                    <div class="d-flex justify-content-start align-items-center pad_0" style="width: 400px;">
-                        <img src="../images/2005.jpg" class="img_product">
-                        <span>電吉他 E - 白</span>
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">2</div>
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">22900
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 120px;">
-                        <img src="../images/dash-circle.svg" style="width: 20px; height: 20px;">
-                        <span class="count_color1">1</span>
-                        <img src="../images/plus-circle.svg" style="width: 20px; height: 20px;">
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">22900
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0"
-                         style="width: 100px; color: red;">移除
-                    </div>
-                </div>
             </div>
 
             <div class="row mar_0 section_row3_col1_row4">
                 <div class="d-flex justify-content-end pad_0">
-                    商品總數<span class="count_2">4</span>
-                    總金額<span class="count_2" style="color: red">NT$161600</span>
+                    商品總數<span th:text="${session.trolleyClass.totalQuantity}" class="count_2">商品總數</span>
+                    總金額<span th:text="'NT$' + ${session.trolleyClass.totalAmount}" class="count_2"
+                                style="color: red">總金額</span>
                 </div>
 
                 <div class="d-flex justify-content-end pad_0">
@@ -189,7 +162,6 @@
             </div>
 
         </div>
-
 
     </div>
 </section>

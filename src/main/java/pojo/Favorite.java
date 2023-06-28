@@ -1,13 +1,15 @@
 package pojo;
 
-import java.util.List;
-
 public class Favorite {
     private Integer id;
-    private List<Product> productList; //Favorite：Product => 1：n
+    private Product product; //Favorite：Product => 1：1
     private User owner; //Favorite：User => 1：1
 
     public Favorite() {
+    }
+
+    public Favorite(Integer id) {
+        this.id = id;
     }
 
     public Integer getId() {
@@ -18,12 +20,12 @@ public class Favorite {
         this.id = id;
     }
 
-    public List<Product> getProductList() {
-        return productList;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public User getOwner() {

@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" href="..\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
-    <link type="text/css" rel="stylesheet" href="..\styles\common.css">
-    <link type="text/css" rel="stylesheet" href="..\styles\manager_order.css">
+    <link type="text/css" rel="stylesheet" href=".\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link type="text/css" rel="stylesheet" href=".\styles\common.css">
+    <link type="text/css" rel="stylesheet" href=".\styles\manager_order.css">
 
     <!-- JavaScript -->
-    <script type="text/javascript" src="..\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
-    <script type="text/javascript" src="..\scripts\dropdown.js" defer></script>
+    <script type="text/javascript" src=".\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
+    <script type="text/javascript" src=".\scripts\common.js" defer></script>
 
     <title>木木吉他</title>
 </head>
@@ -20,7 +20,7 @@
     <div class="row mar_0">
         <div class="col-4 pad_0">
             <!-- Logo -->
-            <img src="../images/mumu_guitar.svg" class="img-fluid img_mumu_guitar">
+            <img src="./images/mumu_guitar.svg" class="img-fluid img_mumu_guitar">
         </div>
 
         <div class="col pad_0">
@@ -35,9 +35,9 @@
                 </div>
 
                 <!--會員圖-->
-                <figure class="col pad_0 login_register_favorite_function">
-                    <img src="../images/person-square.svg" class="img-fluid">
-                    <figcaption class="img_fig_font">登出</figcaption>
+                <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/person-square.svg" class="img-fluid">
+                    <figcaption id="id_logInOut" class="img_fig_font">登出</figcaption>
                 </figure>
             </div>
         </div>
@@ -56,7 +56,6 @@
 </nav>
 
 <section class="container-xl pad_0 section">
-    <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
         <div class="col pad_0 section_row1_col1">
             <div class="row mar_0">
@@ -93,47 +92,22 @@
                 <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">功能</div>
             </div>
 
-            <div class="row mar_0 section_row3_col1_row1-2" style="background-color: #FFFFFF">
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;">&nbsp;202305040115233278</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">2023-05-04
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">161600</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">未發貨</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">user01</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">
-                    更新 已發貨
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">
-                    訂單詳情
-                </div>
-            </div>
+            <!-- 展示所有用戶的訂單 -->
+            <div th:if="${#lists.isEmpty(session.ordertList)}">尚無訂單。</div>
+            <div th:unless="${#lists.isEmpty(session.ordertList)}"
+                 th:each="ordert : ${session.ordertList}"
+                 class="row mar_0 section_row3_col1_row1-2" style="background-color: #FFFFFF">
+                <div th:text="'&nbsp;'+${ordert.number}" class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;"></div>
+                <div th:text="${ordert.date}" class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;"></div>
+                <div th:text="${ordert.totalAmount}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;"></div>
 
-            <div class="row mar_0 section_row3_col1_row1-2" style="background-color: #D8D8D8">
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;">&nbsp;202304210835447843</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">2023-04-21
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">29900</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已發貨</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">user01</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">
-                    更新 已簽收
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">
-                    訂單詳情
-                </div>
-            </div>
+                <div th:if="${ordert.status} == 0" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">未發貨</div>
+                <div th:if="${ordert.status} == 1" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已發貨</div>
+                <div th:if="${ordert.status} == 2" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已簽收</div>
 
-            <div class="row mar_0 section_row3_col1_row1-2" style="background-color: #FFFFFF">
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;">&nbsp;202302041125347421</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">2023-02-04
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">42900</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已簽收</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">user01</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">交易完成</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">
-                    訂單詳情
-                </div>
+                <div th:text="${ordert.owner.username}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;"></div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">更新 已發貨</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">訂單詳情</div>
             </div>
 
             <div class="row mar_0 section_row3_col1_row2">
@@ -149,8 +123,9 @@
                             <li><a data-value="2" href="#" class="dropdown-item">第 2 頁</a></li>
                         </ul>
                     </div>
-                    <span class="d-flex justify-content-center align-items-center pad_0"
-                          style="font-size: 16px; color: #141637;">訂單數量：3</span>
+                    <span th:text="'訂單數量：' + ${#lists.size(session.ordertList)}"
+                          class="d-flex justify-content-center align-items-center pad_0"
+                          style="font-size: 16px; color: #141637;"></span>
                 </div>
             </div>
 
