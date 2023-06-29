@@ -53,11 +53,11 @@
 
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品
+        <button type="button" onclick="index()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品
         </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他
+        <button type="button" onclick="index_woodenGuitar()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他
         </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他
+        <button type="button" onclick="index_electricGuitar()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他
         </button>
         <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦
         </button>
@@ -327,8 +327,9 @@
                             <li><a data-value="2" href="#" class="dropdown-item">第 2 頁</a></li>
                         </ul>
                     </div>
-                    <span class="d-flex justify-content-center align-items-center pad_0"
-                          style="font-size: 16px; color: #141637;">商品數量：7</span>
+                    <span th:text="'商品數量：' + ${#lists.size(session.productList)}"
+                          class="d-flex justify-content-center align-items-center pad_0"
+                          style="font-size: 16px; color: #141637;">商品數量</span>
                 </div>
             </div>
 

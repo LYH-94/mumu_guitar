@@ -24,6 +24,16 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
+    public List<Product> getProductByType(String type) throws ProductControllerImplException {
+        try {
+            return productService.getProductByType(type);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductControllerImpl 的 getProductByType() 有問題。");
+        }
+    }
+
+    @Override
     public List<Product> getHotProduct() throws ProductControllerImplException {
         try {
             List<Product> allProduct = productService.getAllProduct();

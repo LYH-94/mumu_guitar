@@ -11,6 +11,9 @@ public interface ProductController {
     // 獲取前三的熱門商品。
     public List<Product> getHotProduct();
 
+    // 通過 Type 獲取商品。
+    public List<Product> getProductByType(String type);
+
     // 通過 Id 獲取商品。
-    Product getProductById(int id);
+    public Product getProductById(int id);
 }

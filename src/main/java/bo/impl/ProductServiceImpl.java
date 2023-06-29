@@ -24,9 +24,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> getProductByType(String type) throws ProductServiceImplException {
+        try {
+            return productDAO.getProductByType(ConnUtils.getConn(), Product.class, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductServiceImpl 的 getProductByType() 有問題。");
+        }
+    }
+
+    @Override
     public Product getProductById(int id) throws ProductServiceImplException {
         try {
-            return productDAO.getProductById(ConnUtils.getConn(), Product.class , id);
+            return productDAO.getProductById(ConnUtils.getConn(), Product.class, id);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductServiceImpl 的 getProductById() 有問題。");

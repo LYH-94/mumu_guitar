@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?> <!--該行就是 XML 聲明。-->
+
+<!--XML 正文。標籤可以自定義(可擴展的特性)。-->
+<!--這裡將標籤取名為 beans，意指多個 javaBean (java 的物件)。-->
+<beans>
+    <!--在這裡配置了所有需要的 javaBean。-->
+
+    <!-- Controllers -->
+    <bean id="index" class="controllers.impl.UserControllerImpl">
+        <property name="userService" ref="userService"/>
+        <property name="productController" ref="productController"/>
+        <property name="orderController" ref="orderController"/>
+    </bean>
+
+    <bean id="productController" class="controllers.impl.ProductControllerImpl">
+        <property name="productService" ref="productService"/>
+    </bean>
+
+    <bean id="orderController" class="controllers.impl.OrderControllerImpl">
+        <property name="orderService" ref="orderService"/>
+    </bean>
+
+    <bean id="favorite" class="controllers.impl.FavoriteControllerImpl">
+        <property name="favoriteService" ref="favoriteService"/>
+        <property name="productController" ref="productController"/>
+    </bean>
+
+    <bean id="trolley" class="controllers.impl.TrolleyControllerImpl">
+        <property name="trolleyService" ref="trolleyService"/>
+        <property name="productController" ref="productController"/>
+        <property name="trolleyClass" ref="trolleyClass"/>
+    </bean>
+    <bean id="trolleyClass" class="pojo.TrolleyClass"></bean>
+
+    <!-- Services -->
+    <bean id="productService" class="bo.impl.ProductServiceImpl">
+        <property name="productDAO" ref="productDAO"/>
+    </bean>
+
+    <bean id="userService" class="bo.impl.UserServiceImpl">
+        <property name="userDAO" ref="userDAO"/>
+    </bean>
+
+    <bean id="orderService" class="bo.impl.OrderServiceImpl">
+        <property name="orderDAO" ref="orderDAO"/>
+    </bean>
+
+    <bean id="favoriteService" class="bo.impl.FavoriteServiceImpl">
+        <property name="favoriteDAO" ref="favoriteDAO"/>
+    </bean>
+
+    <bean id="trolleyService" class="bo.impl.TrolleyServiceImpl">
+        <property name="trolleyDAO" ref="trolleyDAO"/>
+    </bean>
+
+    <!-- DAOs -->
+    <bean id="productDAO" class="dao.impl.ProductDAOImpl"></bean>
+    <bean id="userDAO" class="dao.impl.UserDAOImpl"></bean>
+    <bean id="orderDAO" class="dao.impl.OrderDAOImpl"></bean>
+    <bean id="favoriteDAO" class="dao.impl.FavoriteDAOImpl"></bean>
+    <bean id="trolleyDAO" class="dao.impl.TrolleyDAOImpl"></bean>
+
+</beans>
+
+        <!--
+        1.概念
+        HTML：超文本標記語言
+        XML：可擴展的標記語言
+        HTML 是 XML 的一個子集
+
+        2.XML 包含三個部分：
+         1) XML 聲明：<?xml version="1.0" encoding="UTF-8"?> 固定寫法。
+            它必需要有，且必需在 XML 文件的第一行，它前面不能有任何內容。
+         2) DTD 文件類型定義
+         3)XML 正文
+            它必須要有。
+        3.關於節點
+          Node 節點
+              Element 元素節點( Node 的子介面)
+              Text 文本節點
+
+          如：<sname>Lin</sname> => 它有兩個節點，<sname> 元素節點 + Lin 文本節點。要注意空白和換行也算一個文本節點。
+        -->
