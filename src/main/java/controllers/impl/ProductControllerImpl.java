@@ -5,6 +5,7 @@ import controllers.ProductController;
 import controllers.exception.ProductControllerImplException;
 import pojo.Product;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +18,7 @@ public class ProductControllerImpl implements ProductController {
     public List<Product> getAllProduct() throws ProductControllerImplException {
         try {
             return productService.getAllProduct();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductControllerImpl 的 getAllProduct() 有問題。");
         }
@@ -27,7 +28,7 @@ public class ProductControllerImpl implements ProductController {
     public List<Product> getProductByType(String type) throws ProductControllerImplException {
         try {
             return productService.getProductByType(type);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductControllerImpl 的 getProductByType() 有問題。");
         }
@@ -43,7 +44,7 @@ public class ProductControllerImpl implements ProductController {
 
             // 回傳前三個商品做為目前的熱門商品。
             return allProduct.stream().limit(3).collect(Collectors.toList());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductControllerImpl 的 getHotProduct() 有問題。");
         }
@@ -53,9 +54,20 @@ public class ProductControllerImpl implements ProductController {
     public Product getProductById(int id) throws ProductControllerImplException {
         try {
             return productService.getProductById(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductControllerImpl 的 getProductById() 有問題。");
+        }
+    }
+
+    @Override
+    public String productDescription(Integer id, HttpServletRequest req) throws ProductControllerImplException {
+        try {
+            req.getSession().setAttribute("productDesc", productService.getProductById(id));
+            return "productDescription";
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductControllerImpl 的 productDescription() 有問題。");
         }
     }
 }

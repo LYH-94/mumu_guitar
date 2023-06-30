@@ -2,6 +2,7 @@ package controllers;
 
 import pojo.Product;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface ProductController {
@@ -16,4 +17,7 @@ public interface ProductController {
 
     // 通過 Id 獲取商品。
     public Product getProductById(int id);
+
+    // 獲取商品的詳細訊息。
+    public String productDescription(Integer id, HttpServletRequest req);
 }

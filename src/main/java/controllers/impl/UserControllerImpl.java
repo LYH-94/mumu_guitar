@@ -26,16 +26,17 @@ public class UserControllerImpl implements UserController {
 
             User user = (User) session.getAttribute("user");
             session.setAttribute("verification", "123"); // 只用來判斷登入時帳號密碼是否錯誤，錯誤時為 "fail"。
-            req.getSession().setAttribute("duplicateUsers", "false"); // 只用來判斷註冊時帳號是已存在，已存在時為 "true"。
+            session.setAttribute("duplicateUsers", "false"); // 只用來判斷註冊時帳號是已存在，已存在時為 "true"。
 
             // 判斷是否有選擇商品的分類。
             String classification = req.getParameter("classification");
-            if (StringUtils.isEmpty(classification)) classification = "all";
+            if (StringUtils.isEmpty(classification)) classification = "所有商品";
+            session.setAttribute("classification", classification);
 
             if (user == null) { // 沒有 user 表示是訪客。
                 // 由於是訪客，所以直接調用 ProductController 將產品數據直接渲染到 index.html 上。
                 List<Product> productList = null;
-                if ("all".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
+                if ("所有商品".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
                     productList = productController.getAllProduct();
                 } else if ("木吉他".equals(classification)) {
                     productList = productController.getProductByType(classification);
@@ -58,7 +59,7 @@ public class UserControllerImpl implements UserController {
                     // 一般用戶與訪客差不多，只是在 HTML 頁面上多顯示歡迎訊息。
                     // 調用 ProductController 將產品數據直接渲染到 index.html 上。
                     List<Product> productList = null;
-                    if ("all".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
+                    if ("所有商品".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
                         productList = productController.getAllProduct();
                     } else if ("木吉他".equals(classification)) {
                         productList = productController.getProductByType(classification);
@@ -90,7 +91,7 @@ public class UserControllerImpl implements UserController {
                 } else {
                     // 由於是訪客，所以直接調用 ProductController 將產品數據直接渲染到 index.html 上。
                     List<Product> productList = null;
-                    if ("all".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
+                    if ("所有商品".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
                         productList = productController.getAllProduct();
                     } else if ("木吉他".equals(classification)) {
                         productList = productController.getProductByType(classification);

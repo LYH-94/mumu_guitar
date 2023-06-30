@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" href=".\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
-    <link type="text/css" rel="stylesheet" href=".\styles\common.css">
-    <link type="text/css" rel="stylesheet" href=".\styles\trolley.css">
+    <link type="text/css" rel="stylesheet" href="./styles/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link type="text/css" rel="stylesheet" href="./styles/common.css">
+    <link type="text/css" rel="stylesheet" href="./styles/trolley.css">
 
     <!-- JavaScript -->
-    <script type="text/javascript" src=".\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
-    <script type="text/javascript" src=".\scripts\common.js" defer></script>
+    <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
+    <script type="text/javascript" src="./scripts/common.js" defer></script>
 
     <title>木木吉他</title>
 </head>
@@ -57,11 +57,14 @@
 
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品
+        <button type="button" onclick="index()"
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品
         </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他
+        <button type="button" onclick="index_woodenGuitar()"
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他
         </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他
+        <button type="button" onclick="index_electricGuitar()"
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他
         </button>
         <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦
         </button>
@@ -118,12 +121,14 @@
                 <div th:unless="${#lists.isEmpty(session.trolleyClass.product)}"
                      th:each="i : ${#numbers.sequence(0, #lists.size(session.trolleyClass.product)-1)}"
                      th:with="trolleyClass = ${session.trolleyClass}"
-                     class="d-flex pad_0 product" style="background-color: #FFFFFF">
-                    <div th:text="${trolleyClass.product.get(i).number}"
-                         class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">商品編號
+                     class="d-flex pad_0 product_css" style="background-color: #FFFFFF">
+                    <div th:onclick="'productDescription('+${trolleyClass.product.get(i).id}+')'"
+                         th:text="${trolleyClass.product.get(i).number}"
+                         class="d-flex justify-content-center align-items-center pad_0"
+                         style="cursor: pointer; width: 100px; color: blue;">商品編號
                     </div>
                     <div class="d-flex justify-content-start align-items-center pad_0" style="width: 400px;">
-                        <img th:src="${'./images/' + session.trolleyClass.product[i].photo}" class="img_product">
+                        <img th:src="'./images/' + ${session.trolleyClass.product[i].photo}" class="img_product">
                         <span th:text="${trolleyClass.product.get(i).name}">商品名稱</span>
                     </div>
                     <div th:text="${trolleyClass.product.get(i).inventory}"
@@ -149,9 +154,9 @@
 
             <div class="row mar_0 section_row3_col1_row4">
                 <div class="d-flex justify-content-end pad_0">
-                    商品總數<span th:text="${session.trolleyClass.totalQuantity}" class="count_2">商品總數</span>
-                    總金額<span th:text="'NT$' + ${session.trolleyClass.totalAmount}" class="count_2"
-                                style="color: red">總金額</span>
+                    <span th:text="'商品總數：' + ${session.trolleyClass.totalQuantity}" class="count_2">商品總數</span>
+                    / 總金額<span th:text="'NT$' + ${session.trolleyClass.totalAmount}" class="count_2"
+                          style="color: red">總金額</span>
                 </div>
 
                 <div class="d-flex justify-content-end pad_0">

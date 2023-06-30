@@ -4,24 +4,18 @@
 
 // 首頁，展示所有商品。
 function index() {
-    window.location.href='index.do'; // 發送 index.do 請求。
+    window.location.href="index.do"; // 發送 index.do 請求。
 }
 
 // 首頁，展示木吉他。
 function index_woodenGuitar() {
-    window.location.href='index.do?classification='+"木吉他"; // 發送 index.do 請求。
+    window.location.href="index.do?classification=木吉他"; // 發送 index.do 請求。
 }
 
 // 首頁，展示電吉他。
 function index_electricGuitar() {
-    window.location.href='index.do?classification='+"電吉他"; // 發送 index.do 請求。
+    window.location.href="index.do?classification=電吉他"; // 發送 index.do 請求。
 }
-
-/*
-function logIn_index() {
-    window.location.href='./index.do'; // 發送 index.do 請求。
-}
-*/
 
 function logInOut() {
     // 獲取當前會員圖示下的文字。("會員登入" 或 "登出")。
@@ -29,22 +23,26 @@ function logInOut() {
     var text_logInOut = element.textContent;
 
     if("會員登入" === text_logInOut){
-        window.location.href='index.do?operate='+"logInPage"; // 發送調用 logInPage 請求。
+        window.location.href="index.do?operate=logInPage"; // 發送調用 logInPage 請求。
     }else{
-        window.location.href='index.do?operate='+"logOut"; // 發送調用 logOut 請求。
+        window.location.href="index.do?operate=logOut"; // 發送調用 logOut 請求。
     }
 }
 
 function register() {
-    window.location.href='index.do?operate='+"registerPage"; // 發送 registerPage 請求。
+    window.location.href="index.do?operate=registerPage"; // 發送 registerPage 請求。
 }
 
 function favorite() {
-    window.location.href='favorite.do?operate='+"getFavoriteByUserId"; // 發送 favorite 請求。
+    window.location.href="favorite.do?operate=getFavoriteByUserId"; // 發送 favorite 請求。
 }
 
 function trolley() {
-    window.location.href='trolley.do?operate='+"getTrolleyByUserId"; // 發送 trolley 請求。
+    window.location.href="trolley.do?operate=getTrolleyByUserId"; // 發送 trolley 請求。
+}
+
+function productDescription(id){
+    window.location.href="productController.do?operate=productDescription&id="+id;
 }
 
 /* ============================= 下拉式選單元件 ============================ */
