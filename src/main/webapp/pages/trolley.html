@@ -28,12 +28,8 @@
                 <!--會員圖-->
                 <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/person-square.svg" class="img-fluid">
-                    <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">
-                        會員登入
-                    </figcaption>
-                    <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">
-                        登出
-                    </figcaption>
+                    <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">會員登入</figcaption>
+                    <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">登出</figcaption>
                 </figure>
                 <!--註冊圖-->
                 <figure onclick="register()" class="col pad_0 login_register_favorite_function">

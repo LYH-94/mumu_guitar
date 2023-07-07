@@ -9,6 +9,8 @@
     <bean id="index" class="controllers.impl.UserControllerImpl">
         <property name="userService" ref="userService"/>
         <property name="productController" ref="productController"/>
+        <property name="favoriteController" ref="favorite"/>
+        <property name="trolleyController" ref="trolley"/>
         <property name="orderController" ref="orderController"/>
     </bean>
 

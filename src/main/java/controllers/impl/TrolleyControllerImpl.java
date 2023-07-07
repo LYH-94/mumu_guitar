@@ -9,7 +9,9 @@ import pojo.TrolleyClass;
 import pojo.User;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class TrolleyControllerImpl implements TrolleyController {
@@ -66,5 +68,35 @@ public class TrolleyControllerImpl implements TrolleyController {
             e.printStackTrace();
             throw new TrolleyControllerImplException("TrolleyControllerImpl 的 getFavoriteByUserId() 有問題。");
         }
+    }
+
+    @Override
+    public String add_delete_Trolley(Integer productId, HttpServletRequest req, HttpServletResponse resp) throws TrolleyControllerImplException {
+        try {
+            HttpSession session = req.getSession();
+            User user = (User) session.getAttribute("user");
+
+            if (user != null && "general".equals(user.getIdentity())) { // 若非 null 表示已經登入。
+                boolean b = trolleyService.addTrolley(productId, user.getId());
+
+                PrintWriter out = resp.getWriter();
+                if (b == true) {
+                    out.print("add_success");
+                } else {
+                    out.print("delete_success");
+                }
+                out.flush();
+                out.close();
+            } else {
+                PrintWriter out = resp.getWriter();
+                out.print("logIn"); // 尚未登入，請用戶進行登入操作。
+                out.flush();
+                out.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TrolleyControllerImplException("TrolleyControllerImpl 的 add_delete_Trolley() 有問題。");
+        }
+        return "axios";
     }
 }

@@ -15,7 +15,24 @@ public class ProductControllerImpl implements ProductController {
     private ProductServiceImpl productService = null;
 
     @Override
-    public List<Product> getAllProduct() throws ProductControllerImplException {
+    public List<Product> getProduct(String classification) throws ProductControllerImplException {
+        try {
+            if ("所有商品".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
+                return getAllProduct();
+            } else if ("木吉他".equals(classification)) {
+                return getProductByType(classification);
+            } else if ("電吉他".equals(classification)) {
+                return getProductByType(classification);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductControllerImpl 的 getProduct() 有問題。");
+        }
+        return null;
+    }
+
+    @Override
+    public List<Product> getAllProduct(){
         try {
             return productService.getAllProduct();
         } catch (Exception e) {
@@ -35,6 +52,16 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
+    public Product getProductById(int id) throws ProductControllerImplException {
+        try {
+            return productService.getProductById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductControllerImpl 的 getProductById() 有問題。");
+        }
+    }
+
+    @Override
     public List<Product> getHotProduct() throws ProductControllerImplException {
         try {
             List<Product> allProduct = productService.getAllProduct();
@@ -47,16 +74,6 @@ public class ProductControllerImpl implements ProductController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductControllerImpl 的 getHotProduct() 有問題。");
-        }
-    }
-
-    @Override
-    public Product getProductById(int id) throws ProductControllerImplException {
-        try {
-            return productService.getProductById(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ProductControllerImplException("ProductControllerImpl 的 getProductById() 有問題。");
         }
     }
 

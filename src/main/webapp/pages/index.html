@@ -12,6 +12,8 @@
     <!-- JavaScript -->
     <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
     <script type="text/javascript" src="./scripts/common.js" defer></script>
+    <script type="text/javascript" src="./scripts/axios.min.js"></script> <!-- Axios 異步請求框架 -->
+    <script type="text/javascript" src="./scripts/vue.js"></script>
 
     <title>木木吉他</title>
 </head>
@@ -28,12 +30,8 @@
                 <!--會員圖-->
                 <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/person-square.svg" class="img-fluid">
-                    <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">
-                        會員登入
-                    </figcaption>
-                    <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">
-                        登出
-                    </figcaption>
+                    <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">會員登入</figcaption>
+                    <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">登出</figcaption>
                 </figure>
                 <!--註冊圖-->
                 <figure onclick="register()" class="col pad_0 login_register_favorite_function">
@@ -163,10 +161,11 @@
                                               style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                                     </div>
                                     <div class="col-4 d-flex justify-content-end pad_0">
-                                        <img src="./images/heart.svg"
-                                             style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                        <img th:onclick="'addFavorite('+${session.hotProductList[0].id}+')'"
+                                             src="./images/heart.svg"
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                         <img src="./images/trolley.svg"
-                                             style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                     </div>
                                 </div>
                             </div>
@@ -202,10 +201,11 @@
                                               style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                                     </div>
                                     <div class="col-4 d-flex justify-content-end pad_0">
-                                        <img src="./images/heart.svg"
-                                             style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                        <img th:onclick="'addFavorite('+${session.hotProductList[1].id}+')'"
+                                             src="./images/heart.svg"
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                         <img src="./images/trolley.svg"
-                                             style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                     </div>
                                 </div>
                             </div>
@@ -241,10 +241,11 @@
                                               style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                                     </div>
                                     <div class="col-4 d-flex justify-content-end pad_0">
-                                        <img src="./images/heart.svg"
-                                             style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                        <img th:onclick="'addFavorite('+${session.hotProductList[2].id}+')'"
+                                             src="./images/heart.svg"
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                         <img src="./images/trolley.svg"
-                                             style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                     </div>
                                 </div>
                             </div>
@@ -330,10 +331,23 @@
                                       style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                             </div>
                             <div class="col-4 d-flex justify-content-end pad_0">
-                                <img src="./images/heart.svg"
-                                     style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                <img src="./images/trolley.svg"
-                                     style="width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                <img th:onclick="'add_delete_Favorite('+${product.id}+')'"
+                                     th:if="${session.favoriteList_index.get(product.id-1) == product.number}"
+                                     src="./images/heart-fill.svg"
+                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                <img th:onclick="'add_delete_Favorite('+${product.id}+')'"
+                                     th:unless="${session.favoriteList_index.get(product.id-1) == product.number}"
+                                     src="./images/heart.svg"
+                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+
+                                <img th:onclick="'add_delete_Trolley('+${product.id}+')'"
+                                     th:if="${session.trolleyList_index.get(product.id-1) == product.number}"
+                                     src="./images/trolley-fill.svg"
+                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                <img th:onclick="'add_delete_Trolley('+${product.id}+')'"
+                                     th:unless="${session.trolleyList_index.get(product.id-1) == product.number}"
+                                     src="./images/trolley.svg"
+                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                             </div>
                         </div>
                     </div>

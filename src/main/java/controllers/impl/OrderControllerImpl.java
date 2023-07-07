@@ -1,7 +1,6 @@
 package controllers.impl;
 
 import bo.impl.OrderServiceImpl;
-import bo.impl.ProductServiceImpl;
 import controllers.OrderController;
 import controllers.exception.OrderControllerImplException;
 import controllers.exception.UserControllerImplException;
