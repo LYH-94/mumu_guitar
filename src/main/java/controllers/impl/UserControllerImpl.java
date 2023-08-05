@@ -4,7 +4,6 @@ import bo.impl.UserServiceImpl;
 import controllers.UserController;
 import controllers.exception.UserControllerImplException;
 import pojo.*;
-import util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -31,14 +30,9 @@ public class UserControllerImpl implements UserController {
             session.setAttribute("favorite", "null");
             session.setAttribute("trolley", "null");
 
-            // 判斷是否有選擇商品的分類。
-            String classification = req.getParameter("classification");
-            if (StringUtils.isEmpty(classification)) classification = "所有商品";
-            session.setAttribute("classification", classification);
-
             if (user == null) { // 沒有 user 表示是訪客。
                 // 由於是訪客，所以直接調用 ProductController 將產品數據直接渲染到 index.html 上。
-                List<Product> productList = productController.getProduct(classification);
+                List<Product> productList = productController.getProduct(req);
 
                 // 獲取銷量前三名的熱門商品。
                 List<Product> hotProductList = productController.getHotProduct();
@@ -63,7 +57,7 @@ public class UserControllerImpl implements UserController {
                 if ("general".equals(user.getIdentity())) {
                     // 一般用戶與訪客差不多，只是在 HTML 頁面上多顯示歡迎訊息。
                     // 調用 ProductController 將產品數據直接渲染到 index.html 上。
-                    List<Product> productList = productController.getProduct(classification);
+                    List<Product> productList = productController.getProduct(req);
 
                     // 獲取銷量前三名的熱門商品。
                     List<Product> hotProductList = productController.getHotProduct();
@@ -122,9 +116,9 @@ public class UserControllerImpl implements UserController {
                     session.setAttribute("ordertList", ordertList);
 
                     return "manager_order";
-                } else {
+                } else { //user 不等於 null 也不符合任何用戶或管理員，所以也是訪客。
                     // 由於是訪客，所以直接調用 ProductController 將產品數據直接渲染到 index.html 上。
-                    List<Product> productList = productController.getProduct(classification);
+                    List<Product> productList = productController.getProduct(req);
 
                     // 獲取銷量前三名的熱門商品。
                     List<Product> hotProductList = productController.getHotProduct();

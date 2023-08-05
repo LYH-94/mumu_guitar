@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductController {
     // 根據輸入的類型來獲取商品數據。
-    public List<Product> getProduct(String classification);
+    public List<Product> getProduct(HttpServletRequest req);
 
     // 獲取所有商品數據。
     public List<Product> getAllProduct();

@@ -114,7 +114,7 @@
                         <input type="radio" name="screen_inventory" value="2" checked> 所有商品
                     </span>
 
-                    <span class="pad_0" style="font-size: 16px; color: #141637;">搜尋</span><br>
+                    <span class="pad_0" style="font-size: 16px; color: #141637;">搜尋商品名稱</span><br>
                     <input type="text" name="search" value=""
                            style="width: 180px; height: 28px; margin-top: 9px; margin-bottom: 0px; margin-left: 15px; margin-right: 0px;"><br>
                     <input type="submit" value="確定" class="bor_0 pad_0 filter_btn">
@@ -274,7 +274,9 @@
             <div class="row mar_0 section_row3_col2_row1">
 
                 <div class="col pad_0">
-                    <span th:text="${session.classification}" class="pad_0" style="font-size: 20px; color: #141637;">商品類型</span>
+                    <span th:if="${session.classification} == 0" th:text="所有商品" class="pad_0" style="font-size: 20px; color: #141637;">商品類型</span>
+                    <span th:if="${session.classification} == 1000" th:text="木吉他" class="pad_0" style="font-size: 20px; color: #141637;">商品類型</span>
+                    <span th:if="${session.classification} == 2000" th:text="電吉他" class="pad_0" style="font-size: 20px; color: #141637;">商品類型</span>
                     <hr class="mar_pad_0 section_baseline_100">
                 </div>
 
@@ -330,7 +332,8 @@
                                 <span th:text="'$' + ${product.price}"
                                       style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                             </div>
-                            <div class="col-4 d-flex justify-content-end pad_0">
+                            <!--若用戶點選分類為所有商品時，執行以下 div。-->
+                            <div class="col-4 d-flex justify-content-end pad_0" th:if="${session.classification} == 0">
                                 <img th:onclick="'add_delete_Favorite('+${product.id}+')'"
                                      th:if="${session.favoriteList_index.get(product.id-1) == product.number}"
                                      src="./images/heart-fill.svg"
@@ -346,6 +349,27 @@
                                      style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                 <img th:onclick="'add_delete_Trolley('+${product.id}+')'"
                                      th:unless="${session.trolleyList_index.get(product.id-1) == product.number}"
+                                     src="./images/trolley.svg"
+                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                            </div>
+
+                            <!--若用戶點選分類不為所有商品時，執行以下 div。-->
+                            <div class="col-4 d-flex justify-content-end pad_0" th:unless="${session.classification} == 0">
+                                <img th:onclick="'add_delete_Favorite('+${product.id}+')'"
+                                     th:if="${session.favoriteList_index.get(product.number-session.classification-1) == product.number}"
+                                     src="./images/heart-fill.svg"
+                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                <img th:onclick="'add_delete_Favorite('+${product.id}+')'"
+                                     th:unless="${session.favoriteList_index.get(product.number-session.classification-1) == product.number}"
+                                     src="./images/heart.svg"
+                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+
+                                <img th:onclick="'add_delete_Trolley('+${product.id}+')'"
+                                     th:if="${session.trolleyList_index.get(product.number-session.classification-1) == product.number}"
+                                     src="./images/trolley-fill.svg"
+                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                <img th:onclick="'add_delete_Trolley('+${product.id}+')'"
+                                     th:unless="${session.trolleyList_index.get(product.number-session.classification-1) == product.number}"
                                      src="./images/trolley.svg"
                                      style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                             </div>

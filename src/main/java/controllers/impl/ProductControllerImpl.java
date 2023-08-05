@@ -4,6 +4,7 @@ import bo.impl.ProductServiceImpl;
 import controllers.ProductController;
 import controllers.exception.ProductControllerImplException;
 import pojo.Product;
+import util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Comparator;
@@ -15,8 +16,25 @@ public class ProductControllerImpl implements ProductController {
     private ProductServiceImpl productService = null;
 
     @Override
-    public List<Product> getProduct(String classification) throws ProductControllerImplException {
+    public List<Product> getProduct(HttpServletRequest req) throws ProductControllerImplException {
         try {
+            // 判斷是否有選擇商品的分類。
+            String classification = req.getParameter("classification");
+            if (StringUtils.isEmpty(classification)) classification = "所有商品";
+
+            // 在 session 中以數字的方式儲存 classification，用以渲染模板時，判斷當前用戶選擇的商品類型。
+            // 所有商品：
+            // 木吉他：1000
+            // 電吉他：2000
+            if ("所有商品".equals(classification)) {
+                req.getSession().setAttribute("classification", 0);
+            } else if ("木吉他".equals(classification)) {
+                req.getSession().setAttribute("classification", 1000);
+            } else if ("電吉他".equals(classification)) {
+                req.getSession().setAttribute("classification", 2000);
+            }
+            //req.getSession().setAttribute("classification", classification);
+
             if ("所有商品".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
                 return getAllProduct();
             } else if ("木吉他".equals(classification)) {
@@ -32,7 +50,7 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
-    public List<Product> getAllProduct(){
+    public List<Product> getAllProduct() {
         try {
             return productService.getAllProduct();
         } catch (Exception e) {
