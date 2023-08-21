@@ -9,5 +9,7 @@ import java.util.List;
 public interface FavoriteController {
     public String getFavoriteByUserId(HttpServletRequest req);
 
+    public boolean checkFavorite(Integer productId, Integer userId);
+
     public String add_delete_Favorite(Integer productId, HttpServletRequest req, HttpServletResponse resp);
 }

@@ -121,7 +121,6 @@ public class DispatcherServlet extends ViewBaseServlet {
                                     }
                                     parameterObj = Integer.parseInt(parameterValue);
                                 } else if ("java.time.LocalDate".equals(typeName)) {
-                                    //System.out.println("123123");
                                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                                     parameterObj = LocalDate.parse(parameterValue, formatter);
                                 }

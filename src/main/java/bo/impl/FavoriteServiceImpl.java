@@ -40,4 +40,14 @@ public class FavoriteServiceImpl implements FavoriteService {
             throw new FavoriteServiceImplException("FavoriteServiceImpl 的 addFavorite() 有問題。");
         }
     }
+
+    @Override
+    public boolean checkFavorite(Integer productId, Integer userId) throws FavoriteServiceImplException {
+        try {
+            return favoriteDAO.checkFavorite(ConnUtils.getConn(), Favorite.class, productId, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new FavoriteServiceImplException("FavoriteServiceImpl 的 checkFavorite() 有問題。");
+        }
+    }
 }

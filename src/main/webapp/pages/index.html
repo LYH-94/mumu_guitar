@@ -56,22 +56,15 @@
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
         <button type="button" onclick="index()"
-                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品
-        </button>
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品</button>
         <button type="button" onclick="index_woodenGuitar()"
-                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他
-        </button>
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他</button>
         <button type="button" onclick="index_electricGuitar()"
-                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他配件
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">擴音設備
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">琴袋琴盒
-        </button>
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他配件</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">擴音設備</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">琴袋琴盒</button>
     </div>
 </nav>
 
@@ -80,8 +73,7 @@
     <div class="row mar_0 section_row1">
         <div th:if="${session.user.username == null}" class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
         <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1"><!-- 用戶詳細訊息還沒做。 -->
-            <a th:text="${session.user.username}" th:href="@{/index.do}">用戶名稱</a> 歡迎光臨~!
-        </div>
+            <a th:text="${session.user.username}" th:href="@{/index.do}">用戶名稱</a> 歡迎光臨~!</div>
     </div>
 
     <!-- 水平分隔線 -->
@@ -94,29 +86,26 @@
         <div class="col-3 pad_0 section_row3_col1">
             <!-- 篩選功能表單 -->
             <div class="row mar_0 section_row3_col1_row1">
-                <form action="..." method="post" class="pad_0">
+                <form action="index.do" method="post" class="pad_0">
                     <span class="pad_0" style="font-size: 20px; color: #141637;">篩選</span>
                     <hr class="mar_pad_0 section_baseline_60">
 
                     <span class="pad_0"
                           style="margin-top: 5px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; font-size: 16px; color: #141637;">售價</span>
                     <div class="pad_0" style="font-size: 16px; color: #141637;">
-                        $<input type="text" name="lowest_price" value=""
-                                style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
-                        ~$<input type="text" name="highest_price" value=""
-                                 style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
+                        $<input type="text" name="lowest_price" style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
+                        ~$<input type="text" name="highest_price" style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
                     </div>
 
                     <span class="pad_0" style="font-size: 16px; color: #141637;">庫存</span>
                     <span class="d-flex justify-content-evenly pad_0" style="font-size: 16px; color: #141637;">
-                        <input type="radio" name="screen_inventory" value="1"> 有現貨
-                        <input type="radio" name="screen_inventory" value="0"> 需調貨
-                        <input type="radio" name="screen_inventory" value="2" checked> 所有商品
+                        <input type="radio" name="inventory" value="1"> 有現貨
+                        <input type="radio" name="inventory" value="0"> 需調貨
+                        <input type="radio" name="inventory" value="2" checked> 所有商品
                     </span>
 
                     <span class="pad_0" style="font-size: 16px; color: #141637;">搜尋商品名稱</span><br>
-                    <input type="text" name="search" value=""
-                           style="width: 180px; height: 28px; margin-top: 9px; margin-bottom: 0px; margin-left: 15px; margin-right: 0px;"><br>
+                    <input type="text" name="searchProduct" style="width: 180px; height: 28px; margin-top: 9px; margin-bottom: 0px; margin-left: 15px; margin-right: 0px;"><br>
                     <input type="submit" value="確定" class="bor_0 pad_0 filter_btn">
                 </form>
             </div>
@@ -137,34 +126,46 @@
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-center pad_0"
                                          style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
-                                        <img th:onclick="'productDescription('+${session.hotProductList[0].id}+')'"
-                                             th:src="'./images/' + ${session.hotProductList[0].photo}"
+                                        <img th:onclick="'productDescription('+${session.hotProductList[0].product.id}+')'"
+                                             th:src="'./images/' + ${session.hotProductList[0].product.photo}"
                                              style="cursor: pointer; width: 206px; height: 298px;">
                                     </div>
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="${session.hotProductList[0].name}"
+                                        <span th:text="${session.hotProductList[0].product.name}"
                                               style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px; color: #141637;">商品名稱</span>
                                     </div>
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-end pad_0">
-                                        <span th:text="'庫存：' + ${session.hotProductList[0].inventory}"
+                                        <span th:text="'庫存：' + ${session.hotProductList[0].product.inventory}"
                                               style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px; color: #141637;">庫存</span>
                                     </div>
                                 </div>
                                 <div class="row"
                                      style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="'$' + ${session.hotProductList[0].price}"
+                                        <span th:text="'$' + ${session.hotProductList[0].product.price}"
                                               style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                                     </div>
                                     <div class="col-4 d-flex justify-content-end pad_0">
-                                        <img th:onclick="'addFavorite('+${session.hotProductList[0].id}+')'"
+                                        <img th:onclick="'add_delete_Favorite('+${session.hotProductList[0].product.id}+')'"
+                                             th:if="${session.hotProductList[0].exist_favorite == true}"
+                                             src="./images/heart-fill.svg"
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                        <img th:onclick="'add_delete_Favorite('+${session.hotProductList[0].product.id}+')'"
+                                             th:unless="${session.hotProductList[0].exist_favorite == true}"
                                              src="./images/heart.svg"
                                              style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                        <img src="./images/trolley.svg"
+
+                                        <img th:onclick="'add_delete_Trolley('+${session.hotProductList[0].product.id}+')'"
+                                             th:if="${session.hotProductList[0].exist_trolley == true}"
+                                             src="./images/trolley-fill.svg"
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                        <img th:onclick="'add_delete_Trolley('+${session.hotProductList[0].product.id}+')'"
+                                             th:unless="${session.hotProductList[0].exist_trolley == true}"
+                                             src="./images/trolley.svg"
                                              style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                     </div>
                                 </div>
@@ -177,34 +178,46 @@
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-center pad_0"
                                          style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
-                                        <img th:onclick="'productDescription('+${session.hotProductList[1].id}+')'"
-                                             th:src="'./images/' + ${session.hotProductList[1].photo}"
+                                        <img th:onclick="'productDescription('+${session.hotProductList[1].product.id}+')'"
+                                             th:src="'./images/' + ${session.hotProductList[1].product.photo}"
                                              style="cursor: pointer; width: 206px; height: 298px;">
                                     </div>
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="${session.hotProductList[1].name}"
+                                        <span th:text="${session.hotProductList[1].product.name}"
                                               style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px; color: #141637;">商品名稱</span>
                                     </div>
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-end pad_0">
-                                        <span th:text="'庫存：' + ${session.hotProductList[1].inventory}"
+                                        <span th:text="'庫存：' + ${session.hotProductList[1].product.inventory}"
                                               style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px; color: #141637;">庫存</span>
                                     </div>
                                 </div>
                                 <div class="row"
                                      style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="'$' + ${session.hotProductList[1].price}"
+                                        <span th:text="'$' + ${session.hotProductList[1].product.price}"
                                               style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                                     </div>
                                     <div class="col-4 d-flex justify-content-end pad_0">
-                                        <img th:onclick="'addFavorite('+${session.hotProductList[1].id}+')'"
+                                        <img th:onclick="'add_delete_Favorite('+${session.hotProductList[1].product.id}+')'"
+                                             th:if="${session.hotProductList[1].exist_favorite == true}"
+                                             src="./images/heart-fill.svg"
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                        <img th:onclick="'add_delete_Favorite('+${session.hotProductList[1].product.id}+')'"
+                                             th:unless="${session.hotProductList[1].exist_favorite == true}"
                                              src="./images/heart.svg"
                                              style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                        <img src="./images/trolley.svg"
+
+                                        <img th:onclick="'add_delete_Trolley('+${session.hotProductList[1].product.id}+')'"
+                                             th:if="${session.hotProductList[1].exist_trolley == true}"
+                                             src="./images/trolley-fill.svg"
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                        <img th:onclick="'add_delete_Trolley('+${session.hotProductList[1].product.id}+')'"
+                                             th:unless="${session.hotProductList[1].exist_trolley == true}"
+                                             src="./images/trolley.svg"
                                              style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                     </div>
                                 </div>
@@ -217,40 +230,51 @@
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-center pad_0"
                                          style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
-                                        <img th:onclick="'productDescription('+${session.hotProductList[2].id}+')'"
-                                             th:src="'./images/' + ${session.hotProductList[2].photo}"
+                                        <img th:onclick="'productDescription('+${session.hotProductList[2].product.id}+')'"
+                                             th:src="'./images/' + ${session.hotProductList[2].product.photo}"
                                              style="cursor: pointer; width: 206px; height: 298px;">
                                     </div>
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="${session.hotProductList[2].name}"
+                                        <span th:text="${session.hotProductList[2].product.name}"
                                               style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px; color: #141637;">商品名稱</span>
                                     </div>
                                 </div>
                                 <div class="row mar_0">
                                     <div class="col d-flex justify-content-end pad_0">
-                                        <span th:text="'庫存：' + ${session.hotProductList[2].inventory}"
+                                        <span th:text="'庫存：' + ${session.hotProductList[2].product.inventory}"
                                               style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px; color: #141637;">庫存</span>
                                     </div>
                                 </div>
                                 <div class="row"
                                      style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
                                     <div class="col d-flex justify-content-start pad_0">
-                                        <span th:text="'$' + ${session.hotProductList[2].price}"
+                                        <span th:text="'$' + ${session.hotProductList[2].product.price}"
                                               style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                                     </div>
                                     <div class="col-4 d-flex justify-content-end pad_0">
-                                        <img th:onclick="'addFavorite('+${session.hotProductList[2].id}+')'"
+                                        <img th:onclick="'add_delete_Favorite('+${session.hotProductList[2].product.id}+')'"
+                                             th:if="${session.hotProductList[2].exist_favorite == true}"
+                                             src="./images/heart-fill.svg"
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                        <img th:onclick="'add_delete_Favorite('+${session.hotProductList[2].product.id}+')'"
+                                             th:unless="${session.hotProductList[2].exist_favorite == true}"
                                              src="./images/heart.svg"
                                              style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                        <img src="./images/trolley.svg"
+
+                                        <img th:onclick="'add_delete_Trolley('+${session.hotProductList[2].product.id}+')'"
+                                             th:if="${session.hotProductList[2].exist_trolley == true}"
+                                             src="./images/trolley-fill.svg"
+                                             style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
+                                        <img th:onclick="'add_delete_Trolley('+${session.hotProductList[2].product.id}+')'"
+                                             th:unless="${session.hotProductList[2].exist_trolley == true}"
+                                             src="./images/trolley.svg"
                                              style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     <!-- 控制按鈕 -->
@@ -266,6 +290,7 @@
                               style="background-color: #CDCDCD"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
+
                 </div>
             </div>
         </div>
@@ -274,9 +299,12 @@
             <div class="row mar_0 section_row3_col2_row1">
 
                 <div class="col pad_0">
-                    <span th:if="${session.classification} == 0" th:text="所有商品" class="pad_0" style="font-size: 20px; color: #141637;">商品類型</span>
-                    <span th:if="${session.classification} == 1000" th:text="木吉他" class="pad_0" style="font-size: 20px; color: #141637;">商品類型</span>
-                    <span th:if="${session.classification} == 2000" th:text="電吉他" class="pad_0" style="font-size: 20px; color: #141637;">商品類型</span>
+                    <span th:if="${session.classification} == 0" th:text="所有商品" class="pad_0"
+                          style="font-size: 20px; color: #141637;">商品類型</span>
+                    <span th:if="${session.classification} == 1000" th:text="木吉他" class="pad_0"
+                          style="font-size: 20px; color: #141637;">商品類型</span>
+                    <span th:if="${session.classification} == 2000" th:text="電吉他" class="pad_0"
+                          style="font-size: 20px; color: #141637;">商品類型</span>
                     <hr class="mar_pad_0 section_baseline_100">
                 </div>
 
@@ -285,9 +313,7 @@
                     <div class="dropdown inline" style="width: 110px;">
                         <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
-                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">
-                            名稱(A-Z)
-                        </button>
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">名稱(A-Z)</button>
                         <ul id="dropdown-menu1" aria-labelledby="dropdownMenuButton1" class="dropdown-menu">
                             <li><a data-value="1" href="#" class="dropdown-item">名稱(A-Z)</a></li>
                             <li><a data-value="2" href="#" class="dropdown-item">名稱(Z-A)</a></li>
@@ -304,72 +330,51 @@
                     <!-- 展示商品 -->
                     <div th:if="${#lists.isEmpty(session.productList)}">尚無商品。</div>
                     <div th:unless="${#lists.isEmpty(session.productList)}"
-                         th:each="product : ${session.productList}"
+                         th:each="productAllInfo : ${session.productList}"
                          class="pad_0 product_css">
                         <div class="row mar_0">
                             <div class="col d-flex justify-content-center pad_0"
                                  style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
-                                <img th:onclick="'productDescription('+${product.id}+')'"
-                                     th:src="'./images/' + ${product.photo}"
+                                <img th:onclick="'productDescription('+${productAllInfo.product.id}+')'"
+                                     th:src="'./images/' + ${productAllInfo.product.photo}"
                                      style="cursor: pointer; width: 206px; height: 298px;">
                             </div>
                         </div>
                         <div class="row mar_0">
                             <div class="col d-flex justify-content-start pad_0">
-                                <span th:text="${product.name}"
+                                <span th:text="${productAllInfo.product.name}"
                                       style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px;">商品名稱</span>
                             </div>
                         </div>
                         <div class="row mar_0">
                             <div class="col d-flex justify-content-end pad_0">
-                                <span th:text="'庫存：' + ${product.inventory}"
+                                <span th:text="'庫存：' + ${productAllInfo.product.inventory}"
                                       style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px;">庫存</span>
                             </div>
                         </div>
                         <div class="row"
                              style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
                             <div class="col d-flex justify-content-start pad_0">
-                                <span th:text="'$' + ${product.price}"
+                                <span th:text="'$' + ${productAllInfo.product.price}"
                                       style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                             </div>
-                            <!--若用戶點選分類為所有商品時，執行以下 div。-->
-                            <div class="col-4 d-flex justify-content-end pad_0" th:if="${session.classification} == 0">
-                                <img th:onclick="'add_delete_Favorite('+${product.id}+')'"
-                                     th:if="${session.favoriteList_index.get(product.id-1) == product.number}"
+
+                            <div class="col-4 d-flex justify-content-end pad_0">
+                                <img th:onclick="'add_delete_Favorite('+${productAllInfo.product.id}+')'"
+                                     th:if="${productAllInfo.exist_favorite == true}"
                                      src="./images/heart-fill.svg"
                                      style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                <img th:onclick="'add_delete_Favorite('+${product.id}+')'"
-                                     th:unless="${session.favoriteList_index.get(product.id-1) == product.number}"
+                                <img th:onclick="'add_delete_Favorite('+${productAllInfo.product.id}+')'"
+                                     th:unless="${productAllInfo.exist_favorite == true}"
                                      src="./images/heart.svg"
                                      style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
 
-                                <img th:onclick="'add_delete_Trolley('+${product.id}+')'"
-                                     th:if="${session.trolleyList_index.get(product.id-1) == product.number}"
+                                <img th:onclick="'add_delete_Trolley('+${productAllInfo.product.id}+')'"
+                                     th:if="${productAllInfo.exist_trolley == true}"
                                      src="./images/trolley-fill.svg"
                                      style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                <img th:onclick="'add_delete_Trolley('+${product.id}+')'"
-                                     th:unless="${session.trolleyList_index.get(product.id-1) == product.number}"
-                                     src="./images/trolley.svg"
-                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                            </div>
-
-                            <!--若用戶點選分類不為所有商品時，執行以下 div。-->
-                            <div class="col-4 d-flex justify-content-end pad_0" th:unless="${session.classification} == 0">
-                                <img th:onclick="'add_delete_Favorite('+${product.id}+')'"
-                                     th:if="${session.favoriteList_index.get(product.number-session.classification-1) == product.number}"
-                                     src="./images/heart-fill.svg"
-                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                <img th:onclick="'add_delete_Favorite('+${product.id}+')'"
-                                     th:unless="${session.favoriteList_index.get(product.number-session.classification-1) == product.number}"
-                                     src="./images/heart.svg"
-                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-
-                                <img th:onclick="'add_delete_Trolley('+${product.id}+')'"
-                                     th:if="${session.trolleyList_index.get(product.number-session.classification-1) == product.number}"
-                                     src="./images/trolley-fill.svg"
-                                     style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                <img th:onclick="'add_delete_Trolley('+${product.id}+')'"
-                                     th:unless="${session.trolleyList_index.get(product.number-session.classification-1) == product.number}"
+                                <img th:onclick="'add_delete_Trolley('+${productAllInfo.product.id}+')'"
+                                     th:unless="${productAllInfo.exist_trolley == true}"
                                      src="./images/trolley.svg"
                                      style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                             </div>
@@ -385,8 +390,7 @@
                     <div class="dropdown" style="width: 85px;">
                         <button id="dropdownMenuButton2" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
-                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">第 1 頁
-                        </button>
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">第 1 頁</button>
                         <ul id="dropdown-menu2" class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                             <li><a data-value="1" href="#" class="dropdown-item">第 1 頁</a></li>
                             <li><a data-value="2" href="#" class="dropdown-item">第 2 頁</a></li>
@@ -399,6 +403,7 @@
             </div>
 
         </div>
+    </div>
     </div>
 </section>
 

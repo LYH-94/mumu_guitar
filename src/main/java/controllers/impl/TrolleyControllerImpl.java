@@ -71,6 +71,16 @@ public class TrolleyControllerImpl implements TrolleyController {
     }
 
     @Override
+    public boolean checkTrolley(Integer productId, Integer userId) throws TrolleyControllerImplException {
+        try {
+            return trolleyService.checkTrolley(productId, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TrolleyControllerImplException("TrolleyControllerImpl 的 checkTrolley() 有問題。");
+        }
+    }
+
+    @Override
     public String add_delete_Trolley(Integer productId, HttpServletRequest req, HttpServletResponse resp) throws TrolleyControllerImplException {
         try {
             HttpSession session = req.getSession();

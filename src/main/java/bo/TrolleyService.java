@@ -11,4 +11,6 @@ public interface TrolleyService {
 
     // 添加商品到指定用戶的購物車中。
     public boolean addTrolley(Integer productId, Integer userId);
+
+    public boolean checkTrolley(Integer productId, Integer userId);
 }

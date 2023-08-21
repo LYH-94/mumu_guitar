@@ -25,6 +25,7 @@
     <bean id="favorite" class="controllers.impl.FavoriteControllerImpl">
         <property name="favoriteService" ref="favoriteService"/>
         <property name="productController" ref="productController"/>
+        <property name="trolleyController" ref="trolley"/>
     </bean>
 
     <bean id="trolley" class="controllers.impl.TrolleyControllerImpl">
@@ -36,6 +37,8 @@
 
     <!-- Services -->
     <bean id="productService" class="bo.impl.ProductServiceImpl">
+        <property name="favoriteController" ref="favorite"/>
+        <property name="trolleyController" ref="trolley"/>
         <property name="productDAO" ref="productDAO"/>
     </bean>
 

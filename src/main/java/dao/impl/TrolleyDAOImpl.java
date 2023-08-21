@@ -17,10 +17,23 @@ public class TrolleyDAOImpl extends BaseDAO implements TrolleyDAO {
             String sql = "SELECT * FROM t_trolley WHERE product = ? AND owner = ?";
             Trolley trolley = super.getInstance(conn, clazz, sql, productId, userId);
 
-            return (trolley == null ? true : false); // 若為不重複為 true，重複則為 false。*/
+            return (trolley == null ? true : false); // 若為不重複為 true，重複則為 false。
         } catch (Exception e) {
             e.printStackTrace();
             throw new TrolleyDAOImplException("TrolleyDAOImpl 的 checkForDuplicateUsers() 有問題。");
+        }
+    }
+
+    @Override
+    public boolean checkTrolley(Connection conn, Class<Trolley> clazz, Integer productId, Integer userId) throws TrolleyDAOImplException {
+        try {
+            String sql = "SELECT * FROM t_trolley WHERE product = ? AND owner = ?";
+            Trolley trolley = super.getInstance(conn, clazz, sql, productId, userId);
+
+            return (trolley != null ? true : false); // 若 !=null 表示該用戶有添加該商品到購物車中。
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TrolleyDAOImplException("TrolleyDAOImpl 的 checkTrolley() 有問題。");
         }
     }
 

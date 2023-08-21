@@ -3,12 +3,13 @@ package controllers.impl;
 import bo.impl.UserServiceImpl;
 import controllers.UserController;
 import controllers.exception.UserControllerImplException;
-import pojo.*;
+import pojo.Order;
+import pojo.ProductAddedFavoAndTrolInfo;
+import pojo.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserControllerImpl implements UserController {
@@ -27,80 +28,32 @@ public class UserControllerImpl implements UserController {
             User user = (User) session.getAttribute("user");
             session.setAttribute("verification", "ok"); // 只用來判斷登入時帳號密碼是否錯誤，錯誤時為 "fail"。
             session.setAttribute("duplicateUsers", "false"); // 只用來判斷註冊時帳號是已存在，已存在時為 "true"。
-            session.setAttribute("favorite", "null");
-            session.setAttribute("trolley", "null");
 
             if (user == null) { // 沒有 user 表示是訪客。
                 // 由於是訪客，所以直接調用 ProductController 將產品數據直接渲染到 index.html 上。
-                List<Product> productList = productController.getProduct(req);
+                List<ProductAddedFavoAndTrolInfo> productList = productController.getProduct(req);
 
                 // 獲取銷量前三名的熱門商品。
-                List<Product> hotProductList = productController.getHotProduct();
-
-                // 訪客沒有購物車和追蹤的商品，因此全部設置為 0。
-                List<String> favorite = new ArrayList<>(); // 設置List用於儲存與Product索引位置對應的favorite。
-                List<String> trolley = new ArrayList<>(); // 設置List用於儲存與Product索引位置對應的trolley。
-                for (int i = 0; i < productList.size(); i++) {
-                    favorite.add("0");
-                    trolley.add("0");
-                }
+                List<ProductAddedFavoAndTrolInfo> hotProductList = productController.getHotProduct(req);
 
                 // 將所有商品和熱門商品的數據存入 session 中，且創建一個 User 物件。
                 session.setAttribute("productList", productList);
                 session.setAttribute("hotProductList", hotProductList);
                 session.setAttribute("user", new User());
-                session.setAttribute("favoriteList_index", favorite);
-                session.setAttribute("trolleyList_index", trolley);
 
                 return "index";
             } else {
                 if ("general".equals(user.getIdentity())) {
                     // 一般用戶與訪客差不多，只是在 HTML 頁面上多顯示歡迎訊息。
                     // 調用 ProductController 將產品數據直接渲染到 index.html 上。
-                    List<Product> productList = productController.getProduct(req);
+                    List<ProductAddedFavoAndTrolInfo> productList = productController.getProduct(req);
 
                     // 獲取銷量前三名的熱門商品。
-                    List<Product> hotProductList = productController.getHotProduct();
-
-                    // 獲取該用戶追蹤的商品。
-                    favoriteController.getFavoriteByUserId(req);
-                    List<Favorite> favoriteList = (List<Favorite>) session.getAttribute("favoriteList");
-                    List<String> favorite = new ArrayList<>(); // 設置List用於儲存與Product索引位置對應的favorite。
-                    String f_number = null;
-                    String p_number = null;
-                    for (int i = 0; i < productList.size(); i++) {
-                        p_number = productList.get(i).getNumber();
-                        favorite.add("0");
-                        for (int j = 0; j < favoriteList.size(); j++) {
-                            f_number = favoriteList.get(j).getProduct().getNumber();
-                            if (f_number.equals(p_number)) {
-                                favorite.add(i, f_number);
-                            }
-                        }
-                    }
-
-                    // 獲取該用戶購物車中的商品。
-                    trolleyController.getTrolleyByUserId(req);
-                    TrolleyClass trolleyClass = (TrolleyClass) session.getAttribute("trolleyClass");
-                    List<String> trolley = new ArrayList<>(); // 設置List用於儲存與Product索引位置對應的trolley。
-                    String t_number = null;
-                    p_number = null;
-                    for (int i = 0; i < productList.size(); i++) {
-                        p_number = productList.get(i).getNumber();
-                        trolley.add("0");
-                        for (int j = 0; j < trolleyClass.getProduct().size(); j++) {
-                            t_number = trolleyClass.getProduct().get(j).getNumber();
-                            if (t_number.equals(p_number)) {
-                                trolley.add(i, t_number);
-                            }
-                        }
-                    }
+                    List<ProductAddedFavoAndTrolInfo> hotProductList = productController.getHotProduct(req);
 
                     // 將所有商品和熱門商品的數據存入 session 中。
                     session.setAttribute("productList", productList);
                     session.setAttribute("hotProductList", hotProductList);
-                    session.setAttribute("favoriteList_index", favorite);
-                    session.setAttribute("trolleyList_index", trolley);
 
                     return "index";
                 } else if ("manager".equals(user.getIdentity())) {
@@ -118,10 +71,10 @@ public class UserControllerImpl implements UserController {
                     return "manager_order";
                 } else { //user 不等於 null 也不符合任何用戶或管理員，所以也是訪客。
                     // 由於是訪客，所以直接調用 ProductController 將產品數據直接渲染到 index.html 上。
-                    List<Product> productList = productController.getProduct(req);
+                    List<ProductAddedFavoAndTrolInfo> productList = productController.getProduct(req);
 
                     // 獲取銷量前三名的熱門商品。
-                    List<Product> hotProductList = productController.getHotProduct();
+                    List<ProductAddedFavoAndTrolInfo> hotProductList = productController.getHotProduct(req);
 
                     // 將所有商品和熱門商品的數據存入 session 中。
                     session.setAttribute("productList", productList);

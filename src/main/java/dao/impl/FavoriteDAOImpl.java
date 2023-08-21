@@ -26,10 +26,24 @@ public class FavoriteDAOImpl extends BaseDAO implements FavoriteDAO {
             String sql = "SELECT * FROM t_favorite WHERE product = ? AND owner = ?";
             Favorite favorite = super.getInstance(conn, clazz, sql, productId, userId);
 
-            return (favorite == null ? true : false); // 若為不重複為 true，重複則為 false。*/
+            return (favorite == null ? true : false); // 若為不重複為 true，重複則為 false。
         } catch (Exception e) {
             e.printStackTrace();
             throw new FavoriteDAOImplException("FavoriteDAOImpl 的 getFavoriteByUserIdAndProductId() 有問題。");
+        }
+    }
+
+    @Override
+    public boolean checkFavorite(Connection conn, Class<Favorite> clazz, Integer productId, Integer userId) throws FavoriteDAOImplException {
+        try {
+            String sql = "SELECT * FROM t_favorite WHERE product = ? AND owner = ?";
+
+            Favorite favorite = super.getInstance(conn, clazz, sql, productId, userId);
+
+            return (favorite != null ? true : false); // 若 !=null 表示該用戶有追蹤該商品。
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new FavoriteDAOImplException("FavoriteDAOImpl 的 checkFavorite() 有問題。");
         }
     }
 

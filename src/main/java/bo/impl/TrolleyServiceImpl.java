@@ -43,4 +43,14 @@ public class TrolleyServiceImpl implements TrolleyService {
             throw new TrolleyServiceImplException("TrolleyServiceImpl 的 addTrolley() 有問題。");
         }
     }
+
+    @Override
+    public boolean checkTrolley(Integer productId, Integer userId) throws TrolleyServiceImplException {
+        try {
+            return trolleyDAO.checkTrolley(ConnUtils.getConn(), Trolley.class, productId, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TrolleyServiceImplException("TrolleyServiceImpl 的 checkTrolley() 有問題。");
+        }
+    }
 }

@@ -4,6 +4,7 @@ import bo.impl.ProductServiceImpl;
 import controllers.ProductController;
 import controllers.exception.ProductControllerImplException;
 import pojo.Product;
+import pojo.ProductAddedFavoAndTrolInfo;
 import util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,7 @@ public class ProductControllerImpl implements ProductController {
     private ProductServiceImpl productService = null;
 
     @Override
-    public List<Product> getProduct(HttpServletRequest req) throws ProductControllerImplException {
+    public List<ProductAddedFavoAndTrolInfo> getProduct(HttpServletRequest req) throws ProductControllerImplException {
         try {
             // 判斷是否有選擇商品的分類。
             String classification = req.getParameter("classification");
@@ -26,27 +27,123 @@ public class ProductControllerImpl implements ProductController {
             // 所有商品：
             // 木吉他：1000
             // 電吉他：2000
-            if ("所有商品".equals(classification)) {
+            // ...
+            List<Product> productList = null;
+            if ("所有商品".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
                 req.getSession().setAttribute("classification", 0);
+                productList = getAllProduct();
             } else if ("木吉他".equals(classification)) {
                 req.getSession().setAttribute("classification", 1000);
+                productList = getProductByType(classification);
             } else if ("電吉他".equals(classification)) {
                 req.getSession().setAttribute("classification", 2000);
+                productList = getProductByType(classification);
             }
-            //req.getSession().setAttribute("classification", classification);
 
-            if ("所有商品".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
-                return getAllProduct();
-            } else if ("木吉他".equals(classification)) {
-                return getProductByType(classification);
-            } else if ("電吉他".equals(classification)) {
-                return getProductByType(classification);
+            // 獲取篩選條件並篩選商品。
+            // 獲取篩選表單中的數據。
+            int lowest_price = 0;
+            int highest_price = 999999;
+            byte inventory = 2;
+            String searchProduct = "";
+
+            if (StringUtils.isEmpty(req.getParameter("lowest_price")) || Integer.parseInt(req.getParameter("lowest_price")) < 0) {
+                lowest_price = 0;
+            } else if (Integer.parseInt(req.getParameter("lowest_price")) > 999999) {
+                lowest_price = 999999;
+            } else {
+                lowest_price = Integer.parseInt(req.getParameter("lowest_price"));
             }
+
+            if (StringUtils.isEmpty(req.getParameter("highest_price")) || Integer.parseInt(req.getParameter("highest_price")) < 0 || Integer.parseInt(req.getParameter("highest_price")) > 999999) {
+                highest_price = 999999;
+            } else {
+                highest_price = Integer.parseInt(req.getParameter("highest_price"));
+            }
+
+            if (StringUtils.isEmpty(req.getParameter("inventory"))) {
+                inventory = 2;
+            } else {
+                inventory = Byte.parseByte(req.getParameter("inventory"));
+            }
+
+            if (StringUtils.isEmpty(req.getParameter("searchProduct"))) {
+                searchProduct = "";
+            } else {
+                searchProduct = req.getParameter("searchProduct");
+            }
+
+            // 開始篩選商品。
+            for (int i = 0; i < productList.size(); ++i) {
+                // 1.篩選價格。
+                if (productList.get(i).getPrice() >= lowest_price && productList.get(i).getPrice() <= highest_price) {
+
+                    // 2.篩選庫存。
+                    if (inventory == 1) { // 1=有現貨、0=需調貨、2=所有商品
+                        if (productList.get(i).getInventory() > 0) {
+                            // 3.篩選商品名稱。
+                            boolean match = true;
+                            for (int j = 0; j < searchProduct.length(); ++j) {
+                                if (productList.get(i).getName().indexOf(searchProduct.charAt(j)) != -1) {
+                                    match = false;
+                                }
+                            }
+                            if (match == true && StringUtils.isNotEmpty(searchProduct)) {
+                                productList.remove(i);
+                                --i;
+                            }
+                        } else {
+                            productList.remove(i);
+                            --i;
+                        }
+                    } else if (inventory == 0) {
+                        if (productList.get(i).getInventory() <= 0) {
+                            // 3.篩選商品名稱。
+                            boolean match = true;
+                            for (int j = 0; j < searchProduct.length(); ++j) {
+                                if (productList.get(i).getName().indexOf(searchProduct.charAt(j)) != -1) {
+                                    match = false;
+                                }
+                            }
+                            if (match == true && StringUtils.isNotEmpty(searchProduct)) {
+                                productList.remove(i);
+                                --i;
+                            }
+                        } else {
+                            productList.remove(i);
+                            --i;
+                        }
+                    } else {
+                        // 3.篩選商品名稱。
+                        boolean match = true;
+                        for (int j = 0; j < searchProduct.length(); ++j) {
+                            if (productList.get(i).getName().indexOf(searchProduct.charAt(j)) != -1) {
+                                match = false;
+                            }
+                        }
+                        if (match == true && StringUtils.isNotEmpty(searchProduct)) {
+                            productList.remove(i);
+                            --i;
+                        }
+                    }
+                } else {
+                    productList.remove(i);
+                    --i;
+                }
+            }
+
+            // 至此 productList 是根據需求獲取的商品數據 (選擇的商品類型或篩選過後的商品等等)，但還不包含是否有添加到用戶的追蹤清單或購物車的訊息，
+            // 因此還需要將商品與追蹤、購物車訊息重新包裝成 ProductAddedFavoAndTrolInfo 物件，方便後續在前端時的顯示判斷。
+            // 調用函式 productService.addFavoAndTrollInfo 包裝 ProductAddedFavoAndTrolInfo 物件。
+            List<ProductAddedFavoAndTrolInfo> productAddedFavoAndTrolInfoList = productService.addFavoAndTrollInfo(productList, req);
+
+            //回傳。
+            return productAddedFavoAndTrolInfoList;
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductControllerImpl 的 getProduct() 有問題。");
         }
-        return null;
     }
 
     @Override
@@ -80,15 +177,21 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
-    public List<Product> getHotProduct() throws ProductControllerImplException {
+    public List<ProductAddedFavoAndTrolInfo> getHotProduct(HttpServletRequest req) throws ProductControllerImplException {
         try {
             List<Product> allProduct = productService.getAllProduct();
 
             // 對 allProduct 進行排序，根據 sales 屬性進行比較。
             allProduct.sort(Comparator.comparingInt(Product::getSales).reversed());
 
-            // 回傳前三個商品做為目前的熱門商品。
-            return allProduct.stream().limit(3).collect(Collectors.toList());
+            // 取前三個商品做為目前的熱門商品。
+            List<Product> hotProductList = allProduct.stream().limit(3).collect(Collectors.toList());
+
+            // 調用函式 productService.addFavoAndTrollInfo 包裝 ProductAddedFavoAndTrolInfo 物件。
+            List<ProductAddedFavoAndTrolInfo> hotProductAddedFavoAndTrolInfoList = productService.addFavoAndTrollInfo(hotProductList, req);
+
+            //處理回傳。
+            return hotProductAddedFavoAndTrolInfoList;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductControllerImpl 的 getHotProduct() 有問題。");
@@ -98,7 +201,7 @@ public class ProductControllerImpl implements ProductController {
     @Override
     public String productDescription(Integer id, HttpServletRequest req) throws ProductControllerImplException {
         try {
-            req.getSession().setAttribute("productDesc", productService.getProductById(id));
+            req.getSession().setAttribute("productDesc", getProductById(id));
             return "productDescription";
         } catch (Exception e) {
             e.printStackTrace();

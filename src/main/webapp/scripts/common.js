@@ -17,6 +17,9 @@ function index_electricGuitar() {
     window.location.href="index.do?classification=電吉他"; // 發送 index.do 請求。
 }
 
+// 首頁，展示...。
+// ...
+
 function logInOut() {
     // 獲取當前會員圖示下的文字。("會員登入" 或 "登出")。
     var element = document.getElementById("id_logInOut");
