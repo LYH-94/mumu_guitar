@@ -6,8 +6,11 @@ import controllers.exception.ProductControllerImplException;
 import pojo.Product;
 import pojo.ProductAddedFavoAndTrolInfo;
 import util.StringUtils;
+import util.compareUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +24,16 @@ public class ProductControllerImpl implements ProductController {
         try {
             // 判斷是否有選擇商品的分類。
             String classification = req.getParameter("classification");
-            if (StringUtils.isEmpty(classification)) classification = "所有商品";
+            HttpSession session = req.getSession();
+            String session_classification = (String) session.getAttribute("session_classification");
+            // 先以 req 請求為主進行來判斷，若為空才根據 session 來判斷。
+            if (StringUtils.isEmpty(classification)) {
+                if (StringUtils.isEmpty(session_classification)) {
+                    classification = "所有商品";
+                } else {
+                    classification = session_classification;
+                }
+            }
 
             // 在 session 中以數字的方式儲存 classification，用以渲染模板時，判斷當前用戶選擇的商品類型。
             // 所有商品：
@@ -30,13 +42,16 @@ public class ProductControllerImpl implements ProductController {
             // ...
             List<Product> productList = null;
             if ("所有商品".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
-                req.getSession().setAttribute("classification", 0);
+                session.setAttribute("classification", 0);
+                session.setAttribute("session_classification", "所有商品");
                 productList = getAllProduct();
             } else if ("木吉他".equals(classification)) {
-                req.getSession().setAttribute("classification", 1000);
+                session.setAttribute("classification", 1000);
+                session.setAttribute("session_classification", "木吉他");
                 productList = getProductByType(classification);
             } else if ("電吉他".equals(classification)) {
-                req.getSession().setAttribute("classification", 2000);
+                session.setAttribute("classification", 2000);
+                session.setAttribute("session_classification", "電吉他");
                 productList = getProductByType(classification);
             }
 
@@ -47,31 +62,61 @@ public class ProductControllerImpl implements ProductController {
             byte inventory = 2;
             String searchProduct = "";
 
-            if (StringUtils.isEmpty(req.getParameter("lowest_price")) || Integer.parseInt(req.getParameter("lowest_price")) < 0) {
+            String session_lowest_price = (String) session.getAttribute("session_lowest_price");
+            if (StringUtils.isEmpty(req.getParameter("lowest_price"))) {
+                if (StringUtils.isEmpty(session_lowest_price)) {
+                    lowest_price = 0;
+                } else {
+                    lowest_price = Integer.parseInt(session_lowest_price);
+                }
+            } else if (Integer.parseInt(req.getParameter("lowest_price")) < 0) {
                 lowest_price = 0;
             } else if (Integer.parseInt(req.getParameter("lowest_price")) > 999999) {
                 lowest_price = 999999;
             } else {
                 lowest_price = Integer.parseInt(req.getParameter("lowest_price"));
             }
+            session.setAttribute("session_lowest_price", Integer.toString(lowest_price));
 
-            if (StringUtils.isEmpty(req.getParameter("highest_price")) || Integer.parseInt(req.getParameter("highest_price")) < 0 || Integer.parseInt(req.getParameter("highest_price")) > 999999) {
+            String session_highest_price = (String) session.getAttribute("session_highest_price");
+            if (StringUtils.isEmpty(req.getParameter("highest_price"))) {
+                if (StringUtils.isEmpty(session_highest_price)) {
+                    highest_price = 999999;
+                } else {
+                    highest_price = Integer.parseInt(session_highest_price);
+                }
+            } else if (Integer.parseInt(req.getParameter("highest_price")) < 0 || Integer.parseInt(req.getParameter("highest_price")) > 999999) {
                 highest_price = 999999;
             } else {
                 highest_price = Integer.parseInt(req.getParameter("highest_price"));
             }
+            session.setAttribute("session_highest_price", Integer.toString(highest_price));
 
+            String session_inventory = (String) session.getAttribute("session_inventory");
             if (StringUtils.isEmpty(req.getParameter("inventory"))) {
-                inventory = 2;
+                if (StringUtils.isEmpty(session_inventory)) {
+                    inventory = 2;
+                } else {
+                    inventory = Byte.parseByte(session_inventory);
+                }
             } else {
                 inventory = Byte.parseByte(req.getParameter("inventory"));
             }
+            session.setAttribute("session_inventory", Byte.toString(inventory));
 
+            String session_searchProduct = (String) session.getAttribute("session_searchProduct");
             if (StringUtils.isEmpty(req.getParameter("searchProduct"))) {
+                if (StringUtils.isEmpty(session_searchProduct)) {
+                    searchProduct = "";
+                } else {
+                    searchProduct = session_searchProduct;
+                }
+            } else if ("reset".equals(req.getParameter("searchProduct"))) {
                 searchProduct = "";
             } else {
                 searchProduct = req.getParameter("searchProduct");
             }
+            session.setAttribute("session_searchProduct", searchProduct);
 
             // 開始篩選商品。
             for (int i = 0; i < productList.size(); ++i) {
@@ -130,6 +175,30 @@ public class ProductControllerImpl implements ProductController {
                     productList.remove(i);
                     --i;
                 }
+            }
+
+            // 獲取選擇的排序方式並排序商品。
+            // 首先獲取用戶選擇的排序方式。1-售價(H-L)、2-售價(L-H)。
+            byte sortBy;
+            String session_sortBy = (String) session.getAttribute("session_sortBy");
+            if (StringUtils.isEmpty(req.getParameter("sortBy"))) { // 預設為 1。
+                if (StringUtils.isEmpty(session_sortBy)) {
+                    sortBy = 1;
+                } else {
+                    sortBy = Byte.parseByte(session_sortBy);
+                }
+            } else {
+                sortBy = Byte.parseByte(req.getParameter("sortBy"));
+            }
+            session.setAttribute("session_sortBy", Byte.toString(sortBy));
+
+            // 進行排序。
+            compareUtils compareUtils = new compareUtils();
+            if (sortBy == 1) {
+                Collections.sort(productList, compareUtils);
+                Collections.reverse(productList);
+            } else if (sortBy == 2) {
+                Collections.sort(productList, compareUtils);
             }
 
             // 至此 productList 是根據需求獲取的商品數據 (選擇的商品類型或篩選過後的商品等等)，但還不包含是否有添加到用戶的追蹤清單或購物車的訊息，

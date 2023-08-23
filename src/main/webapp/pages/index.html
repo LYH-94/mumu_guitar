@@ -93,20 +93,24 @@
                     <span class="pad_0"
                           style="margin-top: 5px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; font-size: 16px; color: #141637;">售價</span>
                     <div class="pad_0" style="font-size: 16px; color: #141637;">
-                        $<input type="text" name="lowest_price" style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
-                        ~$<input type="text" name="highest_price" style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
+                        $<input type="number" min="0" max="999999" name="lowest_price" th:value="${session.session_lowest_price}" style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
+                        ~$<input type="number" min="0" max="999999" name="highest_price" th:value="${session.session_highest_price}" style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
                     </div>
 
                     <span class="pad_0" style="font-size: 16px; color: #141637;">庫存</span>
                     <span class="d-flex justify-content-evenly pad_0" style="font-size: 16px; color: #141637;">
-                        <input type="radio" name="inventory" value="1"> 有現貨
-                        <input type="radio" name="inventory" value="0"> 需調貨
-                        <input type="radio" name="inventory" value="2" checked> 所有商品
+                        <input th:if="${session.session_inventory} == 1" type="radio" name="inventory" value="1" checked>
+                        <input th:unless="${session.session_inventory} == 1" type="radio" name="inventory" value="1"> 有現貨
+                        <input th:if="${session.session_inventory} == 0" type="radio" name="inventory" value="0" checked>
+                        <input th:unless="${session.session_inventory} == 0" type="radio" name="inventory" value="0"> 需調貨
+                        <input th:if="${session.session_inventory} == 2" type="radio" name="inventory" value="2" checked>
+                        <input th:unless="${session.session_inventory} == 2" type="radio" name="inventory" value="2"> 所有商品
                     </span>
 
                     <span class="pad_0" style="font-size: 16px; color: #141637;">搜尋商品名稱</span><br>
-                    <input type="text" name="searchProduct" style="width: 180px; height: 28px; margin-top: 9px; margin-bottom: 0px; margin-left: 15px; margin-right: 0px;"><br>
+                    <input type="text" name="searchProduct" th:value="${session.session_searchProduct}" style="width: 180px; height: 28px; margin-top: 9px; margin-bottom: 0px; margin-left: 15px; margin-right: 0px;"><br>
                     <input type="submit" value="確定" class="bor_0 pad_0 filter_btn">
+                    <input type="reset" value="重置" class="bor_0 pad_0 filter_btn">
                 </form>
             </div>
 
@@ -313,12 +317,11 @@
                     <div class="dropdown inline" style="width: 110px;">
                         <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
-                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">名稱(A-Z)</button>
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
+                                th:value="${session.session_sortBy}">排序方式</button>
                         <ul id="dropdown-menu1" aria-labelledby="dropdownMenuButton1" class="dropdown-menu">
-                            <li><a data-value="1" href="#" class="dropdown-item">名稱(A-Z)</a></li>
-                            <li><a data-value="2" href="#" class="dropdown-item">名稱(Z-A)</a></li>
-                            <li><a data-value="3" href="#" class="dropdown-item">售價(H-L)</a></li>
-                            <li><a data-value="4" href="#" class="dropdown-item">售價(L-H)</a></li>
+                            <li><a data-value="3" href="index.do?sortBy=1" class="dropdown-item">售價(H-L)</a></li>
+                            <li><a data-value="4" href="index.do?sortBy=2" class="dropdown-item">售價(L-H)</a></li>
                         </ul>
                     </div>
                 </div>

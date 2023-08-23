@@ -4,7 +4,8 @@
 
 // 首頁，展示所有商品。
 function index() {
-    window.location.href="index.do"; // 發送 index.do 請求。
+    const searchProduct="reset";
+    window.location.href="index.do?classification=所有商品&lowest_price=0&highest_price=999999&inventory=2&searchProduct="+ searchProduct +"&sortBy=1"; // 發送 index.do 請求。
 }
 
 // 首頁，展示木吉他。
