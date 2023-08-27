@@ -315,13 +315,19 @@
                 <div class="col pad_0" style="text-align: right;">
                     <!-- 下拉式選單 - 排序 -->
                     <div class="dropdown inline" style="width: 110px;">
+                        <!--這裡button的文字也可以使用th:text來渲染，但在後端多進行轉換及if判斷式，較麻煩，
+                        所以就直接在這裡寫兩個button元素，並用th:if做判斷。-->
                         <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
                                 style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
-                                th:value="${session.session_sortBy}">排序方式</button>
+                                th:if="${session.session_sortBy} == 1">售價(H-L)</button>
+                        <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                class="btn dropdown-toggle"
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
+                                th:if="${session.session_sortBy} == 2">售價(L-H)</button>
                         <ul id="dropdown-menu1" aria-labelledby="dropdownMenuButton1" class="dropdown-menu">
-                            <li><a data-value="3" href="index.do?sortBy=1" class="dropdown-item">售價(H-L)</a></li>
-                            <li><a data-value="4" href="index.do?sortBy=2" class="dropdown-item">售價(L-H)</a></li>
+                            <li><a data-value="1" href="index.do?sortBy=1" class="dropdown-item">售價(H-L)</a></li>
+                            <li><a data-value="2" href="index.do?sortBy=2" class="dropdown-item">售價(L-H)</a></li>
                         </ul>
                     </div>
                 </div>
@@ -393,13 +399,13 @@
                     <div class="dropdown" style="width: 85px;">
                         <button id="dropdownMenuButton2" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
-                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">第 1 頁</button>
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
+                                th:text="'第 ' + ${session.session_pageNumber} + ' 頁'">頁碼</button>
                         <ul id="dropdown-menu2" class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                            <li><a data-value="1" href="#" class="dropdown-item">第 1 頁</a></li>
-                            <li><a data-value="2" href="#" class="dropdown-item">第 2 頁</a></li>
+                            <li th:each="i : ${#numbers.sequence(1, session.pages)}"><a th:data-value="${i}" th:href="'index.do?pageNumber=' + ${i}" class="dropdown-item" th:text="'第 ' + ${i} + ' 頁'">頁碼</a></li>
                         </ul>
                     </div>
-                    <span th:text="'商品數量：' + ${#lists.size(session.productList)}"
+                    <span th:text="'商品數量：' + ${session.productCount}"
                           class="d-flex justify-content-center align-items-center pad_0"
                           style="font-size: 16px; color: #141637;">商品數量</span>
                 </div>

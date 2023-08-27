@@ -208,4 +208,28 @@ public abstract class BaseDAO {
             JDBCUtils.closeResource(null, ps);
         }
     }
+
+    // 查詢紀錄條數。
+    public int getCount(Connection conn, String sql, Object... args) throws BaseDAOException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            ps = conn.prepareStatement(sql);
+            for (int i = 0; i < args.length; i++) {
+                ps.setObject(i + 1, args[i]);
+            }
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BaseDAOException("BaseDAO 的 getCount() 有問題。");
+        } finally {
+            JDBCUtils.closeResource(null, ps, rs);
+        }
+        return 0;
+    }
 }
