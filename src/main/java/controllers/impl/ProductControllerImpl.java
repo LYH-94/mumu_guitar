@@ -39,7 +39,6 @@ public class ProductControllerImpl implements ProductController {
             req.getSession().setAttribute("productCount", productCount); // 獲取的商品總數。
             req.getSession().setAttribute("pages", pages); // 根據商品總數計算的總頁數。
 
-            //回傳。
             return productAddedFavoAndTrolInfoList;
 
         } catch (Exception e) {
@@ -92,7 +91,6 @@ public class ProductControllerImpl implements ProductController {
             // 調用函式 productService.addFavoAndTrollInfo 包裝 ProductAddedFavoAndTrolInfo 物件。
             List<ProductAddedFavoAndTrolInfo> hotProductAddedFavoAndTrolInfoList = productService.addFavoAndTrollInfo(hotProductList, req);
 
-            //處理回傳。
             return hotProductAddedFavoAndTrolInfoList;
         } catch (Exception e) {
             e.printStackTrace();

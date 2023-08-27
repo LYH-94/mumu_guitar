@@ -14,11 +14,9 @@ import java.util.List;
 
 public class UserControllerImpl implements UserController {
 
-    private UserServiceImpl userService = null;
     private ProductControllerImpl productController = null;
-    private FavoriteControllerImpl favoriteController = null;
-    private TrolleyControllerImpl trolleyController = null;
     private OrderControllerImpl orderController = null;
+    private UserServiceImpl userService = null;
 
     @Override
     public String checkIdentity(HttpServletRequest req) throws UserControllerImplException {
@@ -27,7 +25,7 @@ public class UserControllerImpl implements UserController {
 
             User user = (User) session.getAttribute("user");
             session.setAttribute("verification", "ok"); // 只用來判斷登入時帳號密碼是否錯誤，錯誤時為 "fail"。
-            session.setAttribute("duplicateUsers", "false"); // 只用來判斷註冊時帳號是已存在，已存在時為 "true"。
+            session.setAttribute("duplicateUsers", "false"); // 只用來判斷註冊時帳號是否已存在，已存在時為 "true"。
 
             if (user == null) { // 沒有 user 表示是訪客。
                 // 由於是訪客，所以直接調用 ProductController 將產品數據直接渲染到 index.html 上。
@@ -69,7 +67,7 @@ public class UserControllerImpl implements UserController {
                     session.setAttribute("ordertList", ordertList);
 
                     return "manager_order";
-                } else { //user 不等於 null 也不符合任何用戶或管理員，所以也是訪客。
+                } else { // user 不等於 null 也不符合任何用戶或管理員，所以也是訪客。
                     // 由於是訪客，所以直接調用 ProductController 將產品數據直接渲染到 index.html 上。
                     List<ProductAddedFavoAndTrolInfo> productList = productController.getProduct(req);
 
@@ -97,11 +95,11 @@ public class UserControllerImpl implements UserController {
     @Override
     public String logIn(String account, String password, String verification, HttpServletRequest req) throws UserControllerImplException {
         try {
-            if (verification.equals((String) req.getSession().getAttribute("KAPTCHA_SESSION_KEY"))) {
+            if (verification.equals(req.getSession().getAttribute("KAPTCHA_SESSION_KEY"))) {
                 // 驗證用戶帳號與密碼。
                 User user = userService.loginVerification(account, password);
 
-                // 用 user 判斷是否登入成功。若成功則將user加入session並調用checkIdentity()，若失敗則返回logIn.html並顯示帳號密碼錯誤訊息。
+                // 用 user 判斷是否登入成功。若成功則將 user 加入 session 並調用 checkIdentity()，若失敗則返回 logIn.html 並顯示帳號密碼錯誤訊息。
                 if (user != null) {
                     req.getSession().setAttribute("user", user);
 
@@ -144,10 +142,10 @@ public class UserControllerImpl implements UserController {
     @Override
     public String register(HttpServletRequest req, String account, String password, String username, String gender, LocalDate birthday, String phone, String email, String verification) throws UserControllerImplException {
         try {
-            if (verification.equals((String) req.getSession().getAttribute("KAPTCHA_SESSION_KEY"))) {
+            if (verification.equals(req.getSession().getAttribute("KAPTCHA_SESSION_KEY"))) {
                 boolean b = userService.register(account, password, username, gender, birthday, phone, email);
 
-                // 用 b 判斷是否註冊成功。若成功則調用將user加入session並調用logIn()，若失敗則調用registerPage()並於register.html顯示"帳號已存在，請更換。"訊息。
+                // 用 b 判斷是否註冊成功。若成功則調用將 user 加入 session 並調用 logIn()，若失敗則調用 registerPage() 並於 register.html 顯示"帳號已存在，請更換。"訊息。
                 // 若註冊成功為 true，不成功則為 false。
                 if (b) {
                     return logIn(account, password, (String) req.getSession().getAttribute("kaptcha_session_key"), req);

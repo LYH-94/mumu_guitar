@@ -61,36 +61,28 @@ public class ProductServiceImpl implements ProductService {
             String session_classification = (String) session.getAttribute("session_classification");
             // 先以 req 請求為主進行來判斷，若為空才根據 session 來判斷。
             if (StringUtils.isEmpty(classification)) {
-                if (StringUtils.isEmpty(session_classification)) {
-                    classification = "所有商品";
+                if (StringUtils.isEmpty(session_classification)) { // 預設進入商品頁面時，是顯示所有商品。
+                    session.setAttribute("session_classification", "所有商品");
+                    classification = ""; // 在數據庫 t_product 表中，商品有自己的類型，不會出現 "所有商品" 這個類，因此使用空字串並寫成 SQL 中模糊匹配的寫法"%%"，表示所有商品。
                 } else {
-                    classification = session_classification;
+                    if ("所有商品".equals(session_classification)) {
+                        classification = "";
+                    } else {
+                        classification = session_classification;
+                    }
                 }
-            }
-
-            // 在 session 中以數字的方式儲存 classification，用以渲染模板時，判斷當前用戶選擇的商品類型。
-            // 所有商品：
-            // 木吉他：1000
-            // 電吉他：2000
-            // ...
-            List<Product> productList = null;
-            if ("所有商品".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
-                session.setAttribute("classification", 0);
-                session.setAttribute("session_classification", "所有商品");
+            } else if ("所有商品".equals(classification)) {
+                session.setAttribute("session_classification", classification);
                 classification = "";
-            } else if ("木吉他".equals(classification)) {
-                session.setAttribute("classification", 1000);
-                session.setAttribute("session_classification", "木吉他");
-            } else if ("電吉他".equals(classification)) {
-                session.setAttribute("classification", 2000);
-                session.setAttribute("session_classification", "電吉他");
+            } else {
+                session.setAttribute("session_classification", classification);
             }
 
             // 獲取篩選條件並篩選商品。
             // 獲取篩選表單中的數據。
             int lowest_price = 0;
             int highest_price = 999999;
-            byte inventory = 2; // 透過if判斷要執行的SQL。
+            byte inventory = 2; // 透過 if 判斷要執行的 SQL。
             String searchProduct = "";
 
             String session_lowest_price = (String) session.getAttribute("session_lowest_price");
@@ -165,7 +157,7 @@ public class ProductServiceImpl implements ProductService {
             session.setAttribute("session_sortBy", Byte.toString(sortBy));
 
             // 獲取用戶選擇的頁碼。
-            int pageNumber = 1; // 預設為第一頁。
+            int pageNumber; // 預設為第一頁。
             if (StringUtils.isEmpty(req.getParameter("pageNumber"))) { // 預設為 1。
                 pageNumber = 1;
             } else {
@@ -189,36 +181,28 @@ public class ProductServiceImpl implements ProductService {
             String session_classification = (String) session.getAttribute("session_classification");
             // 先以 req 請求為主進行來判斷，若為空才根據 session 來判斷。
             if (StringUtils.isEmpty(classification)) {
-                if (StringUtils.isEmpty(session_classification)) {
-                    classification = "所有商品";
+                if (StringUtils.isEmpty(session_classification)) { // 預設進入商品頁面時，是顯示所有商品。
+                    session.setAttribute("session_classification", "所有商品");
+                    classification = ""; // 在數據庫 t_product 表中，商品有自己的類型，不會出現 "所有商品" 這個類，因此使用空字串並寫成 SQL 中模糊匹配的寫法"%%"，表示所有商品。
                 } else {
-                    classification = session_classification;
+                    if ("所有商品".equals(session_classification)) {
+                        classification = "";
+                    } else {
+                        classification = session_classification;
+                    }
                 }
-            }
-
-            // 在 session 中以數字的方式儲存 classification，用以渲染模板時，判斷當前用戶選擇的商品類型。
-            // 所有商品：
-            // 木吉他：1000
-            // 電吉他：2000
-            // ...
-            List<Product> productList = null;
-            if ("所有商品".equals(classification)) { // 預設進入商品頁面時，是顯示所有商品。
-                session.setAttribute("classification", 0);
-                session.setAttribute("session_classification", "所有商品");
+            } else if ("所有商品".equals(classification)) {
+                session.setAttribute("session_classification", classification);
                 classification = "";
-            } else if ("木吉他".equals(classification)) {
-                session.setAttribute("classification", 1000);
-                session.setAttribute("session_classification", "木吉他");
-            } else if ("電吉他".equals(classification)) {
-                session.setAttribute("classification", 2000);
-                session.setAttribute("session_classification", "電吉他");
+            } else {
+                session.setAttribute("session_classification", classification);
             }
 
             // 獲取篩選條件並篩選商品。
             // 獲取篩選表單中的數據。
             int lowest_price = 0;
             int highest_price = 999999;
-            byte inventory = 2; // 透過if判斷要執行的SQL。
+            byte inventory = 2; // 透過 if 判斷要執行的 SQL。
             String searchProduct = "";
 
             String session_lowest_price = (String) session.getAttribute("session_lowest_price");

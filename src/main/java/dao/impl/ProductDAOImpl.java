@@ -68,7 +68,7 @@ public class ProductDAOImpl extends BaseDAO implements ProductDAO {
                 }
             }
 
-            // 在SQL語句中，通配符不能直接給 "" 這樣的空字串，因此處理成模糊匹配的寫法，"%%" 效果可視為與指定字段中的數據皆匹配。
+            // 在 SQL 語句中，通配符不能直接給 "" 這樣的空字串，因此處理成中模糊匹配的寫法，"%%" 效果可視為與指定字段中的數據皆匹配。
             searchProduct = "%" + searchProduct + "%";
             classification = "%" + classification + "%";
             return super.getForList(conn, clazz, sql, classification, lowest_price, highest_price, searchProduct, offset);
@@ -91,7 +91,7 @@ public class ProductDAOImpl extends BaseDAO implements ProductDAO {
                 sql = "SELECT COUNT(id) FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory = 0 AND name LIKE ?";
             }
 
-            // 在SQL語句中，通配符不能直接給 "" 這樣的空字串，因此處理成模糊匹配的寫法，"%%" 效果可視為與指定字段中的數據皆匹配。
+            // 在 SQL 語句中，通配符不能直接給 "" 這樣的空字串，因此處理成模糊匹配的寫法，"%%" 效果可視為與指定字段中的數據皆匹配。
             searchProduct = "%" + searchProduct + "%";
             classification = "%" + classification + "%";
             return super.getCount(conn, sql, classification, lowest_price, highest_price, searchProduct);

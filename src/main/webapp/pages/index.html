@@ -27,23 +27,23 @@
 
         <div class="col pad_0">
             <div class="row four_functions">
-                <!--會員圖-->
+                <!-- 會員圖 -->
                 <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/person-square.svg" class="img-fluid">
                     <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">會員登入</figcaption>
                     <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">登出</figcaption>
                 </figure>
-                <!--註冊圖-->
+                <!-- 註冊圖 -->
                 <figure onclick="register()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/register.svg" class="img-fluid">
                     <figcaption class="img_fig_font">會員註冊</figcaption>
                 </figure>
-                <!--收藏圖-->
+                <!-- 收藏圖 -->
                 <figure onclick="favorite()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/heart.svg" class="img-fluid">
                     <figcaption class="img_fig_font">商品收藏</figcaption>
                 </figure>
-                <!--購物車圖-->
+                <!-- 購物車圖 -->
                 <figure onclick="trolley()" class="col pad_0 trolley_function">
                     <img src="./images/trolley.svg" class="img-fluid">
                     <figcaption class="img_fig_font">購物車</figcaption>
@@ -55,6 +55,7 @@
 
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
+        <!-- 注意，這裡 button 中的文本不要有換行，否則在 common.js 的 logInOut() 中判斷時會因為換行字符而出 Bug。 -->
         <button type="button" onclick="index()"
                 class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品</button>
         <button type="button" onclick="index_woodenGuitar()"
@@ -82,7 +83,7 @@
     </div>
 
     <div class="row mar_0 section_row3">
-        <!--左側邊欄-->
+        <!-- 左側邊欄 -->
         <div class="col-3 pad_0 section_row3_col1">
             <!-- 篩選功能表單 -->
             <div class="row mar_0 section_row3_col1_row1">
@@ -124,7 +125,7 @@
                      style="width: 300px; margin-top: 5px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
                     <div class="carousel-inner">
 
-                        <!--第一個輪播商品-->
+                        <!-- 第一個輪播商品 -->
                         <div class="carousel-item active">
                             <div class="container pad_0" style="border: 3px solid #D8D8D8; border-radius: 5px;">
                                 <div class="row mar_0">
@@ -176,7 +177,7 @@
                             </div>
                         </div>
 
-                        <!--第二個輪播商品-->
+                        <!-- 第二個輪播商品 -->
                         <div class="carousel-item">
                             <div class="container pad_0" style="border: 3px solid #D8D8D8; border-radius: 5px;">
                                 <div class="row mar_0">
@@ -228,7 +229,7 @@
                             </div>
                         </div>
 
-                        <!--第三個輪播商品-->
+                        <!-- 第三個輪播商品 -->
                         <div class="carousel-item">
                             <div class="container pad_0" style="border: 3px solid #D8D8D8; border-radius: 5px;">
                                 <div class="row mar_0">
@@ -303,11 +304,11 @@
             <div class="row mar_0 section_row3_col2_row1">
 
                 <div class="col pad_0">
-                    <span th:if="${session.classification} == 0" th:text="所有商品" class="pad_0"
+                    <span th:if="${session.session_classification} == '所有商品'" th:text="所有商品" class="pad_0"
                           style="font-size: 20px; color: #141637;">商品類型</span>
-                    <span th:if="${session.classification} == 1000" th:text="木吉他" class="pad_0"
+                    <span th:if="${session.session_classification} == '木吉他'" th:text="木吉他" class="pad_0"
                           style="font-size: 20px; color: #141637;">商品類型</span>
-                    <span th:if="${session.classification} == 2000" th:text="電吉他" class="pad_0"
+                    <span th:if="${session.session_classification} == '電吉他'" th:text="電吉他" class="pad_0"
                           style="font-size: 20px; color: #141637;">商品類型</span>
                     <hr class="mar_pad_0 section_baseline_100">
                 </div>
@@ -369,6 +370,7 @@
                             </div>
 
                             <div class="col-4 d-flex justify-content-end pad_0">
+                                <!-- 追蹤商品 -->
                                 <img th:onclick="'add_delete_Favorite('+${productAllInfo.product.id}+')'"
                                      th:if="${productAllInfo.exist_favorite == true}"
                                      src="./images/heart-fill.svg"
@@ -378,6 +380,7 @@
                                      src="./images/heart.svg"
                                      style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
 
+                                <!-- 加入購物車 -->
                                 <img th:onclick="'add_delete_Trolley('+${productAllInfo.product.id}+')'"
                                      th:if="${productAllInfo.exist_trolley == true}"
                                      src="./images/trolley-fill.svg"
@@ -402,6 +405,7 @@
                                 style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
                                 th:text="'第 ' + ${session.session_pageNumber} + ' 頁'">頁碼</button>
                         <ul id="dropdown-menu2" class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                            <!-- 利用 th:each 迴圈生成分頁頁碼的下拉式選單。 -->
                             <li th:each="i : ${#numbers.sequence(1, session.pages)}"><a th:data-value="${i}" th:href="'index.do?pageNumber=' + ${i}" class="dropdown-item" th:text="'第 ' + ${i} + ' 頁'">頁碼</a></li>
                         </ul>
                     </div>
