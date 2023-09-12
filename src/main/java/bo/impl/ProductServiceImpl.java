@@ -5,6 +5,7 @@ import bo.exception.ProductServiceImplException;
 import controllers.impl.FavoriteControllerImpl;
 import controllers.impl.TrolleyControllerImpl;
 import dao.impl.ProductDAOImpl;
+import pojo.OrderProduct;
 import pojo.Product;
 import pojo.ProductAddedFavoAndTrolInfo;
 import pojo.User;
@@ -39,6 +40,16 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductServiceImplException("ProductServiceImpl 的 getProductByType() 有問題。");
+        }
+    }
+
+    @Override
+    public List<OrderProduct> getProductByOrderId(int orderId) throws ProductServiceImplException {
+        try {
+            return productDAO.getProductByOrderId(ConnUtils.getConn(), OrderProduct.class, orderId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductServiceImplException("ProductServiceImpl 的 getProductByOrderNumber() 有問題。");
         }
     }
 

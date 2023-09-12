@@ -135,7 +135,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public String registerPage(HttpServletRequest req) {
+    public String registerPage() {
         return "register";
     }
 
@@ -151,15 +151,53 @@ public class UserControllerImpl implements UserController {
                     return logIn(account, password, (String) req.getSession().getAttribute("kaptcha_session_key"), req);
                 } else {
                     req.getSession().setAttribute("duplicateUsers", "true");
-                    return registerPage(req);
+                    return registerPage();
                 }
             } else {
                 req.getSession().setAttribute("duplicateUsers", "true");
-                return registerPage(req);
+                return registerPage();
             }
         } catch (Exception e) {
             e.printStackTrace();
             throw new UserControllerImplException("UserControllerImpl 的 register() 有問題。");
         }
     }
+
+    @Override
+    public String member_personalInformationPage() {
+        return "member_personalInformation";
+    }
+
+    @Override
+    public String updatePersonalInfo(HttpServletRequest req, String account, String password, String username, String gender, LocalDate birthday, String phone, String email) throws UserControllerImplException {
+        try {
+            boolean b = userService.updatePersonalInfo(account, password, username, gender, birthday, phone, email);
+
+            if (b) { // 更新成功。
+                // 更新session中的user資料。
+                User user = userService.loginVerification(account, password);
+
+                req.getSession().setAttribute("user", user);
+                req.getSession().setAttribute("updateResult", "ok");
+                return "member_personalInformation";
+            } else { // 無任何資料被更動或更新失敗。
+                req.getSession().setAttribute("updateResult", "fail");
+                return "member_personalInformation";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserControllerImplException("UserControllerImpl 的 updatPersonalInfo() 有問題。");
+        }
+    }
+
+    @Override
+    public User getUserById(int userId) throws UserControllerImplException {
+        try {
+            return userService.getUserById(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserControllerImplException("UserControllerImpl 的 getUserById() 有問題。");
+        }
+    }
+
 }

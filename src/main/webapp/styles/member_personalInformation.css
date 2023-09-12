@@ -94,7 +94,7 @@
     margin-right: 0px;
 }
 
-.btn {
+.personalInfo_btn {
     font-size: 20px;
     color: #FFFFFF;
     width: 70px;
@@ -104,4 +104,5 @@
     margin-bottom: 30px;
     margin-left: 10px;
     margin-right: 10px;
+    border-radius: 5px;
 }

@@ -149,7 +149,7 @@ public class DispatcherServlet extends ViewBaseServlet {
                         // 因為是使用 axios 異步請求，所以這裡不進行渲染，因此啥也不幹。
                     } else if (methodReturnStr != "error") {
                         super.processTemplate(methodReturnStr, req, resp);
-                    } else {
+                    } else { // methodReturnStr == "error"
                         System.out.println("視圖處理錯誤!");
                     }
                 } catch (Exception e) {

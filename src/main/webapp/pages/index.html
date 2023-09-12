@@ -13,7 +13,6 @@
     <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
     <script type="text/javascript" src="./scripts/common.js" defer></script>
     <script type="text/javascript" src="./scripts/axios.min.js"></script> <!-- Axios 異步請求框架 -->
-    <script type="text/javascript" src="./scripts/vue.js"></script>
 
     <title>木木吉他</title>
 </head>
@@ -30,6 +29,7 @@
                 <!-- 會員圖 -->
                 <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/person-square.svg" class="img-fluid">
+                    <!-- 注意，這裡 figcaption 中的文本不要有換行，否則在 common.js 的 logInOut() 中判斷時會因為換行字符而出 Bug。 -->
                     <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">會員登入</figcaption>
                     <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">登出</figcaption>
                 </figure>
@@ -55,7 +55,6 @@
 
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
-        <!-- 注意，這裡 button 中的文本不要有換行，否則在 common.js 的 logInOut() 中判斷時會因為換行字符而出 Bug。 -->
         <button type="button" onclick="index()"
                 class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品</button>
         <button type="button" onclick="index_woodenGuitar()"
@@ -73,8 +72,8 @@
     <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
         <div th:if="${session.user.username == null}" class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
-        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1"><!-- 用戶詳細訊息還沒做。 -->
-            <a th:text="${session.user.username}" th:href="@{/index.do}">用戶名稱</a> 歡迎光臨~!</div>
+        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1">
+            <a th:text="${session.user.username}" href="index.do?operate=member_personalInformationPage">用戶名稱</a> 歡迎光臨~!</div>
     </div>
 
     <!-- 水平分隔線 -->

@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="row mar_0">
-                    <form action="./register.do" method="post" class="pad_0">
+                    <form action="./index.do" method="post" class="pad_0">
                         <input type="hidden" name="operate" value="register"/>
                         <div style="margin-top: 16px; margin-bottom: 0px; margin-left: 50px; margin-right: 0px;">
                             <span th:if="${session.duplicateUsers == 'true'}" class="pad_0" style="font-size: 16px; color: red;">帳號已存在或驗證碼錯誤。</span><br>

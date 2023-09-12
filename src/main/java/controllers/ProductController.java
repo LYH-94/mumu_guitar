@@ -1,5 +1,6 @@
 package controllers;
 
+import pojo.OrderProduct;
 import pojo.Product;
 import pojo.ProductAddedFavoAndTrolInfo;
 
@@ -18,6 +19,9 @@ public interface ProductController {
 
     // 通過 Id 獲取商品。
     public Product getProductById(int id);
+
+    // 通過訂單id獲取商品。
+    public List<OrderProduct> getProductByOrderId(int orderId);
 
     // 獲取前三的熱門商品。
     public List<ProductAddedFavoAndTrolInfo> getHotProduct(HttpServletRequest req);

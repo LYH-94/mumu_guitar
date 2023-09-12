@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" href="../styles/bootstrap.min.css"> <!-- Bootstrap CSS -->
-    <link type="text/css" rel="stylesheet" href="../styles/common.css">
-    <link type="text/css" rel="stylesheet" href="../styles/orderDetail.css">
+    <link type="text/css" rel="stylesheet" href="./styles/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link type="text/css" rel="stylesheet" href="./styles/common.css">
+    <link type="text/css" rel="stylesheet" href="./styles/orderDetail.css">
 
     <!-- JavaScript -->
-    <script type="text/javascript" src="../scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
-    <script type="text/javascript" src="../scripts/dropdown.js" defer></script>
+    <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
+    <script type="text/javascript" src="./scripts/common.js" defer></script>
+    <script type="text/javascript" src="./scripts/orderDetail.js" defer></script>
 
     <title>木木吉他</title>
 </head>
@@ -20,29 +21,31 @@
     <div class="row mar_0">
         <div class="col-4 pad_0">
             <!-- Logo -->
-            <img src="../images/mumu_guitar.svg" class="img-fluid img_mumu_guitar">
+            <img src="./images/mumu_guitar.svg" onclick="index()" class="img-fluid img_mumu_guitar">
         </div>
 
         <div class="col pad_0">
             <div class="row four_functions">
-                <!--會員圖-->
-                <figure class="col pad_0 login_register_favorite_function">
-                    <img src="../images/person-square.svg" class="img-fluid">
-                    <figcaption class="img_fig_font">會員登入</figcaption>
+                <!-- 會員圖 -->
+                <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/person-square.svg" class="img-fluid">
+                    <!-- 注意，這裡 figcaption 中的文本不要有換行，否則在 common.js 的 logInOut() 中判斷時會因為換行字符而出 Bug。 -->
+                    <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">會員登入</figcaption>
+                    <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">登出</figcaption>
                 </figure>
-                <!--註冊圖-->
-                <figure class="col pad_0 login_register_favorite_function">
-                    <img src="../images/register.svg" class="img-fluid">
+                <!-- 註冊圖 -->
+                <figure onclick="register()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/register.svg" class="img-fluid">
                     <figcaption class="img_fig_font">會員註冊</figcaption>
                 </figure>
-                <!--收藏圖-->
-                <figure class="col pad_0 login_register_favorite_function">
-                    <img src="../images/heart.svg" class="img-fluid">
+                <!-- 收藏圖 -->
+                <figure onclick="favorite()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/heart.svg" class="img-fluid">
                     <figcaption class="img_fig_font">商品收藏</figcaption>
                 </figure>
-                <!--購物車圖-->
-                <figure class="col pad_0 trolley_function">
-                    <img src="../images/trolley.svg" class="img-fluid">
+                <!-- 購物車圖 -->
+                <figure onclick="trolley()" class="col pad_0 trolley_function">
+                    <img src="./images/trolley.svg" class="img-fluid">
                     <figcaption class="img_fig_font">購物車</figcaption>
                 </figure>
             </div>
@@ -52,30 +55,25 @@
 
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他配件
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">擴音設備
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">琴袋琴盒
-        </button>
+        <button type="button" onclick="index()"
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品</button>
+        <button type="button" onclick="index_woodenGuitar()"
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他</button>
+        <button type="button" onclick="index_electricGuitar()"
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他配件</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">擴音設備</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">琴袋琴盒</button>
     </div>
 </nav>
 
 <section class="container-xl pad_0 section">
     <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
-        <div class="col pad_0 section_row1_col1">
-            <span style="color: blue">LYH</span>
-            &nbsp;歡迎光臨~!
-        </div>
+        <div th:if="${session.user.username == null}" class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
+        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1">
+            <a th:text="${session.user.username}" href="index.do?operate=member_personalInformationPage">用戶名稱</a> 歡迎光臨~!</div>
     </div>
 
     <!-- 水平分隔線 -->
@@ -84,32 +82,26 @@
     </div>
 
     <div class="row mar_0 section_row3">
-        <div class="col pad_0">
+        <div th:object="${session.order}" class="col pad_0">
             <div class="row mar_0 section_row3_col1_row1">
                 <div class="d-flex justify-content-center align-items-center pad_0"
-                     style="width: 100px; font-size: 20px; color: #141637;">購物車
-                </div>
+                     style="width: 100px; font-size: 20px; color: #141637;">購物車</div>
                 <div class="d-flex justify-content-center align-items-center pad_0"
-                     style="width: 50px; font-size: 20px; color: #141637;">&gt;
-                </div>
+                     style="width: 50px; font-size: 20px; color: #141637;">&gt;</div>
                 <div class="d-flex justify-content-center align-items-center pad_0"
-                     style="width: 100px; font-size: 20px; color: #141637;">填寫資料
-                </div>
+                     style="width: 100px; font-size: 20px; color: #141637;">填寫資料</div>
                 <div class="d-flex justify-content-center align-items-center pad_0"
-                     style="width: 50px; font-size: 20px; color: #141637;">&gt;
-                </div>
+                     style="width: 50px; font-size: 20px; color: #141637;">&gt;</div>
                 <div class="d-flex justify-content-center align-items-center pad_0"
-                     style="width: 100px; font-size: 20px; color: #141637; background-color: #D8D8D8;">訂單成立
-                </div>
+                     style="width: 100px; font-size: 20px; color: #141637; background-color: #D8D8D8;">訂單成立</div>
             </div>
 
             <div class="row mar_0 section_row3_col1_row2">
                 <div class="d-flex justify-content-start align-items-center pad_0"
-                     style="width: 100px; font-size: 20px; color: #141637; margin: 0px 0px 0px 20px;">訂單編號：
-                </div>
-                <div class="d-flex justify-content-start align-items-center pad_0"
-                     style="width: 100px; font-size: 20px; color: #141637;">202305040115233278
-                </div>
+                     style="width: 100px; font-size: 20px; color: #141637; margin: 0px 0px 0px 20px;">訂單編號：</div>
+                <div th:text="*{number}"
+                     class="d-flex justify-content-start align-items-center pad_0"
+                     style="width: 100px; font-size: 20px; color: #141637;">訂單編號</div>
             </div>
 
             <div style="background-color: #FFFF">
@@ -120,84 +112,50 @@
                     <div class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r3_div">所屬用戶</div>
                 </div>
                 <div class="row justify-content-start mar_0 section_row3_col1_row3-2">
-                    <div class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r3_div">2023-05-04</div>
-                    <div class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r3_div">161600</div>
-                    <div class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r3_div">未發貨</div>
-                    <div class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r3_div">user01</div>
+                    <div th:text="*{date}" class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r3_div">yyyy-MM-dd</div>
+                    <div th:text="*{totalAmount}" class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r3_div">$</div>
+                    <div th:if="*{status} == 0" class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r3_div">未發貨</div>
+                    <div th:if="*{status} == 1" class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r3_div">已發貨</div>
+                    <div th:if="*{status} == 2" class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r3_div">已簽收</div>
+                    <div th:text="*{owner.username}" class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r3_div">用戶名稱</div>
                 </div>
 
                 <div class="row justify-content-start mar_0 section_row3_col1_row4-1">
                     <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 100px; margin: 0px 50px 0px 0px;">商品編號
-                    </div>
+                         style="width: 100px; margin: 0px 50px 0px 0px;">商品編號</div>
                     <div class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 350px; margin: 0px 50px 0px 0px;">商品名稱
-                    </div>
+                         style="width: 350px; margin: 0px 50px 0px 0px;">商品名稱</div>
                     <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 50px; margin: 0px 50px 0px 0px;">數量
-                    </div>
+                         style="width: 50px; margin: 0px 50px 0px 0px;">數量</div>
                     <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 100px;">小計
-                    </div>
+                         style="width: 100px;">小計</div>
                 </div>
-                <div class="row justify-content-start mar_0 section_row3_col1_row4-2">
-                    <!-- 商品1 -->
-                    <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 100px; margin: 0px 50px 0px 0px;">2004
-                    </div>
-                    <div class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 350px; margin: 0px 50px 0px 0px;">電吉他 D - 白
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 50px; margin: 0px 50px 0px 0px;">1
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 100px;">52900
-                    </div>
-                </div>
-                <div class="row justify-content-start mar_0 section_row3_col1_row4-2">
-                    <!-- 商品2 -->
-                    <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 100px; margin: 0px 50px 0px 0px;">2001
-                    </div>
-                    <div class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 350px; margin: 0px 50px 0px 0px;">電吉他 A - 粉
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 50px; margin: 0px 50px 0px 0px;">2
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 100px;">85800
-                    </div>
-                </div>
-                <div class="row justify-content-start mar_0 section_row3_col1_row4-2">
-                    <!-- 商品3 -->
-                    <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 100px; margin: 0px 50px 0px 0px;">2005
-                    </div>
-                    <div class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 350px; margin: 0px 50px 0px 0px;">電吉他 E - 白
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 50px; margin: 0px 50px 0px 0px;">1
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 100px;">22900
-                    </div>
+                <!-- 商品 -->
+                <div th:each="orderProduct : *{orderProductList}" class="row justify-content-start mar_0 section_row3_col1_row4-2">
+                    <div th:text="${orderProduct.product.number}"
+                         class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
+                         style="width: 100px; margin: 0px 50px 0px 0px;">編號</div>
+                    <div th:text="${orderProduct.product.name}"
+                         class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r4_div"
+                         style="width: 350px; margin: 0px 50px 0px 0px;">名稱</div>
+                    <div th:text="${orderProduct.quantity}"
+                         class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
+                         style="width: 50px; margin: 0px 50px 0px 0px;">購買數量</div>
+                    <div th:text="${orderProduct.subTotal}"
+                         class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
+                         style="width: 100px;">該商品小計</div>
                 </div>
 
                 <div class="row justify-content-start mar_0 section_row3_col1_row5">
-                    <span class="s_r3_c1_r5_div" style="">購買人：林先生</span>
-                    <span class="s_r3_c1_r5_div">聯絡電話：0912345678</span>
-                    <span class="s_r3_c1_r5_div">付款方式：宅配；貨到付款</span>
-                    <span class="s_r3_c1_r5_div">配送地址：XX 市 YY 區 ZZ 街</span>
+                    <span th:text="'購買人：' + *{purchaser}" class="s_r3_c1_r5_div" style="">購買人</span>
+                    <span th:text="'聯絡電話：' + *{phone}" class="s_r3_c1_r5_div">聯絡電話</span>
+                    <span th:text="'付款方式：' + *{payment}" class="s_r3_c1_r5_div">付款方式</span>
+                    <span th:text="'配送地址：' + *{address}" class="s_r3_c1_r5_div">配送地址</span>
                 </div>
             </div>
 
             <div class="row d-flex justify-content-end mar_0">
-                <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 back_btn">
-                    返回首頁
-                </button>
+                <button type="button" onclick="goBack()" class="d-flex justify-content-center align-items-center bor_pad_0 back_btn">返回</button>
             </div>
 
         </div>
@@ -249,7 +207,7 @@
             <div class="row mar_0">
                 <span class="pad_0"
                       style="width: 270px; margin-top: 0px; margin-bottom: 0px; margin-left: 30px; margin-right: 0px; font-size: 16px; color: #FFFFFF;">
-                    退貨雨取消訂單<br><br>
+                    退貨與取消訂單<br><br>
                     隱私聲明<br><br>
                 </span>
             </div>

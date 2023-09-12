@@ -47,6 +47,8 @@
 
     <bean id="orderService" class="bo.impl.OrderServiceImpl">
         <property name="orderDAO" ref="orderDAO"/>
+        <property name="userController" ref="index"/>
+        <property name="productController" ref="productController"/>
     </bean>
 
     <bean id="favoriteService" class="bo.impl.FavoriteServiceImpl">

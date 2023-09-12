@@ -5,6 +5,7 @@ public class OrderProduct {
     private Product product; //OrderProduct：Product => n：1
     private Integer quantity;
     private Order belongOrder; //OrderProduct：Order => n：1
+    private Integer subTotal;
 
     public OrderProduct() {
     }
@@ -43,5 +44,13 @@ public class OrderProduct {
 
     public void setBelongOrder(Order belongOrder) {
         this.belongOrder = belongOrder;
+    }
+
+    public Integer getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(Integer subTotal) {
+        this.subTotal = subTotal;
     }
 }

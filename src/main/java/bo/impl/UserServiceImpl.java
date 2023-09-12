@@ -8,6 +8,8 @@ import pojo.User;
 import util.ConnUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 
 public class UserServiceImpl implements UserService {
@@ -51,7 +53,7 @@ public class UserServiceImpl implements UserService {
             // 先檢查 User 數據表中是否已經存在相同的 account。若為不重複為 true，重複則為 false。
             boolean b = userDAO.checkForDuplicateUsers(ConnUtils.getConn(), User.class, account);
 
-            if(b){
+            if (b) {
                 // 新增會員資料
                 return userDAO.register(ConnUtils.getConn(), account, password, username, gender, birthday, phone, email);
             } else {
@@ -63,4 +65,15 @@ public class UserServiceImpl implements UserService {
             throw new UserServiceImplException("UserServiceImplException 的 register() 有問題。");
         }
     }
+
+    @Override
+    public boolean updatePersonalInfo(String account, String password, String username, String gender, LocalDate birthday, String phone, String email) throws UserServiceImplException {
+        try {
+            return userDAO.updatePersonalInfo(ConnUtils.getConn(), account, password, username, gender, birthday, phone, email);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserServiceImplException("UserServiceImplException 的 updatPersonalInfo() 有問題。");
+        }
+    }
+
 }

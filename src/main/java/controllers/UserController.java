@@ -1,7 +1,8 @@
 package controllers;
 
+import pojo.User;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
 public interface UserController {
@@ -19,8 +20,17 @@ public interface UserController {
     public String logOut(HttpServletRequest req);
 
     // 讓 Thymeleaf 渲染 register.html 頁面用。
-    public String registerPage(HttpServletRequest req);
+    public String registerPage();
 
     // 註冊會員。
     public String register(HttpServletRequest req, String account, String password, String username, String gender, LocalDate birthday, String phone, String email, String verification);
+
+    // 用於跳轉用戶資料頁面-已經獲取 User 數據，因此不需要經過 Thymeleaf 渲染，所以直接跳轉至用戶資料頁面 member_personalInformation.html。
+    public String member_personalInformationPage();
+
+    // 更新用戶資料。
+    public String updatePersonalInfo(HttpServletRequest req, String account, String password, String username, String gender, LocalDate birthday, String phone, String email);
+
+    // 透過id獲取user。
+    public User getUserById(int userId);
 }

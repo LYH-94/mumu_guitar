@@ -1,8 +1,7 @@
 package dao;
 
+import pojo.OrderProduct;
 import pojo.Product;
-import pojo.User;
-import util.ConnUtils;
 
 import java.sql.Connection;
 import java.util.List;
@@ -13,6 +12,8 @@ public interface ProductDAO {
 
     // 通過 Type 獲取商品。
     public List<Product> getProductByType(Connection conn, Class<Product> clazz, String type);
+
+    public List<OrderProduct> getProductByOrderId(Connection conn, Class<OrderProduct> clazz, int orderId);
 
     // 通過 Id 獲取商品。
     public Product getProductById(Connection conn, Class<Product> clazz, int id);

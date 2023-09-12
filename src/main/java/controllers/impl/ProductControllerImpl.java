@@ -3,6 +3,7 @@ package controllers.impl;
 import bo.impl.ProductServiceImpl;
 import controllers.ProductController;
 import controllers.exception.ProductControllerImplException;
+import pojo.OrderProduct;
 import pojo.Product;
 import pojo.ProductAddedFavoAndTrolInfo;
 
@@ -74,6 +75,16 @@ public class ProductControllerImpl implements ProductController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductControllerImpl 的 getProductById() 有問題。");
+        }
+    }
+
+    @Override
+    public List<OrderProduct> getProductByOrderId(int orderId) throws ProductControllerImplException {
+        try {
+            return productService.getProductByOrderId(orderId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductControllerImpl 的 getProductByOrderNumber() 有問題。");
         }
     }
 

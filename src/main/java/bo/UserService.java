@@ -13,4 +13,6 @@ public interface UserService {
     public User getUserById(int id);
 
     public boolean register(String account, String password, String username, String gender, LocalDate birthday, String phone, String email);
+
+    public boolean updatePersonalInfo(String account, String password, String username, String gender, LocalDate birthday, String phone, String email);
 }

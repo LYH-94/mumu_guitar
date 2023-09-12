@@ -3,6 +3,7 @@ package dao.impl;
 import dao.BaseDAO;
 import dao.ProductDAO;
 import dao.exception.ProductDAOImplException;
+import pojo.OrderProduct;
 import pojo.Product;
 
 import java.sql.Connection;
@@ -28,6 +29,17 @@ public class ProductDAOImpl extends BaseDAO implements ProductDAO {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductDAOImplException("ProductDAOImpl 的 getProductByType() 有問題。");
+        }
+    }
+
+    @Override
+    public List<OrderProduct> getProductByOrderId(Connection conn, Class<OrderProduct> clazz, int orderId) throws ProductDAOImplException {
+        try {
+            String sql = "SELECT * FROM t_orderproduct WHERE belongOrder = ?";
+            return super.getForList(conn, clazz, sql, orderId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductDAOImplException("ProductDAOImpl 的 getProductByOrderNumber() 有問題。");
         }
     }
 

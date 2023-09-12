@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" href="..\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
-    <link type="text/css" rel="stylesheet" href="..\styles\common.css">
-    <link type="text/css" rel="stylesheet" href="..\styles\member_myOrderList.css">
+    <link type="text/css" rel="stylesheet" href="./styles/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link type="text/css" rel="stylesheet" href="./styles/common.css">
+    <link type="text/css" rel="stylesheet" href="./styles/member_myOrderList.css">
 
     <!-- JavaScript -->
-    <script type="text/javascript" src="..\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
-    <script type="text/javascript" src="..\scripts\dropdown.js" defer></script>
+    <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
+    <script type="text/javascript" src="./scripts/common.js" defer></script>
 
     <title>木木吉他</title>
 </head>
@@ -20,29 +20,31 @@
     <div class="row mar_0">
         <div class="col-4 pad_0">
             <!-- Logo -->
-            <img src="../images/mumu_guitar.svg" class="img-fluid img_mumu_guitar">
+            <img src=".\images\mumu_guitar.svg" onclick="index()" class="img-fluid img_mumu_guitar">
         </div>
 
         <div class="col pad_0">
             <div class="row four_functions">
-                <!--會員圖-->
-                <figure class="col pad_0 login_register_favorite_function">
-                    <img src="../images/person-square.svg" class="img-fluid">
-                    <figcaption class="img_fig_font">會員登入</figcaption>
+                <!-- 會員圖 -->
+                <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/person-square.svg" class="img-fluid">
+                    <!-- 注意，這裡 figcaption 中的文本不要有換行，否則在 common.js 的 logInOut() 中判斷時會因為換行字符而出 Bug。 -->
+                    <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">會員登入</figcaption>
+                    <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">登出</figcaption>
                 </figure>
-                <!--註冊圖-->
-                <figure class="col pad_0 login_register_favorite_function">
-                    <img src="../images/register.svg" class="img-fluid">
+                <!-- 註冊圖 -->
+                <figure onclick="register()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/register.svg" class="img-fluid">
                     <figcaption class="img_fig_font">會員註冊</figcaption>
                 </figure>
-                <!--收藏圖-->
-                <figure class="col pad_0 login_register_favorite_function">
-                    <img src="../images/heart.svg" class="img-fluid">
+                <!-- 收藏圖 -->
+                <figure onclick="favorite()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/heart.svg" class="img-fluid">
                     <figcaption class="img_fig_font">商品收藏</figcaption>
                 </figure>
-                <!--購物車圖-->
-                <figure class="col pad_0 trolley_function">
-                    <img src="../images/trolley.svg" class="img-fluid">
+                <!-- 購物車圖 -->
+                <figure onclick="trolley()" class="col pad_0 trolley_function">
+                    <img src="./images/trolley.svg" class="img-fluid">
                     <figcaption class="img_fig_font">購物車</figcaption>
                 </figure>
             </div>
@@ -52,30 +54,25 @@
 
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他配件
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">擴音設備
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">琴袋琴盒
-        </button>
+        <button type="button" onclick="index()"
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品</button>
+        <button type="button" onclick="index_woodenGuitar()"
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他</button>
+        <button type="button" onclick="index_electricGuitar()"
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他配件</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">擴音設備</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">琴袋琴盒</button>
     </div>
 </nav>
 
 <section class="container-xl pad_0 section">
     <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
-        <div class="col pad_0 section_row1_col1">
-            <span style="color: blue">LYH</span>
-            &nbsp;歡迎光臨~!
-        </div>
+        <div th:if="${session.user.username == null}" class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
+        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1">
+            <a th:text="${session.user.username}" href="index.do?operate=member_personalInformationPage">用戶名稱</a> 歡迎光臨~!</div>
     </div>
 
     <!-- 水平分隔線 -->
@@ -90,12 +87,8 @@
                 <span class="pad_0" style="font-size: 20px; color: #141637;">會員中心</span>
                 <hr class="mar_pad_0 section_baseline_100">
 
-                <span class="pad_0"
-                      style="margin-top: 10px; margin-bottom: 0px; margin-left: 10px; margin-right: 0px; font-size: 16px; color: #141637;"><a
-                        href="https://...">個人資料</a></span>
-                <span class="pad_0"
-                      style="margin-top: 10px; margin-bottom: 10px; margin-left: 10px; margin-right: 0px; font-size: 16px; color: #141637;"><a
-                        href="https://...">我的訂單</a></span>
+                <span class="pad_0" style="margin-top: 10px; margin-bottom: 0px; margin-left: 10px; margin-right: 0px; font-size: 16px; color: #141637;"><a href="index.do?operate=member_personalInformationPage">個人資料</a></span>
+                <span class="pad_0" style="margin-top: 10px; margin-bottom: 10px; margin-left: 10px; margin-right: 0px; font-size: 16px; color: #141637;"><a href="orderController.do?operate=getUserOrderList&searchOrder=reset">我的訂單</a></span>
             </div>
         </div>
 
@@ -110,9 +103,11 @@
                 <div class="col pad_0" style="text-align: right;">
                     <!-- 搜尋訂單編號 -->
                     <div class="d-flex d-flex justify-content-center align-items-center">
-                        <span class="pad_0" style="font-size: 20px; color: #141637;">搜尋訂單編號</span>
-                        <input type="text" name="search_order" value="" class="input_style">
-                        <button type="button" class="bor_pad_0 search_btn">搜尋</button>
+                        <form action="orderController.do?operate=getUserOrderList" method="post" class="pad_0">
+                            <span class="pad_0" style="font-size: 20px; color: #141637;">搜尋訂單編號<br>(依日期-ex.2001/2/3的訂單則搜尋20010203)</span>
+                            <input type="number" name="searchOrder" th:value="${session.session_searchOrder}" class="input_style">
+                            <button type="submit" class="bor_pad_0 search_btn">搜尋</button>
+                        </form>
                     </div>
                 </div>
 
@@ -126,37 +121,18 @@
                 <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">功能</div>
             </div>
 
-            <div class="row section_row3_col2_row2-2" style="background-color: #FFFFFF">
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;">&nbsp;202305040115233278</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">2023-05-04
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">161600</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">未發貨</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">
-                    訂單詳情
-                </div>
-            </div>
-
-            <div class="row section_row3_col2_row2-2" style="background-color: #D8D8D8">
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;">&nbsp;202304210835447843</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">2023-04-21
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">29900</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已發貨</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">
-                    訂單詳情
-                </div>
-            </div>
-
-            <div class="row section_row3_col2_row2-2" style="background-color: #FFFFFF">
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;">&nbsp;202302041125347421</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">2023-02-04
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">42900</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已簽收</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">
-                    訂單詳情
-                </div>
+            <!-- 展示訂單 -->
+            <div th:if="${#lists.isEmpty(session.userOrderList)}">尚無商品。</div>
+            <div th:unless="${#lists.isEmpty(session.userOrderList)}"
+                 th:each="userOrder : ${session.userOrderList}"
+                 class="row section_row3_col2_row2-2" style="background-color: #FFFFFF">
+                <div th:text="'&nbsp;' + ${userOrder.number}" class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;">訂單編號</div>
+                <div th:text="${userOrder.date}" class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">下單日期</div>
+                <div th:text="${userOrder.totalAmount}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">訂單總額</div>
+                <div th:if="${userOrder.status} == 0" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">未發貨</div>
+                <div th:if="${userOrder.status} == 1" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已發貨</div>
+                <div th:if="${userOrder.status} == 2" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已簽收</div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;"><a th:href="'orderController.do?operate=getOrderDetailByNumber&number=' + ${userOrder.number}">訂單詳情</a></div>
             </div>
 
             <div class="row section_row3_col2_row3">
@@ -165,15 +141,15 @@
                     <div class="dropdown" style="width: 85px;">
                         <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
-                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">第 1 頁
-                        </button>
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">第 1 頁</button>
                         <ul id="dropdown-menu1" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a data-value="1" href="#" class="dropdown-item">第 1 頁</a></li>
                             <li><a data-value="2" href="#" class="dropdown-item">第 2 頁</a></li>
                         </ul>
                     </div>
-                    <span class="d-flex justify-content-center align-items-center pad_0"
-                          style="font-size: 16px; color: #141637;">訂單數量：3</span>
+                    <span th:text="'訂單數量：' + ${session.userOrderCount}"
+                          class="d-flex justify-content-center align-items-center pad_0"
+                          style="font-size: 16px; color: #141637;">訂單數量</span>
                 </div>
             </div>
         </div>
@@ -198,7 +174,6 @@
                 </span>
             </div>
         </div>
-
 
         <div class="col pad_0">
             <div class="row mar_0">
