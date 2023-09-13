@@ -3,7 +3,6 @@ package controllers.impl;
 import bo.impl.OrderServiceImpl;
 import controllers.OrderController;
 import controllers.exception.OrderControllerImplException;
-import controllers.exception.UserControllerImplException;
 import pojo.Order;
 
 import javax.servlet.http.HttpServletRequest;

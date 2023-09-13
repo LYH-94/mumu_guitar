@@ -12,7 +12,7 @@ public interface OrderDAO {
     public List<Order> getAllOrder(Connection conn, Class<Order> clazz);
 
     // 獲取特定用戶所需的訂單。
-    public List<Order> getUserOrderList(Connection conn, Class<Order> clazz, int userId, String searchOrder);
+    public List<Order> getUserOrderList(Connection conn, Class<Order> clazz, int userId, String searchOrder, int orderPageNumber);
 
     // 獲取特定用戶所需的訂單數量。
     public int getUserOrderCount(Connection conn, int userId, String searchOrder);

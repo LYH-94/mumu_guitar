@@ -52,9 +52,18 @@ public class OrderServiceImpl implements OrderService {
             }
             session.setAttribute("session_searchOrder", searchOrder);
 
+            // 獲取用戶選擇的頁碼。
+            int orderPageNumber; // 預設為第一頁。
+            if (StringUtils.isEmpty(req.getParameter("orderPageNumber"))) { // 預設為 1。
+                orderPageNumber = 1;
+            } else {
+                orderPageNumber = Integer.parseInt(req.getParameter("orderPageNumber"));
+            }
+            session.setAttribute("session_orderPageNumber", Integer.toString(orderPageNumber));
+
             // 獲取特定用戶所需的訂單。
             int userId = ((User) session.getAttribute("user")).getId();
-            List<Order> userOrderList = orderDAO.getUserOrderList(ConnUtils.getConn(), Order.class, userId, searchOrder);
+            List<Order> userOrderList = orderDAO.getUserOrderList(ConnUtils.getConn(), Order.class, userId, searchOrder, orderPageNumber);
 
             //  將獲取到的訂單儲存在session中。
             session.setAttribute("userOrderList", userOrderList);
@@ -84,13 +93,22 @@ public class OrderServiceImpl implements OrderService {
             }
             session.setAttribute("session_searchOrder", searchOrder);
 
-            // 獲取特定用戶所需的訂單數量。
+            // 獲取特定用戶所需的訂單數量，用於計算訂單總頁數。
+            int orderPages;
             int userId = ((User) session.getAttribute("user")).getId();
             int userOrderCount = orderDAO.getUserOrderCount(ConnUtils.getConn(), userId, searchOrder);
 
-            // 處理分頁。
+            if (userOrderCount == 0) { // 10 筆訂單為一頁。
+                orderPages = 1;
+            } else if (userOrderCount % 10 != 0) {
+                orderPages = (userOrderCount / 10) + 1;
+            } else {
+                orderPages = userOrderCount / 10;
+            }
 
-            req.getSession().setAttribute("userOrderCount", userOrderCount);
+            req.getSession().setAttribute("userOrderCount", userOrderCount); // 將訂單總數儲存於 session。
+            req.getSession().setAttribute("orderPages", orderPages); // 根據訂單總數計算的總頁數，儲存於 session。
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderServiceImplException("OrderServiceImpl 的 getUserOrderCount() 有問題。");

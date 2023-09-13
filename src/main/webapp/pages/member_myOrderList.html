@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -141,12 +141,14 @@
                     <div class="dropdown" style="width: 85px;">
                         <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
-                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">第 1 頁</button>
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
+                                th:text="'第 ' + ${session.session_orderPageNumber} + ' 頁'">頁碼</button>
                         <ul id="dropdown-menu1" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a data-value="1" href="#" class="dropdown-item">第 1 頁</a></li>
-                            <li><a data-value="2" href="#" class="dropdown-item">第 2 頁</a></li>
+                            <!-- 利用 th:each 迴圈生成分頁頁碼的下拉式選單。 -->
+                            <li th:each="i : ${#numbers.sequence(1, session.orderPages)}"><a th:data-value="${i}" th:href="'orderController.do?operate=getUserOrderList&orderPageNumber=' + ${i}" class="dropdown-item" th:text="'第 ' + ${i} + ' 頁'">頁碼</a></li>
                         </ul>
                     </div>
+
                     <span th:text="'訂單數量：' + ${session.userOrderCount}"
                           class="d-flex justify-content-center align-items-center pad_0"
                           style="font-size: 16px; color: #141637;">訂單數量</span>
