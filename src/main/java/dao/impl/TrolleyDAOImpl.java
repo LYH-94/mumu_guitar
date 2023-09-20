@@ -70,4 +70,45 @@ public class TrolleyDAOImpl extends BaseDAO implements TrolleyDAO {
         }
     }
 
+    @Override
+    public boolean clearTrolley(Connection conn, Integer userId) throws TrolleyDAOImplException {
+        try {
+            String sql = "DELETE FROM t_trolley WHERE owner =?";
+            return super.update(conn, sql, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TrolleyDAOImplException("TrolleyDAOImpl 的 clearTrolley() 有問題。");
+        }
+    }
+
+    @Override
+    public boolean plusQuantity(Connection conn, Integer productId, Integer userId, Integer currentQuantity) throws TrolleyDAOImplException {
+        try {
+            currentQuantity = currentQuantity + 1;
+            String sql = "UPDATE t_trolley SET quantity = ? WHERE product = ? AND owner = ?";
+            return super.update(conn, sql, currentQuantity, productId, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TrolleyDAOImplException("TrolleyDAOImpl 的 plusQuantity() 有問題。");
+        }
+    }
+
+    @Override
+    public boolean reduceQuantity(Connection conn, Integer productId, Integer userId, Integer currentQuantity) throws TrolleyDAOImplException {
+        try {
+            String sql;
+            currentQuantity = currentQuantity - 1;
+            if (currentQuantity <= 0) {
+                sql = "DELETE FROM t_trolley WHERE product = ? AND owner =?";
+                return super.update(conn, sql, productId, userId);
+            } else {
+                sql = "UPDATE t_trolley SET quantity = ? WHERE product = ? AND owner = ?";
+                return super.update(conn, sql, currentQuantity, productId, userId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TrolleyDAOImplException("TrolleyDAOImpl 的 reduceQuantity() 有問題。");
+        }
+    }
+
 }

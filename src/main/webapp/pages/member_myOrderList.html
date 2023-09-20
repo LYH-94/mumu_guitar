@@ -104,7 +104,7 @@
                     <!-- 搜尋訂單編號 -->
                     <div class="d-flex d-flex justify-content-center align-items-center">
                         <form action="orderController.do?operate=getUserOrderList" method="post" class="pad_0">
-                            <span class="pad_0" style="font-size: 20px; color: #141637;">搜尋訂單編號<br>(依日期-ex.2001/2/3的訂單則搜尋20010203)</span>
+                            <span class="pad_0" style="font-size: 20px; color: #141637;">搜尋訂單<br>(依日期-ex.2001/2/3的訂單則搜尋20010203)</span>
                             <input type="number" name="searchOrder" th:value="${session.session_searchOrder}" class="input_style">
                             <button type="submit" class="bor_pad_0 search_btn">搜尋</button>
                         </form>

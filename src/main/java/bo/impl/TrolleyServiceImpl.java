@@ -53,4 +53,44 @@ public class TrolleyServiceImpl implements TrolleyService {
             throw new TrolleyServiceImplException("TrolleyServiceImpl 的 checkTrolley() 有問題。");
         }
     }
+
+    @Override
+    public void plusQuantity(Integer productId, Integer userId, Integer currentQuantity) throws TrolleyServiceImplException {
+        try {
+            boolean b = trolleyDAO.plusQuantity(ConnUtils.getConn(), productId, userId, currentQuantity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TrolleyServiceImplException("TrolleyServiceImpl 的 plusQuantity() 有問題。");
+        }
+    }
+
+    @Override
+    public void reduceQuantity(Integer productId, Integer userId, Integer currentQuantity) throws TrolleyServiceImplException {
+        try {
+            boolean b = trolleyDAO.reduceQuantity(ConnUtils.getConn(), productId, userId, currentQuantity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TrolleyServiceImplException("TrolleyServiceImpl 的 reduceQuantity() 有問題。");
+        }
+    }
+
+    @Override
+    public void deleteTrolleyProduct(Integer productId, Integer userId) throws TrolleyServiceImplException {
+        try {
+            boolean b = trolleyDAO.deleteTrolley(ConnUtils.getConn(), productId, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TrolleyServiceImplException("TrolleyServiceImpl 的 deleteTrolleyProduct() 有問題。");
+        }
+    }
+
+    @Override
+    public void clearTrolley(Integer userId) throws TrolleyServiceImplException {
+        try {
+            boolean b = trolleyDAO.clearTrolley(ConnUtils.getConn(), userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TrolleyServiceImplException("TrolleyServiceImpl 的 clearTrolley() 有問題。");
+        }
+    }
 }

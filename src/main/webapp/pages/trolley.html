@@ -12,6 +12,7 @@
     <!-- JavaScript -->
     <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
     <script type="text/javascript" src="./scripts/common.js" defer></script>
+    <script type="text/javascript" src="./scripts/trolley.js" defer></script>
 
     <title>木木吉他</title>
 </head>
@@ -25,23 +26,24 @@
 
         <div class="col pad_0">
             <div class="row four_functions">
-                <!--會員圖-->
+                <!-- 會員圖 -->
                 <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/person-square.svg" class="img-fluid">
+                    <!-- 注意，這裡 figcaption 中的文本不要有換行，否則在 common.js 的 logInOut() 中判斷時會因為換行字符而出 Bug。 -->
                     <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">會員登入</figcaption>
                     <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">登出</figcaption>
                 </figure>
-                <!--註冊圖-->
+                <!-- 註冊圖 -->
                 <figure onclick="register()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/register.svg" class="img-fluid">
                     <figcaption class="img_fig_font">會員註冊</figcaption>
                 </figure>
-                <!--收藏圖-->
+                <!-- 收藏圖 -->
                 <figure onclick="favorite()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/heart.svg" class="img-fluid">
                     <figcaption class="img_fig_font">商品收藏</figcaption>
                 </figure>
-                <!--購物車圖-->
+                <!-- 購物車圖 -->
                 <figure onclick="trolley()" class="col pad_0 trolley_function">
                     <img src="./images/trolley.svg" class="img-fluid">
                     <figcaption class="img_fig_font">購物車</figcaption>
@@ -54,22 +56,15 @@
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
         <button type="button" onclick="index()"
-                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品
-        </button>
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品</button>
         <button type="button" onclick="index_woodenGuitar()"
-                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他
-        </button>
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他</button>
         <button type="button" onclick="index_electricGuitar()"
-                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他配件
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">擴音設備
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">琴袋琴盒
-        </button>
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他配件</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">擴音設備</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">琴袋琴盒</button>
     </div>
 </nav>
 
@@ -77,9 +72,8 @@
     <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
         <div th:if="${session.user.username == null}" class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
-        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1"><!-- 用戶詳細訊息還沒做。 -->
-            <a th:text="${session.user.username}" th:href="@{/index.do}">用戶名稱</a> 歡迎光臨~!
-        </div>
+        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1">
+            <a th:text="${session.user.username}" href="index.do?operate=member_personalInformationPage">用戶名稱</a> 歡迎光臨~!</div>
     </div>
 
     <!-- 水平分隔線 -->
@@ -96,19 +90,12 @@
             </div>
 
             <div class="row mar_0 section_row3_col1_row2">
-                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 100px;">
-                    商品編號
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 400px;">商品
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 100px;">庫存
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 200px;">單價
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 120px;">數量
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 200px;">小計
-                </div>
+                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 100px;">商品編號</div>
+                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 400px;">商品</div>
+                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 100px;">庫存</div>
+                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 200px;">單價</div>
+                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 120px;">數量</div>
+                <div class="d-flex justify-content-center align-items-center pad_0 field" style="width: 200px;">小計</div>
             </div>
 
             <div class="row mar_0 section_row3_col1_row3">
@@ -121,29 +108,25 @@
                     <div th:onclick="'productDescription('+${trolleyClass.product.get(i).id}+')'"
                          th:text="${trolleyClass.product.get(i).number}"
                          class="d-flex justify-content-center align-items-center pad_0"
-                         style="cursor: pointer; width: 100px; color: blue;">商品編號
-                    </div>
+                         style="cursor: pointer; width: 100px; color: blue;">商品編號</div>
                     <div class="d-flex justify-content-start align-items-center pad_0" style="width: 400px;">
                         <img th:src="'./images/' + ${session.trolleyClass.product[i].photo}" class="img_product">
                         <span th:text="${trolleyClass.product.get(i).name}">商品名稱</span>
                     </div>
                     <div th:text="${trolleyClass.product.get(i).inventory}"
-                         class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">庫存
-                    </div>
+                         class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">庫存</div>
                     <div th:text="${trolleyClass.product.get(i).price}"
-                         class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">單價
-                    </div>
+                         class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">單價</div>
                     <div class="d-flex justify-content-center align-items-center pad_0" style="width: 120px;">
-                        <img src="./images/dash-circle.svg" style="width: 20px; height: 20px;">
+                        <img th:onclick="'reduce('+${trolleyClass.product.get(i).id}+','+${trolleyClass.quantity.get(i)}+')'" src="./images/dash-circle.svg" style="cursor: pointer; width: 20px; height: 20px;">
                         <span th:text="${trolleyClass.quantity.get(i)}" class="count_color1">數量</span>
-                        <img src="./images/plus-circle.svg" style="width: 20px; height: 20px;">
+                        <img th:onclick="'plus('+${trolleyClass.product.get(i).id}+','+${trolleyClass.quantity.get(i)}+')'" src="./images/plus-circle.svg" style="cursor: pointer; width: 20px; height: 20px;">
                     </div>
                     <div th:text="${trolleyClass.subTotal.get(i)}"
-                         class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">小計
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center pad_0"
-                         style="width: 100px; color: red;">移除
-                    </div>
+                         class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;">小計</div>
+                    <div th:onclick="'deleteTrolleyProduct('+${trolleyClass.product.get(i).id}+')'"
+                         class="d-flex justify-content-center align-items-center pad_0"
+                         style="cursor: pointer; width: 100px; color: red;">移除</div>
                 </div>
 
             </div>
@@ -151,14 +134,14 @@
             <div class="row mar_0 section_row3_col1_row4">
                 <div class="d-flex justify-content-end pad_0">
                     <span th:text="'商品總數：' + ${session.trolleyClass.totalQuantity}" class="count_2">商品總數</span>
-                    / 總金額<span th:text="'NT$' + ${session.trolleyClass.totalAmount}" class="count_2"
-                          style="color: red">總金額</span>
+                    / 總金額
+                    <span th:text="'NT$' + ${session.trolleyClass.totalAmount}" class="count_2" style="color: red">總金額</span>
                 </div>
 
                 <div class="d-flex justify-content-end pad_0">
-                    <button type="button" class="bor_pad_0 btn">清空購物車</button>
-                    <button type="button" class="bor_pad_0 btn">繼續購物</button>
-                    <button type="button" class="bor_pad_0 btn">結帳</button>
+                    <button th:unless="${#lists.isEmpty(session.trolleyClass.product)}" th:onclick="clearTrolley()" type="button" class="bor_pad_0 btn">清空購物車</button>
+                    <button onclick="index()" type="button" class="bor_pad_0 btn">繼續購物</button>
+                    <button th:unless="${#lists.isEmpty(session.trolleyClass.product)}" onclick="checkout()" type="button" class="bor_pad_0 btn">結帳</button>
                 </div>
             </div>
 
@@ -185,7 +168,6 @@
                 </span>
             </div>
         </div>
-
 
         <div class="col pad_0">
             <div class="row mar_0">

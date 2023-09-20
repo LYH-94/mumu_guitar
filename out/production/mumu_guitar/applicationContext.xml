@@ -22,15 +22,13 @@
     </bean>
 
     <bean id="favorite" class="controllers.impl.FavoriteControllerImpl">
-        <property name="productController" ref="productController"/>
-        <property name="trolleyController" ref="trolley"/>
         <property name="favoriteService" ref="favoriteService"/>
+        <property name="productService" ref="productService"/>
     </bean>
 
     <bean id="trolley" class="controllers.impl.TrolleyControllerImpl">
         <property name="productController" ref="productController"/>
         <property name="trolleyService" ref="trolleyService"/>
-        <property name="trolleyClass" ref="trolleyClass"/>
     </bean>
     <bean id="trolleyClass" class="pojo.TrolleyClass"></bean>
 

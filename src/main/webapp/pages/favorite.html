@@ -12,6 +12,8 @@
     <!-- JavaScript -->
     <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
     <script type="text/javascript" src="./scripts/common.js" defer></script>
+    <script type="text/javascript" src="./scripts/favorite.js" defer></script>
+    <script type="text/javascript" src="./scripts/axios.min.js"></script> <!-- Axios 異步請求框架 -->
 
     <title>木木吉他</title>
 </head>
@@ -25,23 +27,24 @@
 
         <div class="col pad_0">
             <div class="row four_functions">
-                <!--會員圖-->
+                <!-- 會員圖 -->
                 <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/person-square.svg" class="img-fluid">
+                    <!-- 注意，這裡 figcaption 中的文本不要有換行，否則在 common.js 的 logInOut() 中判斷時會因為換行字符而出 Bug。 -->
                     <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">會員登入</figcaption>
                     <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">登出</figcaption>
                 </figure>
-                <!--註冊圖-->
+                <!-- 註冊圖 -->
                 <figure onclick="register()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/register.svg" class="img-fluid">
                     <figcaption class="img_fig_font">會員註冊</figcaption>
                 </figure>
-                <!--收藏圖-->
+                <!-- 收藏圖 -->
                 <figure onclick="favorite()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/heart.svg" class="img-fluid">
                     <figcaption class="img_fig_font">商品收藏</figcaption>
                 </figure>
-                <!--購物車圖-->
+                <!-- 購物車圖 -->
                 <figure onclick="trolley()" class="col pad_0 trolley_function">
                     <img src="./images/trolley.svg" class="img-fluid">
                     <figcaption class="img_fig_font">購物車</figcaption>
@@ -53,11 +56,11 @@
 
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
-        <button type="button" onclick="index()"
+        <button type="button" onclick="favorite_index()"
                 class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品</button>
-        <button type="button" onclick="index_woodenGuitar()"
+        <button type="button" onclick="favorite_index_woodenGuitar()"
                 class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他</button>
-        <button type="button" onclick="index_electricGuitar()"
+        <button type="button" onclick="favorite_index_electricGuitar()"
                 class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他</button>
         <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦</button>
         <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他配件</button>
@@ -70,8 +73,8 @@
     <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
         <div th:if="${session.user.username == null}" class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
-        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1"><!-- 用戶詳細訊息還沒做。 -->
-            <a th:text="${session.user.username}" th:href="@{/index.do}">用戶名稱</a> 歡迎光臨~!</div>
+        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1">
+            <a th:text="${session.user.username}" href="index.do?operate=member_personalInformationPage">用戶名稱</a> 歡迎光臨~!</div>
     </div>
 
     <!-- 水平分隔線 -->
@@ -84,27 +87,31 @@
         <div class="col-3 pad_0 section_row3_col1">
             <!-- 篩選功能表單 -->
             <div class="row mar_0 section_row3_col1_row1">
-                <form action="..." method="post" class="pad_0">
+                <form action="favorite.do?operate=getFavoriteByUserId" method="post" class="pad_0">
                     <span class="pad_0" style="font-size: 20px; color: #141637;">篩選</span>
                     <hr class="mar_pad_0 section_baseline_60">
 
                     <span class="pad_0"
                           style="margin-top: 5px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; font-size: 16px; color: #141637;">售價</span>
                     <div class="pad_0" style="font-size: 16px; color: #141637;">
-                        $<input type="text" name="lowest_price" style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
-                        ~$<input type="text" name="highest_price" style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
+                        $<input type="number" min="0" max="999999" name="lowest_price" th:value="${session.session_lowest_price}" style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
+                        ~$<input type="number" min="0" max="999999" name="highest_price" th:value="${session.session_highest_price}" style="width: 120px; height: 28px; margin-top: 0px; margin-bottom: 0px; margin-left: 5px; margin-right: 5px;">
                     </div>
 
                     <span class="pad_0" style="font-size: 16px; color: #141637;">庫存</span>
                     <span class="d-flex justify-content-evenly pad_0" style="font-size: 16px; color: #141637;">
-                        <input type="radio" name="screen_inventory" value="1"> 有現貨
-                        <input type="radio" name="screen_inventory" value="0"> 需調貨
-                        <input type="radio" name="screen_inventory" value="2" checked> 所有商品
+                        <input th:if="${session.session_inventory} == 1" type="radio" name="inventory" value="1" checked>
+                        <input th:unless="${session.session_inventory} == 1" type="radio" name="inventory" value="1"> 有現貨
+                        <input th:if="${session.session_inventory} == 0" type="radio" name="inventory" value="0" checked>
+                        <input th:unless="${session.session_inventory} == 0" type="radio" name="inventory" value="0"> 需調貨
+                        <input th:if="${session.session_inventory} == 2" type="radio" name="inventory" value="2" checked>
+                        <input th:unless="${session.session_inventory} == 2" type="radio" name="inventory" value="2"> 所有商品
                     </span>
 
-                    <span class="pad_0" style="font-size: 16px; color: #141637;">搜尋</span><br>
-                    <input type="text" name="search" style="width: 180px; height: 28px; margin-top: 9px; margin-bottom: 0px; margin-left: 15px; margin-right: 0px;"><br>
+                    <span class="pad_0" style="font-size: 16px; color: #141637;">搜尋商品名稱</span><br>
+                    <input type="text" name="searchProduct" th:value="${session.session_searchProduct}" style="width: 180px; height: 28px; margin-top: 9px; margin-bottom: 0px; margin-left: 15px; margin-right: 0px;"><br>
                     <input type="submit" value="確定" class="bor_0 pad_0 filter_btn">
+                    <input type="reset" value="重置" class="bor_0 pad_0 filter_btn">
                 </form>
             </div>
 
@@ -118,7 +125,7 @@
                      style="width: 300px; margin-top: 5px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
                     <div class="carousel-inner">
 
-                        <!--第一個輪播商品-->
+                        <!-- 第一個輪播商品 -->
                         <div class="carousel-item active">
                             <div class="container pad_0" style="border: 3px solid #D8D8D8; border-radius: 5px;">
                                 <div class="row mar_0">
@@ -170,7 +177,7 @@
                             </div>
                         </div>
 
-                        <!--第二個輪播商品-->
+                        <!-- 第二個輪播商品 -->
                         <div class="carousel-item">
                             <div class="container pad_0" style="border: 3px solid #D8D8D8; border-radius: 5px;">
                                 <div class="row mar_0">
@@ -222,7 +229,7 @@
                             </div>
                         </div>
 
-                        <!--第三個輪播商品-->
+                        <!-- 第三個輪播商品 -->
                         <div class="carousel-item">
                             <div class="container pad_0" style="border: 3px solid #D8D8D8; border-radius: 5px;">
                                 <div class="row mar_0">
@@ -304,14 +311,19 @@
                 <div class="col pad_0" style="text-align: right;">
                     <!-- 下拉式選單 - 排序 -->
                     <div class="dropdown inline" style="width: 110px;">
+                        <!--這裡button的文字也可以使用th:text來渲染，但在後端多進行轉換及if判斷式，較麻煩，
+                        所以就直接在這裡寫兩個button元素，並用th:if做判斷。-->
                         <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
-                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">名稱(A-Z)</button>
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
+                                th:if="${session.session_sortBy} == 1">售價(H-L)</button>
+                        <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                class="btn dropdown-toggle"
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
+                                th:if="${session.session_sortBy} == 2">售價(L-H)</button>
                         <ul id="dropdown-menu1" aria-labelledby="dropdownMenuButton1" class="dropdown-menu">
-                            <li><a data-value="1" href="#" class="dropdown-item">名稱(A-Z)</a></li>
-                            <li><a data-value="2" href="#" class="dropdown-item">名稱(Z-A)</a></li>
-                            <li><a data-value="3" href="#" class="dropdown-item">售價(H-L)</a></li>
-                            <li><a data-value="4" href="#" class="dropdown-item">售價(L-H)</a></li>
+                            <li><a data-value="1" href="favorite.do?operate=getFavoriteByUserId&sortBy=1" class="dropdown-item">售價(H-L)</a></li>
+                            <li><a data-value="2" href="favorite.do?operate=getFavoriteByUserId&sortBy=2" class="dropdown-item">售價(L-H)</a></li>
                         </ul>
                     </div>
                 </div>
@@ -321,53 +333,55 @@
                 <div class="col d-flex justify-content-start flex-wrap pad_0">
 
                     <!-- 展示商品 -->
-                    <div th:if="${#lists.isEmpty(session.productList)}">尚無商品。</div>
-                    <div th:unless="${#lists.isEmpty(session.productList)}"
-                         th:each="productAllInfo : ${session.productList}"
+                    <div th:if="${#lists.isEmpty(session.favoriteProductList)}">尚無商品。</div>
+                    <div th:unless="${#lists.isEmpty(session.favoriteProductList)}"
+                         th:each="favoriteProductAllInfo : ${session.favoriteProductList}"
                          class="pad_0 product_css">
                         <div class="row mar_0">
                             <div class="col d-flex justify-content-center pad_0"
                                  style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;">
-                                <img th:onclick="'productDescription('+${productAllInfo.product.id}+')'"
-                                     th:src="'./images/' + ${productAllInfo.product.photo}"
+                                <img th:onclick="'productDescription('+${favoriteProductAllInfo.product.id}+')'"
+                                     th:src="'./images/' + ${favoriteProductAllInfo.product.photo}"
                                      style="cursor: pointer; width: 206px; height: 298px;">
                             </div>
                         </div>
                         <div class="row mar_0">
                             <div class="col d-flex justify-content-start pad_0">
-                                <span th:text="${productAllInfo.product.name}"
+                                <span th:text="${favoriteProductAllInfo.product.name}"
                                       style="margin-top: 10px; margin-bottom: 0px; margin-left: 20px; margin-right: 20px; font-size: 20px;">商品名稱</span>
                             </div>
                         </div>
                         <div class="row mar_0">
                             <div class="col d-flex justify-content-end pad_0">
-                                <span th:text="'庫存：' + ${productAllInfo.product.inventory}"
+                                <span th:text="'庫存：' + ${favoriteProductAllInfo.product.inventory}"
                                       style="margin-top: 10px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px; font-size: 16px;">庫存</span>
                             </div>
                         </div>
                         <div class="row"
                              style="margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 0px;">
                             <div class="col d-flex justify-content-start pad_0">
-                                <span th:text="'$' + ${productAllInfo.product.price}"
+                                <span th:text="'$' + ${favoriteProductAllInfo.product.price}"
                                       style="margin-top: 0px; margin-bottom: 0px; margin-left: 20px; margin-right: 0px; font-size: 20px; color: red;">金額</span>
                             </div>
 
                             <div class="col-4 d-flex justify-content-end pad_0">
-                                <img th:onclick="'add_delete_Favorite('+${productAllInfo.product.id}+')'"
-                                     th:if="${productAllInfo.exist_favorite == true}"
+                                <!-- 追蹤商品 -->
+                                <img th:onclick="'add_delete_Favorite('+${favoriteProductAllInfo.product.id}+')'"
+                                     th:if="${favoriteProductAllInfo.exist_favorite == true}"
                                      src="./images/heart-fill.svg"
                                      style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                <img th:onclick="'add_delete_Favorite('+${productAllInfo.product.id}+')'"
-                                     th:unless="${productAllInfo.exist_favorite == true}"
+                                <img th:onclick="'add_delete_Favorite('+${favoriteProductAllInfo.product.id}+')'"
+                                     th:unless="${favoriteProductAllInfo.exist_favorite == true}"
                                      src="./images/heart.svg"
                                      style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
 
-                                <img th:onclick="'add_delete_Trolley('+${productAllInfo.product.id}+')'"
-                                     th:if="${productAllInfo.exist_trolley == true}"
+                                <!-- 加入購物車 -->
+                                <img th:onclick="'add_delete_Trolley('+${favoriteProductAllInfo.product.id}+')'"
+                                     th:if="${favoriteProductAllInfo.exist_trolley == true}"
                                      src="./images/trolley-fill.svg"
                                      style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
-                                <img th:onclick="'add_delete_Trolley('+${productAllInfo.product.id}+')'"
-                                     th:unless="${productAllInfo.exist_trolley == true}"
+                                <img th:onclick="'add_delete_Trolley('+${favoriteProductAllInfo.product.id}+')'"
+                                     th:unless="${favoriteProductAllInfo.exist_trolley == true}"
                                      src="./images/trolley.svg"
                                      style="cursor: pointer; width: 26px; height: 26px; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 20px;">
                             </div>
@@ -383,14 +397,15 @@
                     <div class="dropdown" style="width: 85px;">
                         <button id="dropdownMenuButton2" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
-                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">第 1 頁</button>
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
+                                th:text="'第 ' + ${session.session_pageNumber} + ' 頁'">頁碼</button>
                         <ul id="dropdown-menu2" class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                            <li><a data-value="1" href="#" class="dropdown-item">第 1 頁</a></li>
-                            <li><a data-value="2" href="#" class="dropdown-item">第 2 頁</a></li>
+                            <!-- 利用 th:each 迴圈生成分頁頁碼的下拉式選單。 -->
+                            <li th:each="i : ${#numbers.sequence(1, session.pages)}"><a th:data-value="${i}" th:href="'favorite.do?operate=getFavoriteByUserId&pageNumber=' + ${i}" class="dropdown-item" th:text="'第 ' + ${i} + ' 頁'">頁碼</a></li>
                         </ul>
                     </div>
-                    <span th:text="'追蹤數量：' + ${#lists.size(session.productList)}"
-                          class="d-flex justify-content-center align-items-center pad_0 inline"
+                    <span th:text="'追蹤數量：' + ${session.favoriteProductCount}"
+                          class="d-flex justify-content-center align-items-center pad_0"
                           style="font-size: 16px; color: #141637;">追蹤數量</span>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 package dao;
 
 import pojo.Favorite;
+import pojo.Product;
 
 import java.sql.Connection;
 import java.util.List;
@@ -17,4 +18,9 @@ public interface FavoriteDAO {
     public boolean addFavorite(Connection conn, Integer productId, Integer userId);
 
     public boolean deleteFavorite(Connection conn, Integer productId, Integer userId);
+
+    // 獲取過濾後的商品。
+    public List<Product> getFilteredFavoriteProduct(Connection conn, Class<Product> clazz, String classification, int lowest_price, int highest_price, byte inventory, String searchProduct, byte sortBy, int pageNumber, int userId);
+
+    public int getFilterFavoriteProductCount(Connection conn, String classification, int lowest_price, int highest_price, byte inventory, String searchProduct, int userId);
 }

@@ -6,7 +6,7 @@
 // 首頁，展示所有商品並將所有設置重置為初始值。
 function index() {
     const searchProduct="reset";
-    window.location.href="index.do?classification=所有商品&lowest_price=0&highest_price=999999&inventory=2&searchProduct="+ searchProduct +"&sortBy=1";
+    window.location.href="index.do?classification=所有商品&lowest_price=0&highest_price=999999&inventory=2&searchProduct=" + searchProduct + "&sortBy=1";
 }
 
 // 首頁，展示木吉他。
@@ -42,7 +42,8 @@ function register() {
 
 // 點擊 "商品收藏" 時發送相應請求。
 function favorite() {
-    window.location.href="favorite.do?operate=getFavoriteByUserId";
+    const searchProduct="reset";
+    window.location.href="favorite.do?operate=getFavoriteByUserId&classification=所有商品&lowest_price=0&highest_price=999999&inventory=2&searchProduct=" + searchProduct + "&sortBy=1";
 }
 
 // 點擊 "購物車" 時發送相應請求。
@@ -52,7 +53,7 @@ function trolley() {
 
 // 點擊商品時發送相應請求，根據商品 id 來獲取該商品的詳細資訊。
 function productDescription(id){
-    window.location.href="productController.do?operate=productDescription&id="+id;
+    window.location.href="productController.do?operate=productDescription&id=" + id;
 }
 
 // 添加或刪除追蹤的商品。
@@ -71,8 +72,10 @@ function add_delete_Favorite(productId){
                 window.location.href="index.do?operate=logInPage";
             }else if(value.data == "add_success"){
                 alert("商品已成功追蹤!");
+                window.location.href="index.do";
             }else if(value.data == "delete_success"){
                 alert("商品已移除追蹤!");
+                window.location.href="index.do";
             }
         }).catch(function(reason){ // 當服務端響應失敗時 (也就是異常)，執行該方法中的匿名函式。
             // reason.response.date 可以獲取到異常訊息的內容。
@@ -96,8 +99,10 @@ function add_delete_Trolley(productId){
                 window.location.href="index.do?operate=logInPage"
             }else if(value.data == "add_success"){
                 alert("商品已加入購物車!");
+                window.location.href="index.do";
             }else if(value.data == "delete_success"){
                 alert("商品已從購物車中移除!");
+                window.location.href="index.do";
             }
         }).catch(function(reason){ // 當服務端響應失敗時 (也就是異常)，執行該方法中的匿名函式。
             // reason.response.date 可以獲取到異常訊息的內容。

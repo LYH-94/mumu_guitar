@@ -89,12 +89,12 @@
     border-right: 0px;
 }
 
-.add_btn {
-    width:120px;
+.add_favorite_btn {
+    width:100px;
     height: 42px;
     font-size: 20px;
     color: #FFFFFF;
-    background-color: #141637;
+    background-color: #444BBD;
     border-radius: 5px;
     margin-top: 0px;
     margin-bottom: 0px;
@@ -102,8 +102,8 @@
     margin-right: 0px;
 }
 
-.checkout_btn {
-    width:100px;
+.add_trolley_btn {
+    width:120px;
     height: 42px;
     font-size: 20px;
     color: #FFFFFF;

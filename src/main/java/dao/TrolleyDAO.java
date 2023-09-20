@@ -18,4 +18,8 @@ public interface TrolleyDAO {
     public boolean addTrolley(Connection conn, Integer productId, Integer userId);
 
     public boolean deleteTrolley(Connection conn, Integer productId, Integer userId);
+    public boolean clearTrolley(Connection conn, Integer userId);
+
+    public boolean plusQuantity(Connection conn, Integer productId, Integer userId, Integer currentQuantity);
+    public boolean reduceQuantity(Connection conn, Integer productId, Integer userId, Integer currentQuantity);
 }

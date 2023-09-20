@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" href=".\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
-    <link type="text/css" rel="stylesheet" href=".\styles\common.css">
-    <link type="text/css" rel="stylesheet" href=".\styles\productDescription.css">
+    <link type="text/css" rel="stylesheet" href="./styles/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link type="text/css" rel="stylesheet" href="./styles/common.css">
+    <link type="text/css" rel="stylesheet" href="./styles/productDescription.css">
 
     <!-- JavaScript -->
-    <script type="text/javascript" src=".\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
-    <script type="text/javascript" src=".\scripts\common.js" defer></script>
+    <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
+    <script type="text/javascript" src="./scripts/common.js" defer></script>
+    <script type="text/javascript" src="./scripts/axios.min.js"></script> <!-- Axios 異步請求框架 -->
 
     <title>木木吉他</title>
 </head>
@@ -25,23 +26,24 @@
 
         <div class="col pad_0">
             <div class="row four_functions">
-                <!--會員圖-->
+                <!-- 會員圖 -->
                 <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/person-square.svg" class="img-fluid">
+                    <!-- 注意，這裡 figcaption 中的文本不要有換行，否則在 common.js 的 logInOut() 中判斷時會因為換行字符而出 Bug。 -->
                     <figcaption id="id_logInOut" th:if="${session.user.username == null}" class="img_fig_font">會員登入</figcaption>
                     <figcaption id="id_logInOut" th:unless="${session.user.username == null}" class="img_fig_font">登出</figcaption>
                 </figure>
-                <!--註冊圖-->
+                <!-- 註冊圖 -->
                 <figure onclick="register()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/register.svg" class="img-fluid">
                     <figcaption class="img_fig_font">會員註冊</figcaption>
                 </figure>
-                <!--收藏圖-->
+                <!-- 收藏圖 -->
                 <figure onclick="favorite()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/heart.svg" class="img-fluid">
                     <figcaption class="img_fig_font">商品收藏</figcaption>
                 </figure>
-                <!--購物車圖-->
+                <!-- 購物車圖 -->
                 <figure onclick="trolley()" class="col pad_0 trolley_function">
                     <img src="./images/trolley.svg" class="img-fluid">
                     <figcaption class="img_fig_font">購物車</figcaption>
@@ -54,22 +56,15 @@
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
         <button type="button" onclick="index()"
-                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品
-        </button>
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品</button>
         <button type="button" onclick="index_woodenGuitar()"
-                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他
-        </button>
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">木吉他</button>
         <button type="button" onclick="index_electricGuitar()"
-                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他配件
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">擴音設備
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">琴袋琴盒
-        </button>
+                class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">電吉他</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他弦</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">吉他配件</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">擴音設備</button>
+        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">琴袋琴盒</button>
     </div>
 </nav>
 
@@ -77,9 +72,8 @@
     <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
         <div th:if="${session.user.username == null}" class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
-        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1"><!-- 用戶詳細訊息還沒做。 -->
-            <a th:text="${session.user.username}" th:href="@{/index.do}">用戶名稱</a> 歡迎光臨~!
-        </div>
+        <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1">
+            <a th:text="${session.user.username}" href="index.do?operate=member_personalInformationPage">用戶名稱</a> 歡迎光臨~!</div>
     </div>
 
     <!-- 水平分隔線 -->
@@ -87,11 +81,11 @@
         <div class="col pad_0 section_row2_col1"></div>
     </div>
 
-    <div th:with="productDesc = ${session.productDesc}"
+    <div th:object="${session.productDesc}"
          class="row mar_0 section_row3">
         <!-- 商品圖片 -->
         <div class="col-5 section_row3_col1">
-            <img th:src="'./images/' + ${productDesc.photo}"
+            <img th:src="'./images/' + *{photo}"
                  style="width: 100%; border: 3px solid #CDCDCD; border-radius: 5px;">
         </div>
 
@@ -99,33 +93,23 @@
         <div class="col section_row3_col2">
             <div class="row mar_0 section_row3_col2_row1">
                 <div class="col-4 pad_0 section_row3_col2_row1_co1">
-                    <span th:text="'價格：$' + ${productDesc.price}" style="font-size: 32px; color: red;">價格</span><br><br>
-                    <span th:text="'品牌：' + ${productDesc.brand}"
-                          style="font-size: 20px; color: #141637;">品牌</span><br><br>
-                    <span th:text="'型號：' + ${productDesc.model}"
-                          style="font-size: 20px; color: #141637;">型號</span><br><br>
+                    <span th:text="'價格：$' + *{price}" style="font-size: 32px; color: red;">價格</span><br><br>
+                    <span th:text="'品牌：' + *{brand}" style="font-size: 20px; color: #141637;">品牌</span><br><br>
+                    <span th:text="'型號：' + *{model}" style="font-size: 20px; color: #141637;">型號</span><br><br>
                     <div class="d-flex align-items-center flex-wrap">
-                        <span th:text="'庫存：' + ${productDesc.inventory}"
-                              style="font-size: 20px; color: #141637; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 50px;">庫存</span>
-                        <img src="./images/heart.svg" style="width: 26px; height: 26px;">
+                        <span th:text="'庫存：' + *{inventory}" style="font-size: 20px; color: #141637; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 50px;">庫存</span>
                     </div>
                 </div>
                 <div class="col pad_0">
-                    <span th:text="'品名：' + ${productDesc.name}"
-                          style="font-size: 32px; color: #141637;">品名</span><br><br>
-                    <span th:text="'介紹：' + ${productDesc.introduce}"
-                          style="font-size: 20px; color: #141637;">介紹</span>
+                    <span th:text="'品名：' + *{name}" style="font-size: 32px; color: #141637;">品名</span><br><br>
+                    <span style="font-size: 20px; color: #141637;">介紹：</span><br>
+                    <span th:text="*{introduce}" style="font-size: 20px; color: #141637;">介紹</span>
                 </div>
             </div>
             <div class="row justify-content-end section_row3_col2_row2">
                 <div class="col-7 d-flex justify-content-end pad_0">
-                    <div class="d-flex justify-content-center align-items-center" style="width: 120px; height: 42px;">
-                        <img src="./images/dash-circle.svg" style="width: 20px; height: 20px;">
-                        <span class="count">1</span>
-                        <img src="./images/plus-circle.svg" style="width: 20px; height: 20px;">
-                    </div>
-                    <button type="button" class="bor_pad_0 checkout_btn">立即結帳</button>
-                    <button type="button" class="bor_pad_0 add_btn">加入購物車</button>
+                    <button type="button" th:onclick="'add_delete_Favorite(' + *{id} + ')'" class="bor_pad_0 add_favorite_btn">加入收藏</button>
+                    <button type="button" th:onclick="'add_delete_Trolley(' + *{id} + ')'" class="bor_pad_0 add_trolley_btn">加入購物車</button>
                 </div>
             </div>
         </div>

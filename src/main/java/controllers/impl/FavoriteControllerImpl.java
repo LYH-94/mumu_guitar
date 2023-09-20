@@ -1,9 +1,9 @@
 package controllers.impl;
 
 import bo.impl.FavoriteServiceImpl;
+import bo.impl.ProductServiceImpl;
 import controllers.FavoriteController;
 import controllers.exception.FavoriteControllerImplException;
-import pojo.Favorite;
 import pojo.Product;
 import pojo.ProductAddedFavoAndTrolInfo;
 import pojo.User;
@@ -12,14 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteControllerImpl implements FavoriteController {
 
     private FavoriteServiceImpl favoriteService = null;
-    private ProductControllerImpl productController = null;
-    private TrolleyControllerImpl trolleyController = null;
+    private ProductServiceImpl productService = null;
 
     @Override
     public String getFavoriteByUserId(HttpServletRequest req) throws FavoriteControllerImplException {
@@ -29,35 +27,27 @@ public class FavoriteControllerImpl implements FavoriteController {
             User user = (User) session.getAttribute("user");
 
             if (user != null && "general".equals(user.getIdentity())) { // 若非 null 表示已經登入。
-                // 1.創建 List<ProductAddedFavoAndTrolInfo> 用於儲存包裝後的物件。
-                List<ProductAddedFavoAndTrolInfo> productAddedFavoAndTrolInfoList = new ArrayList<>();
-
+                // 獲取該用戶追蹤的商品。
                 int userId = user.getId();
+                List<Product> favoriteProductList = favoriteService.getFilteredFavoriteProductByUserId(req, userId);
 
-                // 獲取該用戶的 favorite 與對應的商品物件。
-                List<Favorite> favoriteList = favoriteService.getFavoriteByUserId(userId);
+                // 調用函式 productService.addFavoAndTrollInfo 包裝 ProductAddedFavoAndTrolInfo 物件。
+                List<ProductAddedFavoAndTrolInfo> favoriteProductAddedFavoAndTrolInfoList = productService.addFavoAndTrollInfo(favoriteProductList, req);
 
-                for (int i = 0; i < favoriteList.size(); i++) {
-                    Product product = productController.getProductById(favoriteList.get(i).getProduct().getId());
-                    favoriteList.get(i).setProduct(product);
+                // 獲取獲取到的商品數量，用於計算頁數與實現分頁功能。
+                int pages;
+                int favoriteProductCount = favoriteService.getFilteredFavoriteProductCountByUserId(req, userId);
+                if (favoriteProductCount == 0) {
+                    pages = 1;
+                } else if (favoriteProductCount % 6 != 0) {
+                    pages = (favoriteProductCount / 6) + 1;
+                } else {
+                    pages = favoriteProductCount / 6;
                 }
+                session.setAttribute("favoriteProductCount", favoriteProductCount); // 獲取的追蹤商品總數。
+                session.setAttribute("pages", pages); // 根據追蹤商品總數計算的總頁數。
 
-                //包裝商品訊息。
-                for (int i = 0; i < favoriteList.size(); i++) {
-                    ProductAddedFavoAndTrolInfo productAddedFavoAndTrolInfo = new ProductAddedFavoAndTrolInfo();
-                    productAddedFavoAndTrolInfo.setProduct(favoriteList.get(i).getProduct());
-
-                    // 因商品本就是透過用戶的追蹤清單獲取的，所以直接設置為 true。
-                    productAddedFavoAndTrolInfo.setExist_favorite(true);
-
-                    // 查詢數據庫中，該用戶是否有將該商品添加到購物車。
-                    boolean checkTrolley = trolleyController.checkTrolley(favoriteList.get(i).getProduct().getId(), userId);
-                    productAddedFavoAndTrolInfo.setExist_trolley(checkTrolley);
-
-                    productAddedFavoAndTrolInfoList.add(productAddedFavoAndTrolInfo);
-                }
-
-                session.setAttribute("productList", productAddedFavoAndTrolInfoList);
+                session.setAttribute("favoriteProductList", favoriteProductAddedFavoAndTrolInfoList);
 
                 return "favorite";
 
