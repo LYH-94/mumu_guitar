@@ -5,16 +5,16 @@ import bo.exception.OrderServiceImplException;
 import controllers.impl.ProductControllerImpl;
 import controllers.impl.UserControllerImpl;
 import dao.impl.OrderDAOImpl;
-import pojo.Order;
-import pojo.OrderProduct;
-import pojo.Product;
-import pojo.User;
+import pojo.*;
 import util.ConnUtils;
 import util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class OrderServiceImpl implements OrderService {
 
@@ -143,6 +143,63 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderServiceImplException("OrderServiceImpl 的 getOrderDetailByNumber() 有問題。");
+        }
+    }
+
+    @Override
+    public void addOrder(HttpServletRequest req, String purchaser, String phone, String address) throws OrderServiceImplException {
+        try {
+            HttpSession session = req.getSession();
+
+            // 設置訂單需要的資料。(1.訂單編號 2.下單日期 3.訂單總額 4.發貨狀態 5.所屬用戶 6.購買人 7.連絡電話 8.付款方式(固定的不用設置) 9.配送地址)
+            // 1. 下單日期-獲取當前時間。
+            Date date = new Date();
+
+            // 2. 訂單編號-獲取將當前時間轉成一整個字串並加上四位隨機數。
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+            String number = sdf.format(date);
+
+            // 生成四位隨機數。
+            Random random = new Random();
+
+            int min = 1000; // 最小值 1000 (包括 1000)。
+            int max = 9999; // 最大值 9999（包括 9999）
+            String randomFourNumber = String.valueOf(random.nextInt(max - min + 1) + min);
+
+            // 字串拼接
+            number = number + randomFourNumber;
+
+            // 3. 訂單總額
+            TrolleyClass trolleyClass = (TrolleyClass) session.getAttribute("trolleyClass");
+            Integer totalAmount = trolleyClass.getTotalAmount();
+
+            // 4.發貨狀態(預設為 0)
+
+            // 5. 所屬用戶
+            User user = (User) session.getAttribute("user");
+            Integer owner = user.getId();
+
+            // 6.購買人姓名 - purchaser
+            // 7.連絡電話 - phone
+
+            // 8.付款方式(固定的不用設置)
+            // 9.配送地址 - address
+
+            // 於t_order數據表中新增訂單。
+            orderDAO.addOrder(ConnUtils.getConn(), number, date, totalAmount, owner, purchaser, phone, address);
+
+            // 於t_orderProduct數據表中新增該訂單的商品內容。
+            // 獲取訂單 id。
+            Order order = orderDAO.getOrderByNumber(ConnUtils.getConn(), Order.class, number);
+            Integer belongOrder = order.getId();
+
+            for (int i = 0; i < trolleyClass.getProduct().size(); ++i) {
+                orderDAO.addOrderProduct(ConnUtils.getConn(), trolleyClass.getProduct().get(i).getId(), trolleyClass.getQuantity().get(i), belongOrder);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OrderServiceImplException("OrderServiceImpl 的 addOrder() 有問題。");
         }
     }
 }

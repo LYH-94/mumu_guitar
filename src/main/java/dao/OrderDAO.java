@@ -2,9 +2,9 @@ package dao;
 
 import pojo.Order;
 import pojo.OrderProduct;
-import pojo.Product;
 
 import java.sql.Connection;
+import java.util.Date;
 import java.util.List;
 
 public interface OrderDAO {
@@ -22,4 +22,10 @@ public interface OrderDAO {
 
     // 獲取特定用戶訂單中的所有商品。
     public List<OrderProduct> getAllOrderProduct(Connection conn, Class<OrderProduct> clazz, int belongOrder);
+
+    // 新增訂單。
+    public void addOrder(Connection conn, String number, Date date, Integer totalAmount, Integer owner, String purchaser, String phone, String address);
+
+    // 新增訂單商品。
+    public void addOrderProduct(Connection conn, Integer product, Integer quantity, Integer belongOrder);
 }

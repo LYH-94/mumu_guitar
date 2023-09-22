@@ -7,6 +7,7 @@ import pojo.Order;
 import pojo.OrderProduct;
 
 import java.sql.Connection;
+import java.util.Date;
 import java.util.List;
 
 public class OrderDAOImpl extends BaseDAO implements OrderDAO {
@@ -70,6 +71,30 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderDAOImplException("OrderDAOImpl 的 getAllOrderProduct() 有問題。");
+        }
+    }
+
+    @Override
+    public void addOrder(Connection conn, String number, Date date, Integer totalAmount, Integer owner, String purchaser, String phone, String address) throws OrderDAOImplException {
+        try {
+            String sql = "INSERT INTO t_order(number,date,totalAmount,owner,purchaser,phone,address) VALUES(?,?,?,?,?,?,?)";
+
+            super.update(conn, sql, number, date, totalAmount, owner, purchaser, phone, address);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OrderDAOImplException("OrderDAOImpl 的 addOrder() 有問題。");
+        }
+    }
+
+    @Override
+    public void addOrderProduct(Connection conn, Integer product, Integer quantity, Integer belongOrder) throws OrderDAOImplException {
+        try {
+            String sql = "INSERT INTO t_orderProduct(product,quantity,belongOrder) VALUES(?,?,?)";
+
+            super.update(conn, sql, product, quantity, belongOrder);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OrderDAOImplException("OrderDAOImpl 的 addOrderProduct() 有問題。");
         }
     }
 }

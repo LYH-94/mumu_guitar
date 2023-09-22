@@ -17,4 +17,7 @@ public interface OrderService {
 
     // 透過訂單編號獲取該訂單的詳細資訊。
     public void getOrderDetailByNumber(HttpServletRequest req, String number);
+
+    // 新增訂單至數據庫中。
+    public void addOrder(HttpServletRequest req, String purchaser, String phone, String address);
 }

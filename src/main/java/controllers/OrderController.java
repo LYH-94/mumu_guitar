@@ -14,4 +14,7 @@ public interface OrderController {
 
     // 透過訂單編號獲取訂單詳情。
     public String getOrderDetailByNumber(HttpServletRequest req, String number);
+
+    // 新增訂單。
+    public String addOrder(HttpServletRequest req, String purchaser, String phone, String address);
 }

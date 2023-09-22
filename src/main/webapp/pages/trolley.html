@@ -138,10 +138,12 @@
                     <span th:text="'NT$' + ${session.trolleyClass.totalAmount}" class="count_2" style="color: red">總金額</span>
                 </div>
 
+                <span th:each="i : ${#numbers.sequence(0, #lists.size(session.trolleyClass.product)-1)}"
+                      th:if="${session.trolleyClass.product.get(i).inventory} == 0" th:text="'※商品編號 ' + ${session.trolleyClass.product.get(i).number} + ' 已無庫存，下單後需等待該商品進貨後，於訂單中的其它商品一同出貨，感謝您。'" class="d-flex justify-content-end pad_0" style="color : red">無庫存</span>
                 <div class="d-flex justify-content-end pad_0">
-                    <button th:unless="${#lists.isEmpty(session.trolleyClass.product)}" th:onclick="clearTrolley()" type="button" class="bor_pad_0 btn">清空購物車</button>
-                    <button onclick="index()" type="button" class="bor_pad_0 btn">繼續購物</button>
-                    <button th:unless="${#lists.isEmpty(session.trolleyClass.product)}" onclick="checkout()" type="button" class="bor_pad_0 btn">結帳</button>
+                    <button th:unless="${#lists.isEmpty(session.trolleyClass.product)}" th:onclick="clearTrolley()" type="button" class="bor_pad_0 trolley_btn">清空購物車</button>
+                    <button onclick="index()" type="button" class="bor_pad_0 trolley_btn">繼續購物</button>
+                    <button th:unless="${#lists.isEmpty(session.trolleyClass.product)}" onclick="checkout()" type="button" class="bor_pad_0 trolley_btn">結帳</button>
                 </div>
             </div>
 

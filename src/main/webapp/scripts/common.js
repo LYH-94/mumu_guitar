@@ -110,6 +110,23 @@ function add_delete_Trolley(productId){
         });
 }
 
+// 再次確認是否提交表單 (送出訂單時用的)
+const form = document.getElementById("checkoutForm");
+
+// 添加監聽器來處理表單提交。
+form.addEventListener("submit", function(event) {
+  // 阻止默認的表單提交行為。
+  event.preventDefault();
+
+  // 彈出警告框。
+  const isConfirmed = confirm("您確定要送出訂單嗎 ?");
+
+  // 若按下確定則執行提交。
+  if(isConfirmed){
+    form.submit();
+  }
+});
+
 /* 下拉式選單元件 ============================================= */
 // 取得下拉式選單的元素。
 const dropdownMenu1 = document.querySelector('#dropdown-menu1');

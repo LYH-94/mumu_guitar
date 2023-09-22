@@ -11,6 +11,7 @@ import java.util.List;
 public class OrderControllerImpl implements OrderController {
 
     private OrderServiceImpl orderService = null;
+    private TrolleyControllerImpl trolleyController = null;
 
     @Override
     public List<Order> getAllOrder() throws OrderControllerImplException {
@@ -47,6 +48,22 @@ public class OrderControllerImpl implements OrderController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderControllerImplException("OrderControllerImpl 的 getOrderDetailByNumber() 有問題。");
+        }
+    }
+
+    @Override
+    public String addOrder(HttpServletRequest req, String purchaser, String phone, String address) throws OrderControllerImplException {
+        try {
+            // 新增訂單到數據庫中。
+            orderService.addOrder(req, purchaser, phone, address);
+
+            // 清空購物車。
+            trolleyController.clearTrolley(req);
+
+            return getUserOrderList(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OrderControllerImplException("OrderControllerImpl 的 addOrder() 有問題。");
         }
     }
 }

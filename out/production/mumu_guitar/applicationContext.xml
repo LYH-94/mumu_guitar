@@ -19,6 +19,7 @@
 
     <bean id="orderController" class="controllers.impl.OrderControllerImpl">
         <property name="orderService" ref="orderService"/>
+        <property name="trolleyController" ref="trolley"/>
     </bean>
 
     <bean id="favorite" class="controllers.impl.FavoriteControllerImpl">

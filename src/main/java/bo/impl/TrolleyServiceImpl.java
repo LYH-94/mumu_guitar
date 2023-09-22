@@ -1,11 +1,8 @@
 package bo.impl;
 
 import bo.TrolleyService;
-import bo.exception.FavoriteServiceImplException;
 import bo.exception.TrolleyServiceImplException;
-import dao.TrolleyDAO;
 import dao.impl.TrolleyDAOImpl;
-import pojo.Favorite;
 import pojo.Trolley;
 import util.ConnUtils;
 
