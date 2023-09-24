@@ -12,13 +12,17 @@ import java.util.List;
 
 public class OrderDAOImpl extends BaseDAO implements OrderDAO {
     @Override
-    public List<Order> getAllOrder(Connection conn, Class<Order> clazz) throws OrderDAOImplException {
+    public List<Order> getAllOrderList(Connection conn, Class<Order> clazz, String searchOrder, int orderPageNumber) throws OrderDAOImplException {
         try {
-            String sql = "SELECT * FROM t_order";
-            return super.getForList(conn, clazz, sql);
+            int offset = (orderPageNumber - 1) * 10; // 計算分頁偏移量。
+            String sql = "SELECT * FROM t_order WHERE number LIKE ? ORDER BY status ASC, date DESC LIMIT 10 OFFSET ?";
+
+            // 在 SQL 語句中，通配符不能直接給 "" 這樣的空字串，因此處理成模糊匹配的寫法，"%%" 效果可視為與指定字段中的數據皆匹配。
+            searchOrder = "%" + searchOrder + "%";
+            return super.getForList(conn, clazz, sql, searchOrder, offset);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new OrderDAOImplException("OrderDAOImpl 的 getAllOrder() 有問題。");
+            throw new OrderDAOImplException("OrderDAOImpl 的 getAllOrderList() 有問題。");
         }
     }
 
@@ -34,6 +38,20 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderDAOImplException("OrderDAOImpl 的 getUserOrderList() 有問題。");
+        }
+    }
+
+    @Override
+    public int getAllOrderCount(Connection conn, String searchOrder) throws OrderDAOImplException {
+        try {
+            String sql = "SELECT COUNT(id) FROM t_order WHERE number LIKE ?";
+
+            // 在 SQL 語句中，通配符不能直接給 "" 這樣的空字串，因此處理成模糊匹配的寫法，"%%" 效果可視為與指定字段中的數據皆匹配。
+            searchOrder = "%" + searchOrder + "%";
+            return super.getCount(conn, sql, searchOrder);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OrderDAOImplException("OrderDAOImpl 的 getAllOrderCount() 有問題。");
         }
     }
 
@@ -95,6 +113,18 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderDAOImplException("OrderDAOImpl 的 addOrderProduct() 有問題。");
+        }
+    }
+
+    @Override
+    public void switchStatus(Connection conn, Integer status, String number) throws OrderDAOImplException {
+        try {
+            String sql = "UPDATE t_order SET status = ? WHERE number = ?";
+
+            super.update(conn, sql, status, number);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OrderDAOImplException("OrderDAOImpl 的 switchStatus() 有問題。");
         }
     }
 }

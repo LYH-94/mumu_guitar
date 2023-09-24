@@ -3,10 +3,8 @@ package controllers.impl;
 import bo.impl.OrderServiceImpl;
 import controllers.OrderController;
 import controllers.exception.OrderControllerImplException;
-import pojo.Order;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 public class OrderControllerImpl implements OrderController {
 
@@ -14,12 +12,18 @@ public class OrderControllerImpl implements OrderController {
     private TrolleyControllerImpl trolleyController = null;
 
     @Override
-    public List<Order> getAllOrder() throws OrderControllerImplException {
+    public String getAllOrderList(HttpServletRequest req) throws OrderControllerImplException {
         try {
-            return orderService.getAllOrder();
+            // 獲取所有用戶的訂單。
+            orderService.getAllOrderList(req);
+
+            // 獲取所有用戶的訂單總數。
+            orderService.getAllOrderCount(req);
+
+            return "manager_order";
         } catch (Exception e) {
             e.printStackTrace();
-            throw new OrderControllerImplException("OrderControllerImpl 的 getAllOrder() 有問題。");
+            throw new OrderControllerImplException("OrderControllerImpl 的 getAllOrderList() 有問題。");
         }
     }
 
@@ -64,6 +68,19 @@ public class OrderControllerImpl implements OrderController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderControllerImplException("OrderControllerImpl 的 addOrder() 有問題。");
+        }
+    }
+
+    @Override
+    public String switchStatus(HttpServletRequest req, Integer status, String number) throws OrderControllerImplException {
+        try {
+
+            orderService.switchStatus(status, number);
+
+            return getAllOrderList(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OrderControllerImplException("OrderControllerImpl 的 switchStatus() 有問題。");
         }
     }
 }

@@ -23,12 +23,47 @@ public class OrderServiceImpl implements OrderService {
     private ProductControllerImpl productController = null;
 
     @Override
-    public List<Order> getAllOrder() throws OrderServiceImplException {
+    public void getAllOrderList(HttpServletRequest req) throws OrderServiceImplException {
         try {
-            return orderDAO.getAllOrder(ConnUtils.getConn(), Order.class);
+            // 處理搜尋。
+            String searchOrder = "";
+            HttpSession session = req.getSession();
+            String session_searchOrder = (String) session.getAttribute("session_searchOrder");
+            if (StringUtils.isEmpty(req.getParameter("searchOrder"))) {
+                if (StringUtils.isEmpty(session_searchOrder)) {
+                    searchOrder = "";
+                } else {
+                    searchOrder = session_searchOrder;
+                }
+            } else if ("reset".equals(req.getParameter("searchOrder"))) {
+                searchOrder = "";
+            } else {
+                searchOrder = req.getParameter("searchOrder");
+            }
+            session.setAttribute("session_searchOrder", searchOrder);
+
+            // 獲取用戶選擇的頁碼。
+            int orderPageNumber; // 預設為第一頁。
+            if (StringUtils.isEmpty(req.getParameter("orderPageNumber"))) { // 預設為 1。
+                orderPageNumber = 1;
+            } else {
+                orderPageNumber = Integer.parseInt(req.getParameter("orderPageNumber"));
+            }
+            session.setAttribute("session_orderPageNumber", Integer.toString(orderPageNumber));
+
+            List<Order> allOrderList = orderDAO.getAllOrderList(ConnUtils.getConn(), Order.class, searchOrder, orderPageNumber);
+
+            // 獲取各訂單所屬用戶並賦給 allOrderList。
+            for (int i = 0; i < allOrderList.size(); i++) {
+                allOrderList.get(i).setOwner(userController.getUserById(allOrderList.get(i).getOwner().getId()));
+            }
+
+            //  將獲取到的訂單儲存在session中。
+            session.setAttribute("allOrderList", allOrderList);
+
         } catch (Exception e) {
             e.printStackTrace();
-            throw new OrderServiceImplException("OrderServiceImpl 的 getAllOrder() 有問題。");
+            throw new OrderServiceImplException("OrderServiceImpl 的 getAllOrderList() 有問題。");
         }
     }
 
@@ -70,6 +105,47 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderServiceImplException("OrderServiceImpl 的 getUserOrderList() 有問題。");
+        }
+    }
+
+    @Override
+    public void getAllOrderCount(HttpServletRequest req) throws OrderServiceImplException {
+        try {
+            // 處理搜尋。
+            String searchOrder = "";
+            HttpSession session = req.getSession();
+            String session_searchOrder = (String) session.getAttribute("session_searchOrder");
+            if (StringUtils.isEmpty(req.getParameter("searchOrder"))) {
+                if (StringUtils.isEmpty(session_searchOrder)) {
+                    searchOrder = "";
+                } else {
+                    searchOrder = session_searchOrder;
+                }
+            } else if ("reset".equals(req.getParameter("searchOrder"))) {
+                searchOrder = "";
+            } else {
+                searchOrder = req.getParameter("searchOrder");
+            }
+            session.setAttribute("session_searchOrder", searchOrder);
+
+            // 獲取所有用戶的訂單數量，用於計算訂單總頁數。
+            int orderPages;
+            int allOrderCount = orderDAO.getAllOrderCount(ConnUtils.getConn(), searchOrder);
+
+            if (allOrderCount == 0) { // 10 筆訂單為一頁。
+                orderPages = 1;
+            } else if (allOrderCount % 10 != 0) {
+                orderPages = (allOrderCount / 10) + 1;
+            } else {
+                orderPages = allOrderCount / 10;
+            }
+
+            req.getSession().setAttribute("allOrderCount", allOrderCount); // 將訂單總數儲存於 session。
+            req.getSession().setAttribute("orderPages", orderPages); // 根據訂單總數計算的總頁數，儲存於 session。
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OrderServiceImplException("OrderServiceImpl 的 getAllOrderCount() 有問題。");
         }
     }
 
@@ -200,6 +276,22 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderServiceImplException("OrderServiceImpl 的 addOrder() 有問題。");
+        }
+    }
+
+    @Override
+    public void switchStatus(Integer status, String number) throws OrderServiceImplException {
+        try {
+            if (status == 0) {
+                status = 1;
+            } else if (status == 1) {
+                status = 2;
+            }
+
+            orderDAO.switchStatus(ConnUtils.getConn(), status, number);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new OrderServiceImplException("OrderServiceImpl 的 switchStatus() 有問題。");
         }
     }
 }

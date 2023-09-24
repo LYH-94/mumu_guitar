@@ -3,7 +3,6 @@ package controllers.impl;
 import bo.impl.UserServiceImpl;
 import controllers.UserController;
 import controllers.exception.UserControllerImplException;
-import pojo.Order;
 import pojo.ProductAddedFavoAndTrolInfo;
 import pojo.User;
 
@@ -55,18 +54,10 @@ public class UserControllerImpl implements UserController {
 
                     return "index";
                 } else if ("manager".equals(user.getIdentity())) {
+
                     // 獲取所有用戶的訂單。
-                    List<Order> ordertList = orderController.getAllOrder();
+                    return orderController.getAllOrderList(req);
 
-                    // 獲取各訂單所屬用戶並賦給 ordertList。
-                    for (int i = 0; i < ordertList.size(); i++) {
-                        ordertList.get(i).setOwner(userService.getUserById(ordertList.get(i).getOwner().getId()));
-                    }
-
-                    // 將所有用戶訂單存入 session 中。
-                    session.setAttribute("ordertList", ordertList);
-
-                    return "manager_order";
                 } else { // user 不等於 null 也不符合任何用戶或管理員，所以也是訪客。
                     // 由於是訪客，所以直接調用 ProductController 將產品數據直接渲染到 index.html 上。
                     List<ProductAddedFavoAndTrolInfo> productList = productController.getProduct(req);
@@ -198,6 +189,21 @@ public class UserControllerImpl implements UserController {
             e.printStackTrace();
             throw new UserControllerImplException("UserControllerImpl 的 getUserById() 有問題。");
         }
+    }
+
+    @Override
+    public String manager_orderPage() {
+        return "manager_order";
+    }
+
+    @Override
+    public String manager_productPage() {
+        return "manager_product";
+    }
+
+    @Override
+    public String manager_memberPage() {
+        return "manager_member";
     }
 
 }

@@ -1,4 +1,5 @@
 // 返回至 "我的訂單" 頁面。
 function goBack() {
-    window.location.href="orderController.do?operate=getUserOrderList&searchOrder=reset";
+    // 使用瀏覽器的瀏覽紀錄來執行上一頁的操作。
+    window.history.back();
 }

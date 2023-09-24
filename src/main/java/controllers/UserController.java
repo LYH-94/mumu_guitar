@@ -33,4 +33,13 @@ public interface UserController {
 
     // 透過id獲取user。
     public User getUserById(int userId);
+
+    //跳轉管理員訂單頁。
+    public String manager_orderPage();
+
+    //跳轉管理員商品頁。
+    public String manager_productPage();
+
+    //跳轉管理員會員頁。
+    public String manager_memberPage();
 }

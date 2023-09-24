@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" href=".\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
-    <link type="text/css" rel="stylesheet" href=".\styles\common.css">
-    <link type="text/css" rel="stylesheet" href=".\styles\manager_order.css">
+    <link type="text/css" rel="stylesheet" href="./styles/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link type="text/css" rel="stylesheet" href="./styles/common.css">
+    <link type="text/css" rel="stylesheet" href="./styles/manager_order.css">
 
     <!-- JavaScript -->
-    <script type="text/javascript" src=".\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
-    <script type="text/javascript" src=".\scripts\common.js" defer></script>
+    <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
+    <script type="text/javascript" src="./scripts/common.js" defer></script>
+    <script type="text/javascript" src="./scripts/manager.js" defer></script>
 
     <title>木木吉他</title>
 </head>
@@ -20,7 +21,7 @@
     <div class="row mar_0">
         <div class="col-4 pad_0">
             <!-- Logo -->
-            <img src="./images/mumu_guitar.svg" class="img-fluid img_mumu_guitar">
+            <img src="./images/mumu_guitar.svg" onclick="manager_orderPage()" class="img-fluid img_mumu_guitar">
         </div>
 
         <div class="col pad_0">
@@ -34,7 +35,7 @@
                           style="width: 40px; height: 30px; margin: 0px 10px 0px 0px;">您好</span>
                 </div>
 
-                <!--會員圖-->
+                <!--登出-->
                 <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
                     <img src="./images/person-square.svg" class="img-fluid">
                     <figcaption id="id_logInOut" class="img_fig_font">登出</figcaption>
@@ -46,12 +47,9 @@
 
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">訂單管理
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">商品管理
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">會員管理
-        </button>
+        <button type="button" onclick="manager_orderPage()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">訂單管理</button>
+        <button type="button" onclick="manager_productPage()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">商品管理</button>
+        <button type="button" onclick="manager_memberPage()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">會員管理</button>
     </div>
 </nav>
 
@@ -66,10 +64,12 @@
 
         <div class="col pad_0 section_row1_col2">
             <!-- 搜尋訂單編號 -->
-            <div class="d-flex d-flex justify-content-end align-items-center">
-                <span class="pad_0" style="font-size: 20px; color: #141637;">搜尋訂單編號</span>
-                <input type="text" name="search_order" value="" class="input_style">
-                <button type="button" class="bor_pad_0 search_btn">搜尋</button>
+            <div class="d-flex d-flex justify-content-center align-items-center">
+                <form action="orderController.do?operate=getAllOrderList" method="post" class="pad_0">
+                    <span class="pad_0" style="font-size: 20px; color: #141637;">搜尋訂單編號</span>
+                    <input type="number" name="searchOrder" th:value="${session.session_searchOrder}" class="input_style">
+                    <button type="submit" class="bor_pad_0 search_btn">搜尋</button>
+                </form>
             </div>
         </div>
     </div>
@@ -89,25 +89,23 @@
                 <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">發貨狀態</div>
                 <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">所屬用戶</div>
                 <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">功能</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">功能</div>
             </div>
 
             <!-- 展示所有用戶的訂單 -->
-            <div th:if="${#lists.isEmpty(session.ordertList)}">尚無訂單。</div>
-            <div th:unless="${#lists.isEmpty(session.ordertList)}"
-                 th:each="ordert : ${session.ordertList}"
+            <div th:if="${#lists.isEmpty(session.allOrderList)}">尚無訂單。</div>
+            <div th:unless="${#lists.isEmpty(session.allOrderList)}"
+                 th:each="order : ${session.allOrderList}"
                  class="row mar_0 section_row3_col1_row1-2" style="background-color: #FFFFFF">
-                <div th:text="'&nbsp;'+${ordert.number}" class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;"></div>
-                <div th:text="${ordert.date}" class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;"></div>
-                <div th:text="${ordert.totalAmount}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;"></div>
+                <div th:text="'&nbsp;'+${order.number}" class="d-flex justify-content-start align-items-center pad_0" style="width: 250px;"></div>
+                <div th:text="${order.date}" class="d-flex justify-content-center align-items-center pad_0" style="width: 200px;"></div>
+                <div th:text="${order.totalAmount}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;"></div>
 
-                <div th:if="${ordert.status} == 0" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">未發貨</div>
-                <div th:if="${ordert.status} == 1" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已發貨</div>
-                <div th:if="${ordert.status} == 2" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已簽收</div>
+                <div th:if="${order.status} == 0" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;"><a th:href="'orderController.do?operate=switchStatus&status=' + ${order.status} + '&number=' + ${order.number}">未發貨</a></div>
+                <div th:if="${order.status} == 1" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;"><a th:href="'orderController.do?operate=switchStatus&status=' + ${order.status} + '&number=' + ${order.number}">已發貨</a></div>
+                <div th:if="${order.status} == 2" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">已簽收</div>
 
-                <div th:text="${ordert.owner.username}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;"></div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">更新 已發貨</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">訂單詳情</div>
+                <div th:text="${order.owner.username}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;"></div>
+                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;"><a th:href="'orderController.do?operate=getOrderDetailByNumber&number=' + ${order.number}">訂單詳情</a></div>
             </div>
 
             <div class="row mar_0 section_row3_col1_row2">
@@ -116,16 +114,17 @@
                     <div class="dropdown" style="width: 85px;">
                         <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
-                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">第 1 頁
-                        </button>
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
+                                th:text="'第 ' + ${session.session_orderPageNumber} + ' 頁'">頁碼</button>
                         <ul id="dropdown-menu1" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a data-value="1" href="#" class="dropdown-item">第 1 頁</a></li>
-                            <li><a data-value="2" href="#" class="dropdown-item">第 2 頁</a></li>
+                            <!-- 利用 th:each 迴圈生成分頁頁碼的下拉式選單。 -->
+                            <li th:each="i : ${#numbers.sequence(1, session.orderPages)}"><a th:data-value="${i}" th:href="'orderController.do?operate=getAllOrderList&orderPageNumber=' + ${i}" class="dropdown-item" th:text="'第 ' + ${i} + ' 頁'">頁碼</a></li>
                         </ul>
                     </div>
-                    <span th:text="'訂單數量：' + ${#lists.size(session.ordertList)}"
+
+                    <span th:text="'訂單數量：' + ${session.allOrderCount}"
                           class="d-flex justify-content-center align-items-center pad_0"
-                          style="font-size: 16px; color: #141637;"></span>
+                          style="font-size: 16px; color: #141637;">訂單數量</span>
                 </div>
             </div>
 
