@@ -15,21 +15,21 @@ import java.util.List;
 //通用的 DAO 父類。
 public abstract class BaseDAO {
     //查詢操作：查詢特殊值(如聚合函數等)的通用方法 - 考慮事務。(不在方法內獲取或關閉數據庫連接，改由呼叫方法時才傳入連接。)
-    public <E> E getValue(Connection conn, String sql, Object ...args) throws BaseDAOException {
+    public <E> E getValue(Connection conn, String sql, Object... args) throws BaseDAOException {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        try{
+        try {
             ps = conn.prepareStatement(sql);
-            for(int i = 0; i < args.length; i++){
-                ps.setObject(i + 1,args[i]);
+            for (int i = 0; i < args.length; i++) {
+                ps.setObject(i + 1, args[i]);
             }
 
             rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return (E) rs.getObject(1);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BaseDAOException("BaseDAO 的 getValue() 有問題。");
         } finally {
@@ -39,16 +39,16 @@ public abstract class BaseDAO {
     }
 
     //查詢操作：查詢單表或不同數據表的通用寫法 Version 2.0 - 考慮事務。(不在方法內獲取或關閉數據庫連接，改由呼叫方法時才傳入連接。)
-    public <T> T getInstance(Connection conn, Class<T> clazz, String sql, Object ...args) throws BaseDAOException {
+    public <T> T getInstance(Connection conn, Class<T> clazz, String sql, Object... args) throws BaseDAOException {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        try{
+        try {
             //1.預編譯 SQL 語句，返回 PreparedStatement 物件。
             ps = conn.prepareStatement(sql);
 
             //2.填充佔位符。
-            for(int i = 0; i < args.length; i++){
+            for (int i = 0; i < args.length; i++) {
                 ps.setObject(i + 1, args[i]);
             }
 
@@ -98,10 +98,10 @@ public abstract class BaseDAO {
                 }
                 return t;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BaseDAOException("BaseDAO 的 getInstance() 有問題。");
-        }  finally {
+        } finally {
             //6.關閉資源
             JDBCUtils.closeResource(null, ps, rs);
         }
@@ -109,16 +109,16 @@ public abstract class BaseDAO {
     }
 
     //查詢操作：當返回的結果集是多條紀錄時 Version 2.0 - 考慮事務。(不在方法內獲取或關閉數據庫連接，改由呼叫方法時才傳入連接。)
-    public <T> List<T> getForList(Connection conn, Class<T> clazz, String sql, Object ...args) throws BaseDAOException {
+    public <T> List<T> getForList(Connection conn, Class<T> clazz, String sql, Object... args) throws BaseDAOException {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        try{
+        try {
             //1.預編譯 SQL 語句，返回 PreparedStatement 物件。
             ps = conn.prepareStatement(sql);
 
             //2.填充佔位符。
-            for(int i = 0; i < args.length; i++){
+            for (int i = 0; i < args.length; i++) {
                 ps.setObject(i + 1, args[i]);
             }
 
@@ -173,36 +173,36 @@ public abstract class BaseDAO {
                 list.add(t);
             }
             return list;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BaseDAOException("BaseDAO 的 getForList() 有問題。");
-        }  finally {
+        } finally {
             //7.關閉資源
             JDBCUtils.closeResource(null, ps, rs);
         }
     }
 
     //通用的增刪改操作 Version 2.0 - 考慮事務。(不在方法內獲取或關閉數據庫連接，改由呼叫方法時才傳入連接。)
-    public boolean update(Connection conn, String sql, Object ...args) throws BaseDAOException { //運用可變形參的特性。
+    public boolean update(Connection conn, String sql, Object... args) throws BaseDAOException { //運用可變形參的特性。
         PreparedStatement ps = null;
 
-        try{
+        try {
             //1.預編譯 SQL 語句，返回 PreparedStatement 物件。
             ps = conn.prepareStatement(sql);
 
             //2.填充佔位符。
             //SQL 中佔位符的個數與可變形參的長度相同。
-            for(int i = 0; i < args.length; i++){
-                ps.setObject(i+1,args[i]); //小心參數聲明錯誤。(索引從1開始、陣列從0開始)
+            for (int i = 0; i < args.length; i++) {
+                ps.setObject(i + 1, args[i]); //小心參數聲明錯誤。(索引從1開始、陣列從0開始)
             }
 
             //3.執行操作。
             //ps.execute();
             return (ps.executeUpdate() > 0 ? true : false);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BaseDAOException("BaseDAO 的 update() 有問題。");
-        }finally {
+        } finally {
             //4.關閉資源。
             //注意，不要關掉數據庫連接。
             JDBCUtils.closeResource(null, ps);

@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" href="..\styles\bootstrap.min.css"> <!-- Bootstrap CSS -->
-    <link type="text/css" rel="stylesheet" href="..\styles\common.css">
-    <link type="text/css" rel="stylesheet" href="..\styles\manager_member.css">
+    <link type="text/css" rel="stylesheet" href="./styles/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link type="text/css" rel="stylesheet" href="./styles/common.css">
+    <link type="text/css" rel="stylesheet" href="./styles/manager_member.css">
 
     <!-- JavaScript -->
-    <script type="text/javascript" src="..\scripts\bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
-    <script type="text/javascript" src="..\scripts\dropdown.js" defer></script>
+    <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
+    <script type="text/javascript" src="./scripts/common.js" defer></script>
+    <script type="text/javascript" src="./scripts/manager.js" defer></script>
 
     <title>木木吉他</title>
 </head>
@@ -20,7 +21,7 @@
     <div class="row mar_0">
         <div class="col-4 pad_0">
             <!-- Logo -->
-            <img src="../images/mumu_guitar.svg" class="img-fluid img_mumu_guitar">
+            <img src="./images/mumu_guitar.svg" onclick="manager_orderPage()" class="img-fluid img_mumu_guitar">
         </div>
 
         <div class="col pad_0">
@@ -34,10 +35,10 @@
                           style="width: 40px; height: 30px; margin: 0px 10px 0px 0px;">您好</span>
                 </div>
 
-                <!--會員圖-->
-                <figure class="col pad_0 login_register_favorite_function">
-                    <img src="../images/person-square.svg" class="img-fluid">
-                    <figcaption class="img_fig_font">登出</figcaption>
+                <!-- 登出 -->
+                <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/person-square.svg" class="img-fluid">
+                    <figcaption id="id_logInOut" class="img_fig_font">登出</figcaption>
                 </figure>
             </div>
         </div>
@@ -46,17 +47,13 @@
 
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
     <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">訂單管理
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">商品管理
-        </button>
-        <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">會員管理
-        </button>
+        <button type="button" onclick="manager_orderPage()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">訂單管理</button>
+        <button type="button" onclick="manager_productPage()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">商品管理</button>
+        <button type="button" onclick="manager_memberPage()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">會員管理</button>
     </div>
 </nav>
 
 <section class="container-xl pad_0 section">
-    <!-- 登入歡迎訊息 -->
     <div class="row mar_0 section_row1">
         <div class="col pad_0 section_row1_col1">
             <div class="row mar_0">
@@ -66,11 +63,13 @@
         </div>
 
         <div class="col pad_0 section_row1_col2">
-            <!-- 搜尋訂單編號 -->
-            <div class="d-flex d-flex justify-content-end align-items-center">
-                <span class="pad_0" style="font-size: 20px; color: #141637;">搜尋帳號</span>
-                <input type="text" name="search_order" value="" class="input_style">
-                <button type="button" class="bor_pad_0 search_btn">搜尋</button>
+            <!-- 搜尋會員帳號 -->
+            <div class="d-flex d-flex justify-content-center align-items-center">
+                <form action="index.do?operate=getAllMemberList" method="post" class="pad_0">
+                    <span class="pad_0" style="font-size: 20px; color: #141637;">搜尋會員帳號</span>
+                    <input type="text" name="searchMember" th:value="${session.session_searchMember}" class="input_style">
+                    <button type="submit" class="bor_pad_0 search_btn">搜尋</button>
+                </form>
             </div>
         </div>
     </div>
@@ -85,64 +84,27 @@
 
             <div class="row mar_0 section_row3_col1_row1-1">
                 <div class="d-flex justify-content-start align-items-center pad_0" style="width: 200px;">帳號</div>
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 100px;">姓名</div>
+                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 100px;">名稱</div>
                 <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">性別</div>
                 <div class="d-flex justify-content-center align-items-center pad_0" style="width: 150px;">生日</div>
                 <div class="d-flex justify-content-start align-items-center pad_0" style="width: 150px;">聯絡電話</div>
                 <div class="d-flex justify-content-start align-items-center pad_0" style="width: 300px;">電子信箱</div>
                 <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">狀態</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">功能</div>
             </div>
 
-            <div class="row mar_0 section_row3_col1_row1-2" style="background-color: #FFFFFF">
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 200px;">user01</div>
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 100px;">LYH</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">男</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 150px;">yyyy/MM/dd
-                </div>
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 150px;">0912345678
-                </div>
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 300px;">
-                    abc123@gmail.com
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">正常</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px; color: red;">
-                    停權
-                </div>
-            </div>
-
-            <div class="row mar_0 section_row3_col1_row1-2" style="background-color: #D8D8D8">
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 200px;">aaa111</div>
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 100px;">阿武</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">男</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 150px;">yyyy/MM/dd
-                </div>
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 150px;">0987654321
-                </div>
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 300px;">
-                    a123a@gmail.com
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">正常</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px; color: red;">
-                    停權
-                </div>
-            </div>
-
-            <div class="row mar_0 section_row3_col1_row1-2" style="background-color: #FFFFFF">
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 200px;">bbb222</div>
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 100px;">小惠</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">女</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 150px;">yyyy/MM/dd
-                </div>
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 150px;">0912348765
-                </div>
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 300px;">
-                    c123c@gmail.com
-                </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">停權</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px; color: blue;">
-                    恢復
-                </div>
+            <!-- 展示所有用戶的訊息 -->
+            <div th:if="${#lists.isEmpty(session.allMemberList)}">尚無會員。</div>
+            <div th:unless="${#lists.isEmpty(session.allMemberList)}"
+                 th:each="member : ${session.allMemberList}"
+                 class="row mar_0 section_row3_col1_row1-2" style="background-color: #FFFFFF">
+                <div th:text="${member.account}" class="d-flex justify-content-start align-items-center pad_0" style="width: 200px;">帳號</div>
+                <div th:text="${member.username}" class="d-flex justify-content-start align-items-center pad_0" style="width: 100px;">名稱</div>
+                <div th:if="${member.gender} == 0" class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">女</div>
+                <div th:if="${member.gender} == 1" class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">男</div>
+                <div th:text="${member.birthday}" class="d-flex justify-content-center align-items-center pad_0" style="width: 150px;">生日</div>
+                <div th:text="${member.phone}" class="d-flex justify-content-start align-items-center pad_0" style="width: 150px;">聯絡電話</div>
+                <div th:text="${member.email}" class="d-flex justify-content-start align-items-center pad_0" style="width: 300px;">電子信箱</div>
+                <div th:id="${member.id}" th:text="${member.status}" th:onclick="'switchStatus(' + ${member.id} + ')'" class="d-flex justify-content-center align-items-center pad_0 js_status" style="cursor: pointer; width: 50px;">狀態</div>
             </div>
 
             <div class="row mar_0 section_row3_col1_row2">
@@ -151,15 +113,17 @@
                     <div class="dropdown" style="width: 85px;">
                         <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
-                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;">第 1 頁
-                        </button>
+                                style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
+                                th:text="'第 ' + ${session.session_memberPageNumber} + ' 頁'">頁碼</button>
                         <ul id="dropdown-menu1" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a data-value="1" href="#" class="dropdown-item">第 1 頁</a></li>
-                            <li><a data-value="2" href="#" class="dropdown-item">第 2 頁</a></li>
+                            <!-- 利用 th:each 迴圈生成分頁頁碼的下拉式選單。 -->
+                            <li th:each="i : ${#numbers.sequence(1, session.memberPages)}"><a th:data-value="${i}" th:href="'index.do?operate=getAllMemberList&memberPageNumber=' + ${i}" class="dropdown-item" th:text="'第 ' + ${i} + ' 頁'">頁碼</a></li>
                         </ul>
                     </div>
-                    <span class="d-flex justify-content-center align-items-center pad_0"
-                          style="font-size: 16px; color: #141637;">會員人數：3</span>
+
+                    <span th:text="'會員數量：' + ${session.allMemberCount}"
+                          class="d-flex justify-content-center align-items-center pad_0"
+                          style="font-size: 16px; color: #141637;">會員數量</span>
                 </div>
             </div>
 

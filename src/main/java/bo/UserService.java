@@ -15,4 +15,10 @@ public interface UserService {
     public boolean register(String account, String password, String username, String gender, LocalDate birthday, String phone, String email);
 
     public boolean updatePersonalInfo(String account, String password, String username, String gender, LocalDate birthday, String phone, String email);
+
+    public void getAllMemberList(HttpServletRequest req);
+
+    public void getAllMemberCount(HttpServletRequest req);
+
+    public void switchStatus(HttpServletRequest req, int userId, String status);
 }

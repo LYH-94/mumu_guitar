@@ -15,17 +15,18 @@ CREATE TABLE IF NOT EXISTS `t_user` (
 	`phone` VARCHAR(12) NOT NULL,
 	`email` VARCHAR(30) NOT NULL,
 	`identity` VARCHAR(10) NOT NULL DEFAULT 'general',
+        `status` varchar(10) NOT NULL DEFAULT '正常',
 	PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
 /* 新增 t_user 數據表的數據。 */
-INSERT  INTO `t_user`(`id`,`account`,`password`,`username`,`gender`,`birthday`,`phone`,`email`,`identity`) VALUES
-(0,'user001','pwd001','LYH',1,'1995-09-04','0912345678','user001@gmail.com','general'),
-(0,'user002','pwd002','阿華',1,'1991-05-05','0987654321','user002@gmail.com','general'),
-(0,'user003','pwd003','大大',1,'1989-11-21','0943215678','user003@gmail.com','general'),
-(0,'user004','pwd004','小惠',0,'1999-01-10','0956784321','user004@gmail.com','general'),
-(0,'user005','pwd005','阿武',1,'2003-07-09','0956781234','user005@gmail.com','general'),
-(0,'root','abc123','管理員',1,'1234-12-12','0999999999','root@gmail.com','manager');
+INSERT  INTO `t_user`(`id`,`account`,`password`,`username`,`gender`,`birthday`,`phone`,`email`,`identity`,`status`) VALUES
+(0,'user001','pwd001','LYH',1,'1995-09-04','0912345678','user001@gmail.com','general','正常'),
+(0,'user002','pwd002','阿華',1,'1991-05-05','0987654321','user002@gmail.com','general','正常'),
+(0,'user003','pwd003','大大',1,'1989-11-21','0943215678','user003@gmail.com','general','正常'),
+(0,'user004','pwd004','小惠',0,'1999-01-10','0956784321','user004@gmail.com','general','正常'),
+(0,'user005','pwd005','阿武',1,'2003-07-09','0956781234','user005@gmail.com','general','正常'),
+(0,'root','abc123','管理員',1,'1234-12-12','0999999999','root@gmail.com','manager','正常');
 
 /*===== 建表順序 2 =====*/
 /* 商品 - t_product */

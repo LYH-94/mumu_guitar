@@ -12,6 +12,7 @@ public class User {
     private String phone;
     private String email;
     private String identity;
+    private String status;
 
     public User() {
     }
@@ -90,5 +91,13 @@ public class User {
 
     public void setIdentity(String identity) {
         this.identity = identity;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

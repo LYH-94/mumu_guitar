@@ -7,6 +7,7 @@ import pojo.User;
 
 import java.sql.Connection;
 import java.time.LocalDate;
+import java.util.List;
 
 public class UserDAOImpl extends BaseDAO implements UserDAO {
     @Override
@@ -62,6 +63,47 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
         } catch (Exception e) {
             e.printStackTrace();
             throw new UserDAOImplException("UserDAOImpl 的 checkForDuplicateUsers() 有問題。");
+        }
+    }
+
+    @Override
+    public List<User> getAllMemberList(Connection conn, Class<User> clazz, String searchMember, int memberPageNumber) throws UserDAOImplException {
+        try {
+            int offset = (memberPageNumber - 1) * 10; // 計算分頁偏移量。
+            String sql = "SELECT * FROM t_user WHERE account LIKE ? ORDER BY account ASC LIMIT 10 OFFSET ?";
+
+            // 在 SQL 語句中，通配符不能直接給 "" 這樣的空字串，因此處理成模糊匹配的寫法，"%%" 效果可視為與指定字段中的數據皆匹配。
+            searchMember = "%" + searchMember + "%";
+            return super.getForList(conn, clazz, sql, searchMember, offset);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserDAOImplException("UserDAOImpl 的 getAllMemberList() 有問題。");
+        }
+    }
+
+    @Override
+    public int getAllMemberCount(Connection conn, String searchMember) throws UserDAOImplException {
+        try {
+            String sql = "SELECT COUNT(id) FROM t_user WHERE account LIKE ?";
+
+            // 在 SQL 語句中，通配符不能直接給 "" 這樣的空字串，因此處理成模糊匹配的寫法，"%%" 效果可視為與指定字段中的數據皆匹配。
+            searchMember = "%" + searchMember + "%";
+            return super.getCount(conn, sql, searchMember);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserDAOImplException("UserDAOImpl 的 getAllMemberCount() 有問題。");
+        }
+    }
+
+    @Override
+    public void switchStatus(Connection conn, int userId, String status) throws UserDAOImplException {
+        try {
+            String sql = "UPDATE t_user SET status = ? WHERE id = ?";
+
+            super.update(conn, sql, status, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserDAOImplException("UserDAOImpl 的 switchStatus() 有問題。");
         }
     }
 }

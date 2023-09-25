@@ -91,11 +91,14 @@ public class UserControllerImpl implements UserController {
                 User user = userService.loginVerification(account, password);
 
                 // 用 user 判斷是否登入成功。若成功則將 user 加入 session 並調用 checkIdentity()，若失敗則返回 logIn.html 並顯示帳號密碼錯誤訊息。
-                if (user != null) {
+                if (user != null && "正常".equals(user.getStatus())) {
                     req.getSession().setAttribute("user", user);
 
                     // 調用 checkIdentity()。
                     return checkIdentity(req);
+                } else if (user != null && "停權".equals(user.getStatus())) {
+                    req.getSession().setAttribute("verification", "停權");
+                    return logInPage();
                 } else {
                     req.getSession().setAttribute("verification", "fail");
                     return logInPage();
@@ -192,18 +195,32 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public String manager_orderPage() {
-        return "manager_order";
+    public String getAllMemberList(HttpServletRequest req) throws UserControllerImplException {
+        try {
+            // 獲取所有用戶的資訊。
+            userService.getAllMemberList(req);
+
+            // 獲取所有用戶的數量。
+            userService.getAllMemberCount(req);
+
+            return "manager_member";
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserControllerImplException("UserControllerImpl 的 getAllMemberList() 有問題。");
+        }
     }
 
     @Override
-    public String manager_productPage() {
-        return "manager_product";
-    }
+    public String switchStatus(HttpServletRequest req, Integer userId, String status) throws UserControllerImplException {
+        try {
+            // 切換用戶狀態。
+            userService.switchStatus(req, userId, status);
 
-    @Override
-    public String manager_memberPage() {
-        return "manager_member";
+            return getAllMemberList(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UserControllerImplException("UserControllerImpl 的 switchStatus() 有問題。");
+        }
     }
 
 }

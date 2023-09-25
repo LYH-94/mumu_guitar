@@ -4,6 +4,7 @@ import pojo.User;
 
 import java.sql.Connection;
 import java.time.LocalDate;
+import java.util.List;
 
 public interface UserDAO {
     // 登入驗證。
@@ -20,4 +21,10 @@ public interface UserDAO {
 
     // 檢查重複的用戶。
     public boolean checkForDuplicateUsers(Connection conn, Class<User> clazz, String account);
+
+    public List<User> getAllMemberList(Connection conn, Class<User> clazz, String searchMember, int memberPageNumber);
+
+    public int getAllMemberCount(Connection conn, String searchMember);
+
+    public void switchStatus(Connection conn, int userId, String status);
 }

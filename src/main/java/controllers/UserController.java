@@ -34,12 +34,10 @@ public interface UserController {
     // 透過id獲取user。
     public User getUserById(int userId);
 
-    //跳轉管理員訂單頁。
-    public String manager_orderPage();
+    // 獲取所有用戶資料。
+    public String getAllMemberList(HttpServletRequest req);
 
-    //跳轉管理員商品頁。
-    public String manager_productPage();
+    // 切換用戶狀態。
+    public String switchStatus(HttpServletRequest req, Integer userId, String status);
 
-    //跳轉管理員會員頁。
-    public String manager_memberPage();
 }
