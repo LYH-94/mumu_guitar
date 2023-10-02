@@ -39,15 +39,17 @@ public class TrolleyControllerImpl implements TrolleyController {
                 Integer totalAmount = 0;
                 for (int i = 0; i < trolleyList.size(); i++) {
                     Product product = productController.getProductById(trolleyList.get(i).getProduct().getId());
-                    Integer quantity = trolleyList.get(i).getQuantity();
-                    Integer subTotal = quantity * product.getPrice();
+                    if (product != null) {
+                        Integer quantity = trolleyList.get(i).getQuantity();
+                        Integer subTotal = quantity * product.getPrice();
 
-                    trolleyClass.getProduct().add(product); // 商品
-                    trolleyClass.getQuantity().add(quantity); // 商品數量
-                    trolleyClass.getSubTotal().add(subTotal); // 小計
+                        trolleyClass.getProduct().add(product); // 商品
+                        trolleyClass.getQuantity().add(quantity); // 商品數量
+                        trolleyClass.getSubTotal().add(subTotal); // 小計
 
-                    totalQuantity = totalQuantity + quantity;
-                    totalAmount = totalAmount + subTotal;
+                        totalQuantity = totalQuantity + quantity;
+                        totalAmount = totalAmount + subTotal;
+                    }
                 }
 
                 trolleyClass.setTotalQuantity(totalQuantity); //總商品數量

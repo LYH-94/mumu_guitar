@@ -65,11 +65,12 @@
         <div class="col pad_0 section_row1_col2">
             <!-- 搜尋商品編號 -->
             <div class="d-flex d-flex justify-content-center align-items-center">
-                <form action="....do?operate=..." method="post" class="pad_0">
+                <form action="productController.do?operate=getAllProductList" method="post" class="pad_0">
                     <span class="pad_0" style="font-size: 20px; color: #141637;">搜尋商品編號</span>
-                    <input type="number" name="searchProduct" th:value="${session.session_searchProduct}" class="input_style">
+                    <input type="number" name="searchProductNumber" th:value="${session.session_searchProductNumber}" class="input_style">
                     <button type="submit" class="bor_pad_0 search_btn">搜尋</button>
                 </form>
+                <button id="addProductBtn" type="button" onclick="showAddProductForm()" class="bor_pad_0 add_btn">新增商品</button>
             </div>
         </div>
     </div>
@@ -95,21 +96,63 @@
                 <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">功能</div>
             </div>
 
+            <!-- 新增商品時用的。 -->
+            <div id="addProductDiv" class="pad_0" hidden="hidden">
+                <form id="addProductForm" action="productController.do?operate=addProduct" method="post" class="d-flex pad_0 section_row3_col1_row1-2" style="background-color: #FFFFFF">
+                    <div class="pad_0">
+                        <input type="text" name="productNumber" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">
+                    </div>
+                    <div class="d-flex justify-content-start pad_0" style="width: 400px;">
+                        <div class="pad_0">
+                            <input type="text" name="productPhoto">
+                        </div>
+                        <div class="pad_0">
+                            <input type="text" name="productName">
+                            <input type="textarea" name="productIntroduce">
+                        </div>
+                    </div>
+                    <div class="pad_0">
+                        <input type="text" name="productBrand" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">
+                    </div>
+                    <div class="pad_0">
+                        <input type="text" name="productModel" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">
+                    </div>
+                    <div class="pad_0">
+                        <input type="text" name="productType" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">
+                    </div>
+                    <div class="pad_0">
+                        <input type="number" name="productPrice" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">
+                    </div>
+                    <div class="pad_0">
+                        <input type="number" name="productInventory" class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">
+                    </div>
+                    <div class="pad_0">
+                        <input type="number" name="productSales" class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">
+                    </div>
+
+                    <input type="submit" value="確定" class="d-flex justify-content-center align-items-center pad_0" style="cursor: pointer; width: 100px; color: blue;">
+                    <input type="reset" value="清除" class="d-flex justify-content-center align-items-center pad_0 js_status" style="cursor: pointer; width: 100px; color: blue;">
+                </form>
+            </div>
+
             <!-- 展示所有商品 -->
-            <div class="d-flex pad_0 section_row3_col1_row1-2" style="background-color: #FFFFFF">
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">2001</div>
-                <div class="d-flex justify-content-start align-items-center pad_0" style="width: 400px;">
-                    <img src="../images/2001.jpg" class="img_product">
-                    <span>電吉他 A - 粉</span>
+            <div th:if="${#lists.isEmpty(session.allProductList)}">尚無會員。</div>
+            <div th:unless="${#lists.isEmpty(session.allProductList)}"
+                 th:each="product : ${session.allProductList}"
+                 class="d-flex pad_0 section_row3_col1_row1-2" style="background-color: #FFFFFF">
+                <div th:text="${product.number}" th:id="'number_id_' + ${product.id}" th:data-productIntroduce = "${product.introduce}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">商品編號</div>
+                <div th:id="'photoAndName_id_' + ${product.id}" class="d-flex justify-content-start align-items-center pad_0" style="width: 400px;">
+                    <img th:src="'./images/' + ${product.photo}" class="img_product">
+                    <span th:text="${product.name}">商品名稱</span>
                 </div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">A</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">ABC</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">電吉他</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">42900</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">5</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">10</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">修改</div>
-                <div class="d-flex justify-content-center align-items-center pad_0" style="width: 100px; color: blue;">刪除</div>
+                <div th:text="${product.brand}" th:id="'brand_id_' + ${product.id}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">品牌</div>
+                <div th:text="${product.model}" th:id="'model_id_' + ${product.id}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">型號</div>
+                <div th:text="${product.type}" th:id="'type_id_' + ${product.id}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">分類</div>
+                <div th:text="${product.price}" th:id="'price_id_' + ${product.id}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">單價</div>
+                <div th:text="${product.inventory}" th:id="'inventory_id_' + ${product.id}" class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">庫存</div>
+                <div th:text="${product.sales}" th:id="'sales_id_' + ${product.id}" class="d-flex justify-content-center align-items-center pad_0" style="width: 50px;">銷量</div>
+                <div th:onclick="'editProduct(' + ${product.id} + ')'" th:id="'editBtn_id_' + ${product.id}" class="d-flex justify-content-center align-items-center pad_0" style="cursor: pointer; width: 100px; color: blue;">修改</div>
+                <div th:text="${product.status}"  th:onclick="'stopSaleProduct(' + ${product.id} + ')'" th:id="'stopSaleBtn_id_' + ${product.id}" class="d-flex justify-content-center align-items-center pad_0 js_status" style="cursor: pointer; width: 100px; color: blue;">狀態</div>
             </div>
 
             <div class="row mar_0 section_row3_col1_row2">
@@ -119,13 +162,13 @@
                         <button id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 class="btn dropdown-toggle"
                                 style="padding-top: 2px; padding-bottom: 2px; padding-left: 6px; padding-right: 6px;"
-                                th:text="'第 ' + ${session.session_productPageNumber} + ' 頁'">頁碼</button>
+                                th:text="'第 ' + ${session.session_pageNumber} + ' 頁'">頁碼</button>
                         <ul id="dropdown-menu1" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <!-- 利用 th:each 迴圈生成分頁頁碼的下拉式選單。 -->
-                            <li th:each="i : ${#numbers.sequence(1, session.productPages)}"><a th:data-value="${i}" th:href="'....do?operate=...&productPageNumber=' + ${i}" class="dropdown-item" th:text="'第 ' + ${i} + ' 頁'">頁碼</a></li>
+                            <li th:each="i : ${#numbers.sequence(1, session.pages)}"><a th:data-value="${i}" th:href="'productController.do?operate=getAllProductList&pageNumber=' + ${i}" class="dropdown-item" th:text="'第 ' + ${i} + ' 頁'">頁碼</a></li>
                         </ul>
                     </div>
-                    <span th:text="'商品數量：' + ${session.allProductCount}"
+                    <span th:text="'商品數量：' + ${session.productCount}"
                           class="d-flex justify-content-center align-items-center pad_0"
                           style="font-size: 16px; color: #141637;">商品數量</span>
                 </div>

@@ -184,6 +184,43 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void getFilteredAllProduct(HttpServletRequest req) throws ProductServiceImplException {
+        try {
+            HttpSession session = req.getSession();
+
+            String searchProductNumber = "";
+            String session_searchProductNumber = (String) session.getAttribute("session_searchProductNumber");
+            if (StringUtils.isEmpty(req.getParameter("searchProductNumber"))) {
+                if (StringUtils.isEmpty(session_searchProductNumber)) {
+                    searchProductNumber = "";
+                } else {
+                    searchProductNumber = session_searchProductNumber;
+                }
+            } else if ("reset".equals(req.getParameter("searchProductNumber"))) {
+                searchProductNumber = "";
+            } else {
+                searchProductNumber = req.getParameter("searchProductNumber");
+            }
+            session.setAttribute("session_searchProductNumber", searchProductNumber);
+
+            // 獲取用戶選擇的頁碼。
+            int pageNumber; // 預設為第一頁。
+            if (StringUtils.isEmpty(req.getParameter("pageNumber"))) { // 預設為 1。
+                pageNumber = 1;
+            } else {
+                pageNumber = Integer.parseInt(req.getParameter("pageNumber"));
+            }
+            session.setAttribute("session_pageNumber", Integer.toString(pageNumber));
+
+            List<Product> allProductList = productDAO.getFilteredAllProduct(ConnUtils.getConn(), Product.class, searchProductNumber, pageNumber);
+            session.setAttribute("allProductList", allProductList); // 所有商品列表。
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductServiceImplException("ProductServiceImpl 的 getFilteredAllProduct() 有問題。");
+        }
+    }
+
+    @Override
     public int getFilterProductCount(HttpServletRequest req) throws ProductServiceImplException {
         try {
             // 獲取用戶選擇商品的分類。
@@ -295,6 +332,44 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void getFilterAllProductCount(HttpServletRequest req) throws ProductServiceImplException {
+        try {
+            HttpSession session = req.getSession();
+
+            String searchProductNumber = "";
+            String session_searchProductNumber = (String) session.getAttribute("session_searchProductNumber");
+            if (StringUtils.isEmpty(req.getParameter("searchProductNumber"))) {
+                if (StringUtils.isEmpty(session_searchProductNumber)) {
+                    searchProductNumber = "";
+                } else {
+                    searchProductNumber = session_searchProductNumber;
+                }
+            } else if ("reset".equals(req.getParameter("searchProductNumber"))) {
+                searchProductNumber = "";
+            } else {
+                searchProductNumber = req.getParameter("searchProductNumber");
+            }
+            session.setAttribute("session_searchProductNumber", searchProductNumber);
+
+            int productCount = productDAO.getFilterAllProductCount(ConnUtils.getConn(), searchProductNumber);
+            int pages;
+            if (productCount == 0) {
+                pages = 1;
+            } else if (productCount % 10 != 0) {
+                pages = (productCount / 10) + 1;
+            } else {
+                pages = productCount / 10;
+            }
+            req.getSession().setAttribute("productCount", productCount); // 獲取的商品總數。
+            req.getSession().setAttribute("pages", pages); // 根據商品總數計算的總頁數。
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductServiceImplException("ProductServiceImpl 的 getFilterAllProductCount() 有問題。");
+        }
+    }
+
+    @Override
     public List<ProductAddedFavoAndTrolInfo> addFavoAndTrollInfo(List<Product> productList, HttpServletRequest req) throws ProductServiceImplException {
         try {
             // 輸入參數 productList 是根據需求獲取的商品數據 (所以商品或特定類型等等)，但還不包含是否有添加到用戶的追蹤清單或購物車，
@@ -363,6 +438,48 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductServiceImplException("ProductServiceImpl 的 addFavoAndTrollInfo() 有問題。");
+        }
+    }
+
+    @Override
+    public void editProductById(Integer id, String number, String photo, String name, String Introduce, String brand, String model, String type, Integer inventory, Integer sales, Integer price) throws ProductServiceImplException {
+        try {
+            productDAO.editProductById(ConnUtils.getConn(), id, number, photo, name, Introduce, brand, model, type, inventory, sales, price);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductServiceImplException("ProductServiceImpl 的 editProductById() 有問題。");
+        }
+    }
+
+    @Override
+    public void stopSaleProductById(Integer id, String status) throws ProductServiceImplException {
+        try {
+            productDAO.stopSaleProductById(ConnUtils.getConn(), id, status);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductServiceImplException("ProductServiceImpl 的 editProductById() 有問題。");
+        }
+    }
+
+    @Override
+    public void addProduct(HttpServletRequest req) throws ProductServiceImplException {
+        try {
+            String number = req.getParameter("productNumber");
+            String photo = req.getParameter("productPhoto");
+            String name = req.getParameter("productName");
+            String introduce = req.getParameter("productIntroduce");
+            String brand = req.getParameter("productBrand");
+            String model = req.getParameter("productModel");
+            String type = req.getParameter("productType");
+            Integer price = Integer.valueOf(req.getParameter("productPrice"));
+            Integer inventory = Integer.valueOf(req.getParameter("productInventory"));
+            Integer sales = Integer.valueOf(req.getParameter("productSales"));
+
+
+            productDAO.addProduct(ConnUtils.getConn(), number, photo, name, introduce, brand, model, type, price, inventory, sales);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductServiceImplException("ProductServiceImpl 的 addProduct() 有問題。");
         }
     }
 }

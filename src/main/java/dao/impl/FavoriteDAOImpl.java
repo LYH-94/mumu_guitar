@@ -78,21 +78,21 @@ public class FavoriteDAOImpl extends BaseDAO implements FavoriteDAO {
 
             if (inventory == 2) { // inventory == 2 庫存-所有商品
                 if (sortBy == 1) { // 降冪排序 sortBy == 1
-                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price between ? AND ? AND inventory >= 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) ORDER BY price DESC LIMIT 6 OFFSET ?";
+                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price between ? AND ? AND inventory >= 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) AND status = '正常' ORDER BY price DESC LIMIT 6 OFFSET ?";
                 } else { // 升冪排序 sortBy == 2
-                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price between ? AND ? AND inventory >= 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) ORDER BY price ASC LIMIT 6 OFFSET ?";
+                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price between ? AND ? AND inventory >= 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) AND status = '正常' ORDER BY price ASC LIMIT 6 OFFSET ?";
                 }
             } else if (inventory == 1) { // inventory == 1 庫存-有現貨
                 if (sortBy == 1) { // 降冪排序 sortBy == 1
-                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory > 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) ORDER BY price DESC LIMIT 6 OFFSET ?";
+                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory > 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) AND status = '正常' ORDER BY price DESC LIMIT 6 OFFSET ?";
                 } else { // 升冪排序 sortBy == 2
-                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory > 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) ORDER BY price ASC LIMIT 6 OFFSET ?";
+                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory > 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) AND status = '正常' ORDER BY price ASC LIMIT 6 OFFSET ?";
                 }
             } else { // inventory == 0 庫存-需調貨
                 if (sortBy == 1) { // 降冪排序 sortBy == 1
-                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory = 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) ORDER BY price DESC LIMIT 6 OFFSET ?";
+                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory = 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) AND status = '正常' ORDER BY price DESC LIMIT 6 OFFSET ?";
                 } else { // 升冪排序 sortBy == 2
-                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory = 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) ORDER BY price ASC LIMIT 6 OFFSET ?";
+                    sql = "SELECT * FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory = 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) AND status = '正常' ORDER BY price ASC LIMIT 6 OFFSET ?";
                 }
             }
 
@@ -112,11 +112,11 @@ public class FavoriteDAOImpl extends BaseDAO implements FavoriteDAO {
             String sql;
 
             if (inventory == 2) { // inventory == 2 庫存-所有商品
-                sql = "SELECT COUNT(id) FROM t_product WHERE type LIKE ? AND price between ? AND ? AND inventory >= 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?)";
+                sql = "SELECT COUNT(id) FROM t_product WHERE type LIKE ? AND price between ? AND ? AND inventory >= 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) AND status = '正常'";
             } else if (inventory == 1) { // inventory == 1 庫存-有現貨
-                sql = "SELECT COUNT(id) FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory > 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?)";
+                sql = "SELECT COUNT(id) FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory > 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) AND status = '正常'";
             } else { // inventory == 0 庫存-需調貨
-                sql = "SELECT COUNT(id) FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory = 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?)";
+                sql = "SELECT COUNT(id) FROM t_product WHERE type LIKE ? AND price BETWEEN ? AND ? AND inventory = 0 AND name LIKE ? AND id IN(SELECT product FROM t_favorite  WHERE owner = ?) AND status = '正常'";
             }
 
             // 在 SQL 語句中，通配符不能直接給 "" 這樣的空字串，因此處理成模糊匹配的寫法，"%%" 效果可視為與指定字段中的數據皆匹配。

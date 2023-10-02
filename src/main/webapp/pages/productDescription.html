@@ -107,7 +107,8 @@
                 </div>
             </div>
             <div class="row justify-content-end section_row3_col2_row2">
-                <div class="col-7 d-flex justify-content-end pad_0">
+                <div class="col-8 d-flex align-items-center justify-content-end pad_0">
+                    <span th:text="'販售狀態：' + *{status}" style="font-size: 20px; color: #141637;"></span>
                     <button type="button" th:onclick="'add_delete_Favorite(' + *{id} + ')'" class="bor_pad_0 add_favorite_btn">加入收藏</button>
                     <button type="button" th:onclick="'add_delete_Trolley(' + *{id} + ')'" class="bor_pad_0 add_trolley_btn">加入購物車</button>
                 </div>

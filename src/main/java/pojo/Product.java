@@ -12,6 +12,7 @@ public class Product {
     private Integer inventory;
     private Integer sales;
     private Integer price;
+    private String status;
 
     public Product() {
     }
@@ -106,5 +107,13 @@ public class Product {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

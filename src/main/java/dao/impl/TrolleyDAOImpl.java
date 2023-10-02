@@ -40,8 +40,9 @@ public class TrolleyDAOImpl extends BaseDAO implements TrolleyDAO {
     @Override
     public List<Trolley> getTrolleyByUserId(Connection conn, Class<Trolley> clazz, int userId) throws TrolleyDAOImplException {
         try {
-            String sql = "SELECT * FROM t_trolley WHERE owner = ?";
-            return super.getForList(ConnUtils.getConn(), clazz, sql, userId);
+            String sql = "SELECT * FROM t_trolley WHERE product IN(SELECT id FROM t_product tp WHERE id IN(SELECT product FROM t_trolley WHERE owner = ?) AND status = '正常') AND owner = ?";
+
+            return super.getForList(ConnUtils.getConn(), clazz, sql, userId, userId);
         } catch (Exception e) {
             e.printStackTrace();
             throw new TrolleyDAOImplException("TrolleyDAOImpl 的 getFavoriteByUserId() 有問題。");

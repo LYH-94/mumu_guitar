@@ -49,12 +49,19 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
-    public List<Product> getAllProduct() {
+    public String getAllProductList(HttpServletRequest req) throws ProductControllerImplException {
         try {
-            return productService.getAllProduct();
+            // 獲取需要的商品。
+            productService.getFilteredAllProduct(req);
+
+            // 獲取獲取到的商品數量，用於計算頁數與實現分頁功能。
+            productService.getFilterAllProductCount(req);
+
+            return "manager_product";
+
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ProductControllerImplException("ProductControllerImpl 的 getAllProduct() 有問題。");
+            throw new ProductControllerImplException("ProductControllerImpl 的 getAllProductList() 有問題。");
         }
     }
 
@@ -117,6 +124,42 @@ public class ProductControllerImpl implements ProductController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductControllerImpl 的 productDescription() 有問題。");
+        }
+    }
+
+    @Override
+    public String editProductById(HttpServletRequest req, Integer id, String number, String photo, String name, String Introduce, String brand, String model, String type, Integer inventory, Integer sales, Integer price) throws ProductControllerImplException {
+        try {
+            productService.editProductById(id, number, photo, name, Introduce, brand, model, type, inventory, sales, price);
+
+            return getAllProductList(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductControllerImpl 的 editProductById() 有問題。");
+        }
+    }
+
+    @Override
+    public String stopSaleProductById(HttpServletRequest req, Integer id, String status) throws ProductControllerImplException {
+        try {
+            productService.stopSaleProductById(id, status);
+
+            return getAllProductList(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductControllerImpl 的 editProductById() 有問題。");
+        }
+    }
+
+    @Override
+    public String addProduct(HttpServletRequest req) throws ProductControllerImplException {
+        try {
+            productService.addProduct(req);
+
+            return getAllProductList(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ProductControllerImplException("ProductControllerImpl 的 addProduct() 有問題。");
         }
     }
 }
