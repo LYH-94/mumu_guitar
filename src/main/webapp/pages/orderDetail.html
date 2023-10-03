@@ -12,13 +12,15 @@
     <!-- JavaScript -->
     <script type="text/javascript" src="./scripts/bootstrap.bundle.min.js" defer></script> <!-- Bootstrap JS -->
     <script type="text/javascript" src="./scripts/common.js" defer></script>
+    <script type="text/javascript" src="./scripts/manager.js" defer></script>
     <script type="text/javascript" src="./scripts/orderDetail.js" defer></script>
 
     <title>木木吉他</title>
 </head>
 <body>
 <header class="container-xl pad_0 header">
-    <div class="row mar_0">
+    <!-- 若為一般用戶則顯示以下。 -->
+    <div th:if="${session.user.identity} != 'manager'" class="row mar_0">
         <div class="col-4 pad_0">
             <!-- Logo -->
             <img src="./images/mumu_guitar.svg" onclick="index()" class="img-fluid img_mumu_guitar">
@@ -51,10 +53,38 @@
             </div>
         </div>
     </div>
+
+    <!-- 若為管理員則顯示以下。 -->
+    <div th:if="${session.user.identity} == 'manager'" class="row mar_0">
+        <div class="col-4 pad_0">
+            <!-- Logo -->
+            <img src="./images/mumu_guitar.svg" onclick="manager_orderPage()" class="img-fluid img_mumu_guitar">
+        </div>
+
+        <div class="col pad_0">
+            <div class="row four_functions">
+                <div class="col d-flex align-items-center pad_0">
+                    <span class="d-flex justify-content-center align-items-center"
+                          style="width: 100px; height: 30px; margin: 0px 20px 0px 0px;">管理員介面</span>
+                    <span class="d-flex justify-content-center align-items-center"
+                          style="width: 60px; height: 30px; margin: 0px 10px 0px 0px; color: blue;">管理員</span>
+                    <span class="d-flex justify-content-center align-items-center"
+                          style="width: 40px; height: 30px; margin: 0px 10px 0px 0px;">您好</span>
+                </div>
+
+                <!-- 登出 -->
+                <figure onclick="logInOut()" class="col pad_0 login_register_favorite_function">
+                    <img src="./images/person-square.svg" class="img-fluid">
+                    <figcaption id="id_logInOut" class="img_fig_font">登出</figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
 </header>
 
 <nav class="navbar navbar-expand-xl justify-content-center pad_0">
-    <div class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
+    <!-- 若為一般用戶則顯示以下。 -->
+    <div th:if="${session.user.identity} != 'manager'" class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
         <button type="button" onclick="index()"
                 class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">所有商品</button>
         <button type="button" onclick="index_woodenGuitar()"
@@ -66,18 +96,25 @@
         <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">擴音設備</button>
         <button type="button" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">琴袋琴盒</button>
     </div>
+
+    <!-- 若為管理員則顯示以下。 -->
+    <div th:if="${session.user.identity} == 'manager'" class="container-xl d-flex justify-content-center flex-wrap pad_0 navbar_inner">
+        <button type="button" onclick="manager_orderPage()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">訂單管理</button>
+        <button type="button" onclick="manager_productPage()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">商品管理</button>
+        <button type="button" onclick="manager_memberPage()" class="d-flex justify-content-center align-items-center bor_pad_0 navbar_btn">會員管理</button>
+    </div>
 </nav>
 
 <section class="container-xl pad_0 section">
     <!-- 登入歡迎訊息 -->
-    <div class="row mar_0 section_row1">
+    <div th:if="${session.user.identity} != 'manager'" class="row mar_0 section_row1">
         <div th:if="${session.user.username == null}" class="col pad_0 section_row1_col1">訪客 歡迎光臨~!</div>
         <div th:unless="${session.user.username == null}" class="col pad_0 section_row1_col1">
             <a th:text="${session.user.username}" href="index.do?operate=member_personalInformationPage">用戶名稱</a> 歡迎光臨~!</div>
     </div>
 
     <!-- 水平分隔線 -->
-    <div class="row mar_0 section_row2">
+    <div th:if="${session.user.identity} != 'manager'" class="row mar_0 section_row2">
         <div class="col pad_0 section_row2_col1"></div>
     </div>
 
@@ -132,9 +169,8 @@
                 </div>
                 <!-- 商品 -->
                 <div th:each="orderProduct : *{orderProductList}" class="row justify-content-start mar_0 section_row3_col1_row4-2">
-                    <div th:text="${orderProduct.product.number}"
-                         class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
-                         style="width: 100px; margin: 0px 50px 0px 0px;">編號</div>
+                    <div class="d-flex justify-content-center align-items-center pad_0 s_r3_c1_r4_div"
+                         style="width: 100px; margin: 0px 50px 0px 0px;"><a th:href="'productController.do?operate=productDescription&id=' + ${orderProduct.product.id}" th:text="${orderProduct.product.number}">編號</a></div>
                     <div th:text="${orderProduct.product.name}"
                          class="d-flex justify-content-start align-items-center pad_0 s_r3_c1_r4_div"
                          style="width: 350px; margin: 0px 50px 0px 0px;">名稱</div>

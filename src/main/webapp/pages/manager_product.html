@@ -140,7 +140,7 @@
             <div th:unless="${#lists.isEmpty(session.allProductList)}"
                  th:each="product : ${session.allProductList}"
                  class="d-flex pad_0 section_row3_col1_row1-2" style="background-color: #FFFFFF">
-                <div th:text="${product.number}" th:id="'number_id_' + ${product.id}" th:data-productIntroduce = "${product.introduce}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;">商品編號</div>
+                <div th:id="'number_id_' + ${product.id}" th:data-productIntroduce = "${product.introduce}" class="d-flex justify-content-center align-items-center pad_0" style="width: 100px;"><a th:href="'productController.do?operate=productDescription&id=' + ${product.id}" th:text="${product.number}">商品編號</a></div>
                 <div th:id="'photoAndName_id_' + ${product.id}" class="d-flex justify-content-start align-items-center pad_0" style="width: 400px;">
                     <img th:src="'./images/' + ${product.photo}" class="img_product">
                     <span th:text="${product.name}">商品名稱</span>
