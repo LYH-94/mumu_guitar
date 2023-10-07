@@ -11,37 +11,43 @@ import java.util.List;
 
 public class TrolleyDAOImpl extends BaseDAO implements TrolleyDAO {
 
-    @Override
-    public boolean checkForDuplicateUsers(Connection conn, Class<Trolley> clazz, int productId, int userId) throws TrolleyDAOImplException {
-        try {
-            String sql = "SELECT * FROM t_trolley WHERE product = ? AND owner = ?";
-            Trolley trolley = super.getInstance(conn, clazz, sql, productId, userId);
-
-            return (trolley == null ? true : false); // 若為不重複為 true，重複則為 false。
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new TrolleyDAOImplException("TrolleyDAOImpl 的 checkForDuplicateUsers() 有問題。");
-        }
-    }
-
+    /**
+     * 檢查指定會員是否將該商品添加到購物車。
+     *
+     * @param conn
+     * @param clazz
+     * @param productId 商品 id。
+     * @param userId    會員 id。
+     * @return
+     * @throws TrolleyDAOImplException
+     */
     @Override
     public boolean checkTrolley(Connection conn, Class<Trolley> clazz, Integer productId, Integer userId) throws TrolleyDAOImplException {
         try {
             String sql = "SELECT * FROM t_trolley WHERE product = ? AND owner = ?";
             Trolley trolley = super.getInstance(conn, clazz, sql, productId, userId);
 
-            return (trolley != null ? true : false); // 若 !=null 表示該用戶有添加該商品到購物車中。
+            // 若 !=null 表示該用戶有添加該商品到購物車中。
+            return (trolley != null ? true : false);
         } catch (Exception e) {
             e.printStackTrace();
             throw new TrolleyDAOImplException("TrolleyDAOImpl 的 checkTrolley() 有問題。");
         }
     }
 
+    /**
+     * 透過會員 id 獲取購物車。
+     *
+     * @param conn
+     * @param clazz
+     * @param userId 會員 id。
+     * @return
+     * @throws TrolleyDAOImplException
+     */
     @Override
     public List<Trolley> getTrolleyByUserId(Connection conn, Class<Trolley> clazz, int userId) throws TrolleyDAOImplException {
         try {
             String sql = "SELECT * FROM t_trolley WHERE product IN(SELECT id FROM t_product tp WHERE id IN(SELECT product FROM t_trolley WHERE owner = ?) AND status = '正常') AND owner = ?";
-
             return super.getForList(ConnUtils.getConn(), clazz, sql, userId, userId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,6 +55,15 @@ public class TrolleyDAOImpl extends BaseDAO implements TrolleyDAO {
         }
     }
 
+    /**
+     * 添加商品到指定會員的購物車中。
+     *
+     * @param conn
+     * @param productId 商品 idm
+     * @param userId    會員 id。
+     * @return
+     * @throws TrolleyDAOImplException
+     */
     @Override
     public boolean addTrolley(Connection conn, Integer productId, Integer userId) throws TrolleyDAOImplException {
         try {
@@ -60,6 +75,15 @@ public class TrolleyDAOImpl extends BaseDAO implements TrolleyDAO {
         }
     }
 
+    /**
+     * 刪除購物車中的商品。
+     *
+     * @param conn
+     * @param productId 商品 id。
+     * @param userId    會員 id。
+     * @return
+     * @throws TrolleyDAOImplException
+     */
     @Override
     public boolean deleteTrolley(Connection conn, Integer productId, Integer userId) throws TrolleyDAOImplException {
         try {
@@ -71,6 +95,14 @@ public class TrolleyDAOImpl extends BaseDAO implements TrolleyDAO {
         }
     }
 
+    /**
+     * 清空購物車。
+     *
+     * @param conn
+     * @param userId 會員 id。
+     * @return
+     * @throws TrolleyDAOImplException
+     */
     @Override
     public boolean clearTrolley(Connection conn, Integer userId) throws TrolleyDAOImplException {
         try {
@@ -82,6 +114,16 @@ public class TrolleyDAOImpl extends BaseDAO implements TrolleyDAO {
         }
     }
 
+    /**
+     * 將購物車中指定商品的數量加一。
+     *
+     * @param conn
+     * @param productId       商品 id。
+     * @param userId          會員 id。
+     * @param currentQuantity 商品當前數量。
+     * @return
+     * @throws TrolleyDAOImplException
+     */
     @Override
     public boolean plusQuantity(Connection conn, Integer productId, Integer userId, Integer currentQuantity) throws TrolleyDAOImplException {
         try {
@@ -94,6 +136,16 @@ public class TrolleyDAOImpl extends BaseDAO implements TrolleyDAO {
         }
     }
 
+    /**
+     * 將購物車中指定商品的數量減一。
+     *
+     * @param conn
+     * @param productId       商品 id。
+     * @param userId          會員 id。
+     * @param currentQuantity 商品當前數量。
+     * @return
+     * @throws TrolleyDAOImplException
+     */
     @Override
     public boolean reduceQuantity(Connection conn, Integer productId, Integer userId, Integer currentQuantity) throws TrolleyDAOImplException {
         try {
@@ -111,5 +163,4 @@ public class TrolleyDAOImpl extends BaseDAO implements TrolleyDAO {
             throw new TrolleyDAOImplException("TrolleyDAOImpl 的 reduceQuantity() 有問題。");
         }
     }
-
 }

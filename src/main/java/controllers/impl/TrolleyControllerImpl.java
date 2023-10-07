@@ -20,15 +20,22 @@ public class TrolleyControllerImpl implements TrolleyController {
 
     private ProductControllerImpl productController = null;
 
+    /**
+     * 透過會員 id 獲取該會員的購物車商品。
+     *
+     * @param req
+     * @return
+     * @throws TrolleyControllerImplException
+     */
     @Override
     public String getTrolleyByUserId(HttpServletRequest req) throws TrolleyControllerImplException {
         try {
-
+            TrolleyClass trolleyClass = new TrolleyClass();
             HttpSession session = req.getSession();
             User user = (User) session.getAttribute("user");
-            TrolleyClass trolleyClass = new TrolleyClass();
 
-            if (user != null && "general".equals(user.getIdentity())) { // 判斷是否已經登入且是一般用戶。
+            // 判斷是否已經登入且是一般用戶。
+            if (user != null && "general".equals(user.getIdentity())) {
                 int userId = user.getId();
 
                 // 獲取該用戶的 trolley。
@@ -43,17 +50,19 @@ public class TrolleyControllerImpl implements TrolleyController {
                         Integer quantity = trolleyList.get(i).getQuantity();
                         Integer subTotal = quantity * product.getPrice();
 
-                        trolleyClass.getProduct().add(product); // 商品
-                        trolleyClass.getQuantity().add(quantity); // 商品數量
-                        trolleyClass.getSubTotal().add(subTotal); // 小計
+                        // 添加商品、商品數量、小計
+                        trolleyClass.getProduct().add(product);
+                        trolleyClass.getQuantity().add(quantity);
+                        trolleyClass.getSubTotal().add(subTotal);
 
                         totalQuantity = totalQuantity + quantity;
                         totalAmount = totalAmount + subTotal;
                     }
                 }
 
-                trolleyClass.setTotalQuantity(totalQuantity); //總商品數量
-                trolleyClass.setTotalAmount(totalAmount); //總金額
+                // 設置商品總數量、總金額。
+                trolleyClass.setTotalQuantity(totalQuantity);
+                trolleyClass.setTotalAmount(totalAmount);
                 trolleyClass.setOwner(user);
 
                 session.setAttribute("trolleyClass", trolleyClass);
@@ -68,6 +77,14 @@ public class TrolleyControllerImpl implements TrolleyController {
         }
     }
 
+    /**
+     * 檢查指定會員的購物車中是否已存在指定商品。
+     *
+     * @param productId 商品 id。
+     * @param userId    會員 id。
+     * @return
+     * @throws TrolleyControllerImplException
+     */
     @Override
     public boolean checkTrolley(Integer productId, Integer userId) throws TrolleyControllerImplException {
         try {
@@ -78,13 +95,23 @@ public class TrolleyControllerImpl implements TrolleyController {
         }
     }
 
+    /**
+     * 新增或刪除購物車中的商品。
+     *
+     * @param productId 商品 id。
+     * @param req
+     * @param resp
+     * @return
+     * @throws TrolleyControllerImplException
+     */
     @Override
     public String add_delete_Trolley(Integer productId, HttpServletRequest req, HttpServletResponse resp) throws TrolleyControllerImplException {
         try {
             HttpSession session = req.getSession();
             User user = (User) session.getAttribute("user");
 
-            if (user != null && "general".equals(user.getIdentity())) { // 若非 null 表示已經登入。
+            // 若非 null 表示已經登入。
+            if (user != null && "general".equals(user.getIdentity())) {
                 boolean b = trolleyService.addTrolley(productId, user.getId());
 
                 PrintWriter out = resp.getWriter();
@@ -108,6 +135,15 @@ public class TrolleyControllerImpl implements TrolleyController {
         return "axios";
     }
 
+    /**
+     * 將購物車中指定商品的數量加一。
+     *
+     * @param req
+     * @param productId       商品 id。
+     * @param currentQuantity 該商品的當前數量。
+     * @return
+     * @throws TrolleyControllerImplException
+     */
     @Override
     public String plusQuantity(HttpServletRequest req, Integer productId, Integer currentQuantity) throws TrolleyControllerImplException {
         try {
@@ -123,6 +159,15 @@ public class TrolleyControllerImpl implements TrolleyController {
         }
     }
 
+    /**
+     * 將購物車中指定商品的數量減一。
+     *
+     * @param req
+     * @param productId       商品 id。
+     * @param currentQuantity 該商品的當前數量。
+     * @return
+     * @throws TrolleyControllerImplException
+     */
     @Override
     public String reduceQuantity(HttpServletRequest req, Integer productId, Integer currentQuantity) throws TrolleyControllerImplException {
         try {
@@ -138,6 +183,14 @@ public class TrolleyControllerImpl implements TrolleyController {
         }
     }
 
+    /**
+     * 刪除購物車中的指定商品。
+     *
+     * @param req
+     * @param productId 商品 id。
+     * @return
+     * @throws TrolleyControllerImplException
+     */
     @Override
     public String deleteTrolleyProduct(HttpServletRequest req, Integer productId) throws TrolleyControllerImplException {
         try {
@@ -153,6 +206,13 @@ public class TrolleyControllerImpl implements TrolleyController {
         }
     }
 
+    /**
+     * 清空購物車中的商品。
+     *
+     * @param req
+     * @return
+     * @throws TrolleyControllerImplException
+     */
     @Override
     public String clearTrolley(HttpServletRequest req) throws TrolleyControllerImplException {
         try {
@@ -168,6 +228,12 @@ public class TrolleyControllerImpl implements TrolleyController {
         }
     }
 
+    /**
+     * 結帳按鈕被點擊時，跳轉至結帳頁。
+     *
+     * @param req
+     * @return
+     */
     @Override
     public String checkout(HttpServletRequest req) {
         return "checkout";

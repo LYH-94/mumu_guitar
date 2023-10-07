@@ -23,6 +23,12 @@ public class ProductServiceImpl implements ProductService {
     private TrolleyControllerImpl trolleyController = null;
     private ProductDAOImpl productDAO = null;
 
+    /**
+     * 獲取所有正常販售的商品。
+     *
+     * @return
+     * @throws ProductServiceImplException
+     */
     @Override
     public List<Product> getAllProduct() throws ProductServiceImplException {
         try {
@@ -33,16 +39,13 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    @Override
-    public List<Product> getProductByType(String type) throws ProductServiceImplException {
-        try {
-            return productDAO.getProductByType(ConnUtils.getConn(), Product.class, type);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ProductServiceImplException("ProductServiceImpl 的 getProductByType() 有問題。");
-        }
-    }
-
+    /**
+     * 通過訂單 id 獲取商品。
+     *
+     * @param orderId
+     * @return
+     * @throws ProductServiceImplException
+     */
     @Override
     public List<OrderProduct> getProductByOrderId(int orderId) throws ProductServiceImplException {
         try {
@@ -53,6 +56,13 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    /**
+     * 通過 Id 獲取商品。
+     *
+     * @param id
+     * @return
+     * @throws ProductServiceImplException
+     */
     @Override
     public Product getProductById(int id) throws ProductServiceImplException {
         try {
@@ -63,18 +73,31 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    /**
+     * 獲取過濾後的商品。
+     *
+     * @param req
+     * @return
+     * @throws ProductServiceImplException
+     */
     @Override
     public List<Product> getFilteredProduct(HttpServletRequest req) throws ProductServiceImplException {
         try {
-            // 獲取用戶選擇商品的分類。
-            String classification = req.getParameter("classification");
             HttpSession session = req.getSession();
+
+            // 1.獲取用戶選擇商品的分類。
+            String classification = req.getParameter("classification");
             String session_classification = (String) session.getAttribute("session_classification");
-            // 先以 req 請求為主進行來判斷，若為空才根據 session 來判斷。
+
+            // 先以 req 請求為主進行判斷，若為空才根據 session 來判斷。
             if (StringUtils.isEmpty(classification)) {
-                if (StringUtils.isEmpty(session_classification)) { // 預設進入商品頁面時，是顯示所有商品。
+                // 預設進入商品頁面時，是顯示所有商品。
+                if (StringUtils.isEmpty(session_classification)) {
                     session.setAttribute("session_classification", "所有商品");
-                    classification = ""; // 在數據庫 t_product 表中，商品有自己的類型，不會出現 "所有商品" 這個類，因此使用空字串並寫成 SQL 中模糊匹配的寫法"%%"，表示所有商品。
+
+                    // 在數據庫 t_product 表中，商品有自己的類型，不會出現 "所有商品" 這個類，
+                    // 因此使用空字串並寫成 SQL 中模糊匹配的寫法"%%"，表示所有商品。
+                    classification = "";
                 } else {
                     if ("所有商品".equals(session_classification)) {
                         classification = "";
@@ -89,13 +112,13 @@ public class ProductServiceImpl implements ProductService {
                 session.setAttribute("session_classification", classification);
             }
 
-            // 獲取篩選條件並篩選商品。
-            // 獲取篩選表單中的數據。
+            // 2.獲取篩選表單中的數據。
             int lowest_price = 0;
             int highest_price = 999999;
-            byte inventory = 2; // 透過 if 判斷要執行的 SQL。
+            byte inventory = 2; // 後續利用 if 判斷要執行的 SQL。
             String searchProduct = "";
 
+            // 最低價格 lowest_price
             String session_lowest_price = (String) session.getAttribute("session_lowest_price");
             if (StringUtils.isEmpty(req.getParameter("lowest_price"))) {
                 if (StringUtils.isEmpty(session_lowest_price)) {
@@ -112,6 +135,7 @@ public class ProductServiceImpl implements ProductService {
             }
             session.setAttribute("session_lowest_price", Integer.toString(lowest_price));
 
+            // 最高價格 highest_price
             String session_highest_price = (String) session.getAttribute("session_highest_price");
             if (StringUtils.isEmpty(req.getParameter("highest_price"))) {
                 if (StringUtils.isEmpty(session_highest_price)) {
@@ -126,6 +150,7 @@ public class ProductServiceImpl implements ProductService {
             }
             session.setAttribute("session_highest_price", Integer.toString(highest_price));
 
+            // 商品庫存 inventory
             String session_inventory = (String) session.getAttribute("session_inventory");
             if (StringUtils.isEmpty(req.getParameter("inventory"))) {
                 if (StringUtils.isEmpty(session_inventory)) {
@@ -138,6 +163,7 @@ public class ProductServiceImpl implements ProductService {
             }
             session.setAttribute("session_inventory", Byte.toString(inventory));
 
+            // 商品搜尋 searchProduct
             String session_searchProduct = (String) session.getAttribute("session_searchProduct");
             if (StringUtils.isEmpty(req.getParameter("searchProduct"))) {
                 if (StringUtils.isEmpty(session_searchProduct)) {
@@ -152,8 +178,7 @@ public class ProductServiceImpl implements ProductService {
             }
             session.setAttribute("session_searchProduct", searchProduct);
 
-            // 獲取選擇的排序方式並排序商品。
-            // 首先獲取用戶選擇的排序方式。1-售價(H-L)、2-售價(L-H)。
+            // 3.首先獲取用戶選擇的排序方式。1-售價(H-L)、2-售價(L-H)。
             byte sortBy;
             String session_sortBy = (String) session.getAttribute("session_sortBy");
             if (StringUtils.isEmpty(req.getParameter("sortBy"))) { // 預設為 1。
@@ -167,15 +192,17 @@ public class ProductServiceImpl implements ProductService {
             }
             session.setAttribute("session_sortBy", Byte.toString(sortBy));
 
-            // 獲取用戶選擇的頁碼。
-            int pageNumber; // 預設為第一頁。
-            if (StringUtils.isEmpty(req.getParameter("pageNumber"))) { // 預設為 1。
+            // 4.獲取用戶選擇的頁碼。
+            int pageNumber;
+            if (StringUtils.isEmpty(req.getParameter("pageNumber"))) {
+                // 預設為第一頁。
                 pageNumber = 1;
             } else {
                 pageNumber = Integer.parseInt(req.getParameter("pageNumber"));
             }
             session.setAttribute("session_pageNumber", Integer.toString(pageNumber));
 
+            // 調用 DAO。
             return productDAO.getFilteredProduct(ConnUtils.getConn(), Product.class, classification, lowest_price, highest_price, inventory, searchProduct, sortBy, pageNumber);
         } catch (Exception e) {
             e.printStackTrace();
@@ -183,11 +210,18 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    /**
+     * 獲取所有商品。
+     *
+     * @param req
+     * @throws ProductServiceImplException
+     */
     @Override
     public void getFilteredAllProduct(HttpServletRequest req) throws ProductServiceImplException {
         try {
             HttpSession session = req.getSession();
 
+            // 商品編號搜尋 searchProductNumber
             String searchProductNumber = "";
             String session_searchProductNumber = (String) session.getAttribute("session_searchProductNumber");
             if (StringUtils.isEmpty(req.getParameter("searchProductNumber"))) {
@@ -204,34 +238,49 @@ public class ProductServiceImpl implements ProductService {
             session.setAttribute("session_searchProductNumber", searchProductNumber);
 
             // 獲取用戶選擇的頁碼。
-            int pageNumber; // 預設為第一頁。
-            if (StringUtils.isEmpty(req.getParameter("pageNumber"))) { // 預設為 1。
+            int pageNumber;
+            if (StringUtils.isEmpty(req.getParameter("pageNumber"))) {
+                // 預設為第一頁。
                 pageNumber = 1;
             } else {
                 pageNumber = Integer.parseInt(req.getParameter("pageNumber"));
             }
             session.setAttribute("session_pageNumber", Integer.toString(pageNumber));
 
+            // 調用 DAO。
             List<Product> allProductList = productDAO.getFilteredAllProduct(ConnUtils.getConn(), Product.class, searchProductNumber, pageNumber);
-            session.setAttribute("allProductList", allProductList); // 所有商品列表。
+            session.setAttribute("allProductList", allProductList);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductServiceImplException("ProductServiceImpl 的 getFilteredAllProduct() 有問題。");
         }
     }
 
+    /**
+     * 獲取所有商品的數量。
+     *
+     * @param req
+     * @return
+     * @throws ProductServiceImplException
+     */
     @Override
     public int getFilterProductCount(HttpServletRequest req) throws ProductServiceImplException {
         try {
+            HttpSession session = req.getSession();
+
             // 獲取用戶選擇商品的分類。
             String classification = req.getParameter("classification");
-            HttpSession session = req.getSession();
             String session_classification = (String) session.getAttribute("session_classification");
-            // 先以 req 請求為主進行來判斷，若為空才根據 session 來判斷。
+
+            // 先以 req 請求為主進行判斷，若為空才根據 session 來判斷。
             if (StringUtils.isEmpty(classification)) {
-                if (StringUtils.isEmpty(session_classification)) { // 預設進入商品頁面時，是顯示所有商品。
+                // 預設進入商品頁面時，是顯示所有商品。
+                if (StringUtils.isEmpty(session_classification)) {
                     session.setAttribute("session_classification", "所有商品");
-                    classification = ""; // 在數據庫 t_product 表中，商品有自己的類型，不會出現 "所有商品" 這個類，因此使用空字串並寫成 SQL 中模糊匹配的寫法"%%"，表示所有商品。
+
+                    // 在數據庫 t_product 表中，商品有自己的類型，不會出現 "所有商品" 這個類，
+                    // 因此使用空字串並寫成 SQL 中模糊匹配的寫法"%%"，表示所有商品。
+                    classification = "";
                 } else {
                     if ("所有商品".equals(session_classification)) {
                         classification = "";
@@ -246,13 +295,13 @@ public class ProductServiceImpl implements ProductService {
                 session.setAttribute("session_classification", classification);
             }
 
-            // 獲取篩選條件並篩選商品。
             // 獲取篩選表單中的數據。
             int lowest_price = 0;
             int highest_price = 999999;
-            byte inventory = 2; // 透過 if 判斷要執行的 SQL。
+            byte inventory = 2; // 後續利用 if 判斷要執行的 SQL。
             String searchProduct = "";
 
+            // 最低價格 lowest_price
             String session_lowest_price = (String) session.getAttribute("session_lowest_price");
             if (StringUtils.isEmpty(req.getParameter("lowest_price"))) {
                 if (StringUtils.isEmpty(session_lowest_price)) {
@@ -269,6 +318,7 @@ public class ProductServiceImpl implements ProductService {
             }
             session.setAttribute("session_lowest_price", Integer.toString(lowest_price));
 
+            // 最高價格 highest_price
             String session_highest_price = (String) session.getAttribute("session_highest_price");
             if (StringUtils.isEmpty(req.getParameter("highest_price"))) {
                 if (StringUtils.isEmpty(session_highest_price)) {
@@ -283,6 +333,7 @@ public class ProductServiceImpl implements ProductService {
             }
             session.setAttribute("session_highest_price", Integer.toString(highest_price));
 
+            // 商品庫存 inventory
             String session_inventory = (String) session.getAttribute("session_inventory");
             if (StringUtils.isEmpty(req.getParameter("inventory"))) {
                 if (StringUtils.isEmpty(session_inventory)) {
@@ -295,6 +346,7 @@ public class ProductServiceImpl implements ProductService {
             }
             session.setAttribute("session_inventory", Byte.toString(inventory));
 
+            // 搜尋商品 searchProduct
             String session_searchProduct = (String) session.getAttribute("session_searchProduct");
             if (StringUtils.isEmpty(req.getParameter("searchProduct"))) {
                 if (StringUtils.isEmpty(session_searchProduct)) {
@@ -309,7 +361,6 @@ public class ProductServiceImpl implements ProductService {
             }
             session.setAttribute("session_searchProduct", searchProduct);
 
-            // 獲取選擇的排序方式並排序商品。
             // 首先獲取用戶選擇的排序方式。1-售價(H-L)、2-售價(L-H)。
             byte sortBy;
             String session_sortBy = (String) session.getAttribute("session_sortBy");
@@ -324,6 +375,7 @@ public class ProductServiceImpl implements ProductService {
             }
             session.setAttribute("session_sortBy", Byte.toString(sortBy));
 
+            // 調用 DAO。
             return productDAO.getFilterProductCount(ConnUtils.getConn(), classification, lowest_price, highest_price, inventory, searchProduct);
         } catch (Exception e) {
             e.printStackTrace();
@@ -331,11 +383,18 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    /**
+     * 獲取所有商品的數量。
+     *
+     * @param req
+     * @throws ProductServiceImplException
+     */
     @Override
     public void getFilterAllProductCount(HttpServletRequest req) throws ProductServiceImplException {
         try {
             HttpSession session = req.getSession();
 
+            // 商品編號搜尋 searchProductNumber
             String searchProductNumber = "";
             String session_searchProductNumber = (String) session.getAttribute("session_searchProductNumber");
             if (StringUtils.isEmpty(req.getParameter("searchProductNumber"))) {
@@ -351,7 +410,10 @@ public class ProductServiceImpl implements ProductService {
             }
             session.setAttribute("session_searchProductNumber", searchProductNumber);
 
+            // 調用 DAO 獲取商品總數。
             int productCount = productDAO.getFilterAllProductCount(ConnUtils.getConn(), searchProductNumber);
+
+            // 根據商品總數計算的總頁數。
             int pages;
             if (productCount == 0) {
                 pages = 1;
@@ -360,15 +422,23 @@ public class ProductServiceImpl implements ProductService {
             } else {
                 pages = productCount / 10;
             }
-            req.getSession().setAttribute("productCount", productCount); // 獲取的商品總數。
-            req.getSession().setAttribute("pages", pages); // 根據商品總數計算的總頁數。
 
+            req.getSession().setAttribute("productCount", productCount);
+            req.getSession().setAttribute("pages", pages);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductServiceImplException("ProductServiceImpl 的 getFilterAllProductCount() 有問題。");
         }
     }
 
+    /**
+     * 添加追蹤商品與購物車的訊息。
+     *
+     * @param productList 商品列表。
+     * @param req
+     * @return
+     * @throws ProductServiceImplException
+     */
     @Override
     public List<ProductAddedFavoAndTrolInfo> addFavoAndTrollInfo(List<Product> productList, HttpServletRequest req) throws ProductServiceImplException {
         try {
@@ -382,7 +452,8 @@ public class ProductServiceImpl implements ProductService {
             HttpSession session = req.getSession();
 
             User user = (User) session.getAttribute("user");
-            if (user == null) { // 沒有 user 表示是訪客。
+            // user == null 表示是訪客。
+            if (user == null) {
                 for (int i = 0; i < productList.size(); i++) {
                     ProductAddedFavoAndTrolInfo productAddedFavoAndTrolInfo = new ProductAddedFavoAndTrolInfo();
                     productAddedFavoAndTrolInfo.setProduct(productList.get(i));
@@ -391,7 +462,6 @@ public class ProductServiceImpl implements ProductService {
 
                     productAddedFavoAndTrolInfoList.add(productAddedFavoAndTrolInfo);
                 }
-
                 return productAddedFavoAndTrolInfoList;
             } else {
                 if ("general".equals(user.getIdentity())) {
@@ -409,7 +479,6 @@ public class ProductServiceImpl implements ProductService {
 
                         productAddedFavoAndTrolInfoList.add(productAddedFavoAndTrolInfo);
                     }
-
                     return productAddedFavoAndTrolInfoList;
                 } else if ("manager".equals(user.getIdentity())) {
                     for (int i = 0; i < productList.size(); i++) {
@@ -420,9 +489,8 @@ public class ProductServiceImpl implements ProductService {
 
                         productAddedFavoAndTrolInfoList.add(productAddedFavoAndTrolInfo);
                     }
-
                     return productAddedFavoAndTrolInfoList;
-                } else { //user 不等於 null 也不符合任何用戶或管理員，所以也是訪客。
+                } else { // user 不等於 null 也不符合一般會員和管理員，所以也是訪客。
                     for (int i = 0; i < productList.size(); i++) {
                         ProductAddedFavoAndTrolInfo productAddedFavoAndTrolInfo = new ProductAddedFavoAndTrolInfo();
                         productAddedFavoAndTrolInfo.setProduct(productList.get(i));
@@ -431,7 +499,6 @@ public class ProductServiceImpl implements ProductService {
 
                         productAddedFavoAndTrolInfoList.add(productAddedFavoAndTrolInfo);
                     }
-
                     return productAddedFavoAndTrolInfoList;
                 }
             }
@@ -441,6 +508,22 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    /**
+     * 修改指定 id 的商品。
+     *
+     * @param id        商品 id。
+     * @param number    商品編號。
+     * @param photo     商品照片。
+     * @param name      商品名稱。
+     * @param Introduce 商品介紹。
+     * @param brand     商品品牌。
+     * @param model     商品型號。
+     * @param type      商品類型。
+     * @param inventory 商品庫存。
+     * @param sales     商品銷量。
+     * @param price     商品價格。
+     * @throws ProductServiceImplException
+     */
     @Override
     public void editProductById(Integer id, String number, String photo, String name, String Introduce, String brand, String model, String type, Integer inventory, Integer sales, Integer price) throws ProductServiceImplException {
         try {
@@ -451,6 +534,13 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    /**
+     * 停售指定 id 的商品。
+     *
+     * @param id     商品 id。
+     * @param status 商品販售狀態。
+     * @throws ProductServiceImplException
+     */
     @Override
     public void stopSaleProductById(Integer id, String status) throws ProductServiceImplException {
         try {
@@ -461,6 +551,12 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    /**
+     * 新增商品。
+     *
+     * @param req
+     * @throws ProductServiceImplException
+     */
     @Override
     public void addProduct(HttpServletRequest req) throws ProductServiceImplException {
         try {
@@ -475,7 +571,7 @@ public class ProductServiceImpl implements ProductService {
             Integer inventory = Integer.valueOf(req.getParameter("productInventory"));
             Integer sales = Integer.valueOf(req.getParameter("productSales"));
 
-
+            // 調用 DAO。
             productDAO.addProduct(ConnUtils.getConn(), number, photo, name, introduce, brand, model, type, price, inventory, sales);
         } catch (Exception e) {
             e.printStackTrace();

@@ -16,8 +16,16 @@ public class ProductControllerImpl implements ProductController {
 
     private ProductServiceImpl productService = null;
 
+    /**
+     * 獲取用戶所需的商品列表。(for 用戶)
+     *
+     * @param req
+     * @return
+     * @throws ProductControllerImplException
+     */
     @Override
     public List<ProductAddedFavoAndTrolInfo> getProduct(HttpServletRequest req) throws ProductControllerImplException {
+
         try {
             // 獲取需要的商品。
             List<Product> productList = productService.getFilteredProduct(req);
@@ -48,6 +56,13 @@ public class ProductControllerImpl implements ProductController {
         }
     }
 
+    /**
+     * 獲取所有商品數據。(for 管理員)
+     *
+     * @param req
+     * @return
+     * @throws ProductControllerImplException
+     */
     @Override
     public String getAllProductList(HttpServletRequest req) throws ProductControllerImplException {
         try {
@@ -58,23 +73,19 @@ public class ProductControllerImpl implements ProductController {
             productService.getFilterAllProductCount(req);
 
             return "manager_product";
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new ProductControllerImplException("ProductControllerImpl 的 getAllProductList() 有問題。");
         }
     }
 
-    @Override
-    public List<Product> getProductByType(String type) throws ProductControllerImplException {
-        try {
-            return productService.getProductByType(type);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ProductControllerImplException("ProductControllerImpl 的 getProductByType() 有問題。");
-        }
-    }
-
+    /**
+     * 通過 Id 獲取商品。
+     *
+     * @param id
+     * @return
+     * @throws ProductControllerImplException
+     */
     @Override
     public Product getProductById(int id) throws ProductControllerImplException {
         try {
@@ -85,6 +96,13 @@ public class ProductControllerImpl implements ProductController {
         }
     }
 
+    /**
+     * 通過訂單 id 獲取商品。
+     *
+     * @param orderId
+     * @return
+     * @throws ProductControllerImplException
+     */
     @Override
     public List<OrderProduct> getProductByOrderId(int orderId) throws ProductControllerImplException {
         try {
@@ -95,6 +113,13 @@ public class ProductControllerImpl implements ProductController {
         }
     }
 
+    /**
+     * 獲取前三的熱門商品。
+     *
+     * @param req
+     * @return
+     * @throws ProductControllerImplException
+     */
     @Override
     public List<ProductAddedFavoAndTrolInfo> getHotProduct(HttpServletRequest req) throws ProductControllerImplException {
         try {
@@ -116,6 +141,14 @@ public class ProductControllerImpl implements ProductController {
         }
     }
 
+    /**
+     * 獲取商品的詳細訊息。
+     *
+     * @param id
+     * @param req
+     * @return
+     * @throws ProductControllerImplException
+     */
     @Override
     public String productDescription(Integer id, HttpServletRequest req) throws ProductControllerImplException {
         try {
@@ -127,11 +160,28 @@ public class ProductControllerImpl implements ProductController {
         }
     }
 
+    /**
+     * 修改商品資料。
+     *
+     * @param req
+     * @param id        要修改的商品 id。
+     * @param number    商品編號。
+     * @param photo     商品照片。
+     * @param name      商品名稱。
+     * @param Introduce 商品介紹。
+     * @param brand     商品品牌。
+     * @param model     商品型號。
+     * @param type      商品類型。
+     * @param inventory 商品庫存。
+     * @param sales     商品銷量。
+     * @param price     商品價格。
+     * @return
+     * @throws ProductControllerImplException
+     */
     @Override
     public String editProductById(HttpServletRequest req, Integer id, String number, String photo, String name, String Introduce, String brand, String model, String type, Integer inventory, Integer sales, Integer price) throws ProductControllerImplException {
         try {
             productService.editProductById(id, number, photo, name, Introduce, brand, model, type, inventory, sales, price);
-
             return getAllProductList(req);
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,11 +189,19 @@ public class ProductControllerImpl implements ProductController {
         }
     }
 
+    /**
+     * 切換商品販售狀態。(正常/停售)
+     *
+     * @param req
+     * @param id     商品 id。
+     * @param status 商品狀態。
+     * @return
+     * @throws ProductControllerImplException
+     */
     @Override
     public String stopSaleProductById(HttpServletRequest req, Integer id, String status) throws ProductControllerImplException {
         try {
             productService.stopSaleProductById(id, status);
-
             return getAllProductList(req);
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,11 +209,17 @@ public class ProductControllerImpl implements ProductController {
         }
     }
 
+    /**
+     * 新增商品。
+     *
+     * @param req
+     * @return
+     * @throws ProductControllerImplException
+     */
     @Override
     public String addProduct(HttpServletRequest req) throws ProductControllerImplException {
         try {
             productService.addProduct(req);
-
             return getAllProductList(req);
         } catch (Exception e) {
             e.printStackTrace();

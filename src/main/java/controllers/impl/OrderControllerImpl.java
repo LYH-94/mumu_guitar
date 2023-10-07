@@ -11,6 +11,13 @@ public class OrderControllerImpl implements OrderController {
     private OrderServiceImpl orderService = null;
     private TrolleyControllerImpl trolleyController = null;
 
+    /**
+     * 獲取所有會員的訂單。
+     *
+     * @param req
+     * @return
+     * @throws OrderControllerImplException
+     */
     @Override
     public String getAllOrderList(HttpServletRequest req) throws OrderControllerImplException {
         try {
@@ -27,6 +34,13 @@ public class OrderControllerImpl implements OrderController {
         }
     }
 
+    /**
+     * 獲取指定會員的所有訂單。
+     *
+     * @param req
+     * @return
+     * @throws OrderControllerImplException
+     */
     @Override
     public String getUserOrderList(HttpServletRequest req) throws OrderControllerImplException {
         try {
@@ -35,6 +49,7 @@ public class OrderControllerImpl implements OrderController {
 
             // 獲取特定用戶所需的訂單數量。
             orderService.getUserOrderCount(req);
+
             return "member_myOrderList";
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,6 +57,14 @@ public class OrderControllerImpl implements OrderController {
         }
     }
 
+    /**
+     * 透過訂單編號獲取訂單詳情。
+     *
+     * @param req
+     * @param number 訂單編號。
+     * @return
+     * @throws OrderControllerImplException
+     */
     @Override
     public String getOrderDetailByNumber(HttpServletRequest req, String number) throws OrderControllerImplException {
         try {
@@ -55,6 +78,16 @@ public class OrderControllerImpl implements OrderController {
         }
     }
 
+    /**
+     * 新增訂單。
+     *
+     * @param req
+     * @param purchaser 購買人姓名。
+     * @param phone     聯絡電話
+     * @param address   配送地址。
+     * @return
+     * @throws OrderControllerImplException
+     */
     @Override
     public String addOrder(HttpServletRequest req, String purchaser, String phone, String address) throws OrderControllerImplException {
         try {
@@ -71,10 +104,18 @@ public class OrderControllerImpl implements OrderController {
         }
     }
 
+    /**
+     * 切換訂單狀態。
+     *
+     * @param req
+     * @param status 當前訂單狀態。
+     * @param number 訂單編號。
+     * @return
+     * @throws OrderControllerImplException
+     */
     @Override
     public String switchStatus(HttpServletRequest req, Integer status, String number) throws OrderControllerImplException {
         try {
-
             orderService.switchStatus(status, number);
 
             return getAllOrderList(req);

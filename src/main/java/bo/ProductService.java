@@ -10,10 +10,9 @@ import java.util.List;
 public interface ProductService {
     public List<Product> getAllProduct();
 
-    public List<Product> getProductByType(String type);
-
     public List<OrderProduct> getProductByOrderId(int orderId);
 
+    // 有用。
     public Product getProductById(int id);
 
     public List<Product> getFilteredProduct(HttpServletRequest req);

@@ -22,12 +22,19 @@ public class OrderServiceImpl implements OrderService {
     private UserControllerImpl userController = null;
     private ProductControllerImpl productController = null;
 
+    /**
+     * 獲取所有會員的訂單。
+     *
+     * @param req
+     * @throws OrderServiceImplException
+     */
     @Override
     public void getAllOrderList(HttpServletRequest req) throws OrderServiceImplException {
         try {
-            // 處理搜尋。
-            String searchOrder = "";
             HttpSession session = req.getSession();
+
+            // 1.處理搜尋。
+            String searchOrder = "";
             String session_searchOrder = (String) session.getAttribute("session_searchOrder");
             if (StringUtils.isEmpty(req.getParameter("searchOrder"))) {
                 if (StringUtils.isEmpty(session_searchOrder)) {
@@ -42,37 +49,45 @@ public class OrderServiceImpl implements OrderService {
             }
             session.setAttribute("session_searchOrder", searchOrder);
 
-            // 獲取用戶選擇的頁碼。
-            int orderPageNumber; // 預設為第一頁。
-            if (StringUtils.isEmpty(req.getParameter("orderPageNumber"))) { // 預設為 1。
+            // 2.獲取使用者選擇的頁碼。
+            int orderPageNumber;
+            if (StringUtils.isEmpty(req.getParameter("orderPageNumber"))) {
+                // 預設為第一頁。
                 orderPageNumber = 1;
             } else {
                 orderPageNumber = Integer.parseInt(req.getParameter("orderPageNumber"));
             }
             session.setAttribute("session_orderPageNumber", Integer.toString(orderPageNumber));
 
+            // 調用 DAO。
             List<Order> allOrderList = orderDAO.getAllOrderList(ConnUtils.getConn(), Order.class, searchOrder, orderPageNumber);
 
-            // 獲取各訂單所屬用戶並賦給 allOrderList。
+            // 獲取各訂單的所屬會員並設置給 allOrderList 中的訂單。
             for (int i = 0; i < allOrderList.size(); i++) {
                 allOrderList.get(i).setOwner(userController.getUserById(allOrderList.get(i).getOwner().getId()));
             }
 
-            //  將獲取到的訂單儲存在session中。
+            //  將獲取到的訂單儲存在 session 中。
             session.setAttribute("allOrderList", allOrderList);
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderServiceImplException("OrderServiceImpl 的 getAllOrderList() 有問題。");
         }
     }
 
+    /**
+     * 獲取特定會員所需的訂單。
+     *
+     * @param req
+     * @throws OrderServiceImplException
+     */
     @Override
     public void getUserOrderList(HttpServletRequest req) throws OrderServiceImplException {
         try {
-            // 處理搜尋。
-            String searchOrder = "";
             HttpSession session = req.getSession();
+
+            // 1.處理搜尋。
+            String searchOrder = "";
             String session_searchOrder = (String) session.getAttribute("session_searchOrder");
             if (StringUtils.isEmpty(req.getParameter("searchOrder"))) {
                 if (StringUtils.isEmpty(session_searchOrder)) {
@@ -87,20 +102,21 @@ public class OrderServiceImpl implements OrderService {
             }
             session.setAttribute("session_searchOrder", searchOrder);
 
-            // 獲取用戶選擇的頁碼。
-            int orderPageNumber; // 預設為第一頁。
-            if (StringUtils.isEmpty(req.getParameter("orderPageNumber"))) { // 預設為 1。
+            // 2.獲取使用者選擇的頁碼。
+            int orderPageNumber;
+            if (StringUtils.isEmpty(req.getParameter("orderPageNumber"))) {
+                // 預設為第一頁。
                 orderPageNumber = 1;
             } else {
                 orderPageNumber = Integer.parseInt(req.getParameter("orderPageNumber"));
             }
             session.setAttribute("session_orderPageNumber", Integer.toString(orderPageNumber));
 
-            // 獲取特定用戶所需的訂單。
+            // 3.獲取特定會員所需的訂單。
             int userId = ((User) session.getAttribute("user")).getId();
             List<Order> userOrderList = orderDAO.getUserOrderList(ConnUtils.getConn(), Order.class, userId, searchOrder, orderPageNumber);
 
-            //  將獲取到的訂單儲存在session中。
+            //  將獲取到的訂單儲存在 session 中。
             session.setAttribute("userOrderList", userOrderList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,12 +124,19 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    /**
+     * 獲取所有會員的訂單總數。
+     *
+     * @param req
+     * @throws OrderServiceImplException
+     */
     @Override
     public void getAllOrderCount(HttpServletRequest req) throws OrderServiceImplException {
         try {
-            // 處理搜尋。
-            String searchOrder = "";
             HttpSession session = req.getSession();
+
+            // 1.處理搜尋。
+            String searchOrder = "";
             String session_searchOrder = (String) session.getAttribute("session_searchOrder");
             if (StringUtils.isEmpty(req.getParameter("searchOrder"))) {
                 if (StringUtils.isEmpty(session_searchOrder)) {
@@ -128,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
             }
             session.setAttribute("session_searchOrder", searchOrder);
 
-            // 獲取所有用戶的訂單數量，用於計算訂單總頁數。
+            // 2.獲取所有會員的訂單數量，用於計算訂單總頁數。
             int orderPages;
             int allOrderCount = orderDAO.getAllOrderCount(ConnUtils.getConn(), searchOrder);
 
@@ -140,21 +163,27 @@ public class OrderServiceImpl implements OrderService {
                 orderPages = allOrderCount / 10;
             }
 
-            req.getSession().setAttribute("allOrderCount", allOrderCount); // 將訂單總數儲存於 session。
-            req.getSession().setAttribute("orderPages", orderPages); // 根據訂單總數計算的總頁數，儲存於 session。
-
+            req.getSession().setAttribute("allOrderCount", allOrderCount);
+            req.getSession().setAttribute("orderPages", orderPages);
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderServiceImplException("OrderServiceImpl 的 getAllOrderCount() 有問題。");
         }
     }
 
+    /**
+     * 獲取特定會員所需的訂單總數。
+     *
+     * @param req
+     * @throws OrderServiceImplException
+     */
     @Override
     public void getUserOrderCount(HttpServletRequest req) throws OrderServiceImplException {
         try {
-            // 處理搜尋。
-            String searchOrder = "";
             HttpSession session = req.getSession();
+
+            // 1.處理搜尋。
+            String searchOrder = "";
             String session_searchOrder = (String) session.getAttribute("session_searchOrder");
             if (StringUtils.isEmpty(req.getParameter("searchOrder"))) {
                 if (StringUtils.isEmpty(session_searchOrder)) {
@@ -169,12 +198,13 @@ public class OrderServiceImpl implements OrderService {
             }
             session.setAttribute("session_searchOrder", searchOrder);
 
-            // 獲取特定用戶所需的訂單數量，用於計算訂單總頁數。
+            // 2.獲取特定會員所需的訂單數量，用於計算訂單總頁數。
             int orderPages;
             int userId = ((User) session.getAttribute("user")).getId();
             int userOrderCount = orderDAO.getUserOrderCount(ConnUtils.getConn(), userId, searchOrder);
 
-            if (userOrderCount == 0) { // 10 筆訂單為一頁。
+            // 每一頁顯示 10 筆訂單。
+            if (userOrderCount == 0) {
                 orderPages = 1;
             } else if (userOrderCount % 10 != 0) {
                 orderPages = (userOrderCount / 10) + 1;
@@ -182,15 +212,21 @@ public class OrderServiceImpl implements OrderService {
                 orderPages = userOrderCount / 10;
             }
 
-            req.getSession().setAttribute("userOrderCount", userOrderCount); // 將訂單總數儲存於 session。
-            req.getSession().setAttribute("orderPages", orderPages); // 根據訂單總數計算的總頁數，儲存於 session。
-
+            req.getSession().setAttribute("userOrderCount", userOrderCount);
+            req.getSession().setAttribute("orderPages", orderPages);
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderServiceImplException("OrderServiceImpl 的 getUserOrderCount() 有問題。");
         }
     }
 
+    /**
+     * 透過訂單編號獲取該訂單的詳細資訊。
+     *
+     * @param req
+     * @param number
+     * @throws OrderServiceImplException
+     */
     @Override
     public void getOrderDetailByNumber(HttpServletRequest req, String number) throws OrderServiceImplException {
         try {
@@ -201,7 +237,7 @@ public class OrderServiceImpl implements OrderService {
             User user = userController.getUserById(order.getOwner().getId());
             order.setOwner(user);
 
-            // 透過訂單id獲取該訂單中的所有商品，並透過商品id(OrderProduct中的product.id)獲取商品。
+            // 透過訂單id獲取該訂單中的所有商品，並透過商品 id ( OrderProduct中的product.id ) 獲取商品。
             List<OrderProduct> productList = productController.getProductByOrderId(order.getId());
             for (int i = 0; i < productList.size(); ++i) {
                 Product product = productController.getProductById(productList.get(i).getProduct().getId());
@@ -215,23 +251,31 @@ public class OrderServiceImpl implements OrderService {
 
             HttpSession session = req.getSession();
             session.setAttribute("order", order);
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderServiceImplException("OrderServiceImpl 的 getOrderDetailByNumber() 有問題。");
         }
     }
 
+    /**
+     * 新增訂單至數據庫中。
+     *
+     * @param req
+     * @param purchaser 購買人姓名。
+     * @param phone     聯絡電話。
+     * @param address   配送地址。
+     * @throws OrderServiceImplException
+     */
     @Override
     public void addOrder(HttpServletRequest req, String purchaser, String phone, String address) throws OrderServiceImplException {
         try {
             HttpSession session = req.getSession();
 
             // 設置訂單需要的資料。(1.訂單編號 2.下單日期 3.訂單總額 4.發貨狀態 5.所屬用戶 6.購買人 7.連絡電話 8.付款方式(固定的不用設置) 9.配送地址)
-            // 1. 下單日期-獲取當前時間。
+            // 1.下單日期-獲取當前時間。
             Date date = new Date();
 
-            // 2. 訂單編號-獲取將當前時間轉成一整個字串並加上四位隨機數。
+            // 2.訂單編號-獲取將當前時間轉成一整個字串並加上四位隨機數。
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
             String number = sdf.format(date);
 
@@ -239,19 +283,19 @@ public class OrderServiceImpl implements OrderService {
             Random random = new Random();
 
             int min = 1000; // 最小值 1000 (包括 1000)。
-            int max = 9999; // 最大值 9999（包括 9999）
+            int max = 9999; // 最大值 9999（包括 9999）。
             String randomFourNumber = String.valueOf(random.nextInt(max - min + 1) + min);
 
             // 字串拼接
             number = number + randomFourNumber;
 
-            // 3. 訂單總額
+            // 3.訂單總額
             TrolleyClass trolleyClass = (TrolleyClass) session.getAttribute("trolleyClass");
             Integer totalAmount = trolleyClass.getTotalAmount();
 
-            // 4.發貨狀態(預設為 0)
+            // 4.發貨狀態 ( 預設為 0 )
 
-            // 5. 所屬用戶
+            // 5.所屬用戶
             User user = (User) session.getAttribute("user");
             Integer owner = user.getId();
 
@@ -261,10 +305,10 @@ public class OrderServiceImpl implements OrderService {
             // 8.付款方式(固定的不用設置)
             // 9.配送地址 - address
 
-            // 於t_order數據表中新增訂單。
+            // 調用 DAO，於 t_order 數據表中新增訂單。
             orderDAO.addOrder(ConnUtils.getConn(), number, date, totalAmount, owner, purchaser, phone, address);
 
-            // 於t_orderProduct數據表中新增該訂單的商品內容。
+            // 於 t_orderProduct 數據表中新增該訂單的商品內容。
             // 獲取訂單 id。
             Order order = orderDAO.getOrderByNumber(ConnUtils.getConn(), Order.class, number);
             Integer belongOrder = order.getId();
@@ -272,22 +316,30 @@ public class OrderServiceImpl implements OrderService {
             for (int i = 0; i < trolleyClass.getProduct().size(); ++i) {
                 orderDAO.addOrderProduct(ConnUtils.getConn(), trolleyClass.getProduct().get(i).getId(), trolleyClass.getQuantity().get(i), belongOrder);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new OrderServiceImplException("OrderServiceImpl 的 addOrder() 有問題。");
         }
     }
 
+    /**
+     * 切換訂單的狀態。
+     *
+     * @param status 訂單當前狀態。
+     * @param number 訂單編號。
+     * @throws OrderServiceImplException
+     */
     @Override
     public void switchStatus(Integer status, String number) throws OrderServiceImplException {
         try {
+            // 切換狀態。
             if (status == 0) {
                 status = 1;
             } else if (status == 1) {
                 status = 2;
             }
 
+            // 調用 DAO。
             orderDAO.switchStatus(ConnUtils.getConn(), status, number);
         } catch (Exception e) {
             e.printStackTrace();

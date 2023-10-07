@@ -19,15 +19,21 @@ public class FavoriteControllerImpl implements FavoriteController {
     private FavoriteServiceImpl favoriteService = null;
     private ProductServiceImpl productService = null;
 
+    /**
+     * 獲取指定會員的追蹤商品。
+     *
+     * @param req
+     * @return
+     * @throws FavoriteControllerImplException
+     */
     @Override
     public String getFavoriteByUserId(HttpServletRequest req) throws FavoriteControllerImplException {
         try {
-
             HttpSession session = req.getSession();
             User user = (User) session.getAttribute("user");
 
-            if (user != null && "general".equals(user.getIdentity())) { // 若非 null 表示已經登入。
-                // 獲取該用戶追蹤的商品。
+            if (user != null && "general".equals(user.getIdentity())) {
+                // 獲取該會員追蹤的商品。
                 int userId = user.getId();
                 List<Product> favoriteProductList = favoriteService.getFilteredFavoriteProductByUserId(req, userId);
 
@@ -44,13 +50,12 @@ public class FavoriteControllerImpl implements FavoriteController {
                 } else {
                     pages = favoriteProductCount / 6;
                 }
-                session.setAttribute("favoriteProductCount", favoriteProductCount); // 獲取的追蹤商品總數。
-                session.setAttribute("pages", pages); // 根據追蹤商品總數計算的總頁數。
 
+                session.setAttribute("favoriteProductCount", favoriteProductCount);
+                session.setAttribute("pages", pages);
                 session.setAttribute("favoriteProductList", favoriteProductAddedFavoAndTrolInfoList);
 
                 return "favorite";
-
             } else {
                 return "logIn";
             }
@@ -60,6 +65,14 @@ public class FavoriteControllerImpl implements FavoriteController {
         }
     }
 
+    /**
+     * 用於查詢數據庫中，該用戶是否已經追蹤該商品。
+     *
+     * @param productId 商品 id。
+     * @param userId    使用者 id。
+     * @return
+     * @throws FavoriteControllerImplException
+     */
     @Override
     public boolean checkFavorite(Integer productId, Integer userId) throws FavoriteControllerImplException {
         try {
@@ -70,13 +83,22 @@ public class FavoriteControllerImpl implements FavoriteController {
         }
     }
 
+    /**
+     * 新增或刪除追蹤的商品。
+     *
+     * @param productId 商品 id。
+     * @param req
+     * @param resp
+     * @return
+     * @throws FavoriteControllerImplException
+     */
     @Override
     public String add_delete_Favorite(Integer productId, HttpServletRequest req, HttpServletResponse resp) throws FavoriteControllerImplException {
         try {
             HttpSession session = req.getSession();
             User user = (User) session.getAttribute("user");
 
-            if (user != null && "general".equals(user.getIdentity())) { // 若非 null 表示已經登入。
+            if (user != null && "general".equals(user.getIdentity())) {
                 boolean b = favoriteService.addFavorite(productId, user.getId());
 
                 PrintWriter out = resp.getWriter();
@@ -93,7 +115,6 @@ public class FavoriteControllerImpl implements FavoriteController {
                 out.flush();
                 out.close();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new FavoriteControllerImplException("FavoriteControllerImpl 的 addFavorite() 有問題。");

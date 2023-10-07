@@ -118,8 +118,8 @@
                     <span class="pad_0 form_text">性別：</span><br>
                     <input th:if="${session.user.gender} == 1" type="radio" name="gender" value="1" checked style="margin-left: 50px" class="js_inputElement" disabled>
                     <input th:if="${session.user.gender} != 1" type="radio" name="gender" value="1" style="margin-left: 50px" class="js_inputElement" disabled>&nbsp;男
-                    <input th:if="${session.user.gender} == 2" type="radio" name="gender" value="2" checked style="margin-left: 50px" class="js_inputElement" disabled>
-                    <input th:if="${session.user.gender} != 2" type="radio" name="gender" value="2" style="margin-left: 50px" class="js_inputElement" disabled>&nbsp;女<br>
+                    <input th:if="${session.user.gender} == 0" type="radio" name="gender" value="0" checked style="margin-left: 50px" class="js_inputElement" disabled>
+                    <input th:if="${session.user.gender} != 0" type="radio" name="gender" value="0" style="margin-left: 50px" class="js_inputElement" disabled>&nbsp;女<br>
 
                     <span class="pad_0 form_text">生日：</span><br>
                     <input type="date" name="birthday" th:value="${session.user.birthday}" class="pad_0 form_text inline js_inputElement" style="margin: 10px 0px 10px 0px" disabled><br>
