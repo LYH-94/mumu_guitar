@@ -16,7 +16,6 @@
 網站主題：吉他與吉他周邊商品
 
 ## 頁面截圖與功能說明
-
 一共有 13 個頁面，如下：
 
 1. 商品主頁
@@ -141,7 +140,6 @@
 - 有分頁功能，每頁展示十項商品。
 
 ## 專案用到的技術
-
 前端：HTML、CSS、JavaScript、Bootstrap、Axios<br>
 後端：Java、Thymeleaf<br>
 資料庫：MySQL<br>
