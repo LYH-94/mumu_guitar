@@ -1,4 +1,4 @@
-CREATE DATABASE `mumu_guitar_db` CHARACTER SET 'utf8mb4';
+CREATE DATABASE mumu_guitar_db CHARACTER SET 'utf8mb4';
 
 USE mumu_guitar_db;
 
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `t_product` (
 
 /* 新增 t_product 數據表的數據。 */
 INSERT  INTO `t_product`(`id`,`number`,`photo`,`name`,`introduce`,`brand`,`model`,`type`,`inventory`,`sales`,`price`) VALUES 
-(0,'2001','2001.jpg','電吉他A-粉','粉白配色的電吉他，擁有獨特迷人的外觀和卓越的音樂表現。這款吉他採用了優質的木材和精密的工藝，確保了出色的音質和舒適的演奏體驗。','A','ABC','電吉他',5,10,42900),
+(0,'2001','2001.jpg','電吉他A-粉','粉白配色的電吉他，擁有獨特迷人的外觀和卓越的音樂表現。這款吉他採用了優質的木材和精密的工藝，確保了出色的音質和舒適的演奏體驗。','A','ABC','電吉他',5,10,42900,'正常'),
 (0,'2002','2002.jpg','電吉他B-黑','BBB123','B','B200','電吉他',3,17,55200,'正常'),
 (0,'2003','2003.jpg','電吉他C-白','CCC123','C','C300','電吉他',5,20,39900,'正常'),
 (0,'2004','2004.jpg','電吉他D-白','DDD123','D','D400','電吉他',6,15,52900,'正常'),
@@ -79,41 +79,41 @@ INSERT  INTO `t_order`(`id`,`number`,`date`,`totalAmount`,`status`,`owner`,`purc
 (0,'202305040115233278',NOW(),161600,0,1,'林阿華','0912345678','XX市YY區ZZ街');
 
 /*===== 建表順序 4 =====*/
-/* 訂單 - t_orderProduct */
-CREATE TABLE IF NOT EXISTS `t_orderProduct` (
+/* 訂單 - t_orderproduct */
+CREATE TABLE IF NOT EXISTS `t_orderproduct` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`product` INT NOT NULL,
 	`quantity` MEDIUMINT UNSIGNED NOT NULL DEFAULT 1,
 	`belongOrder` INT NOT NULL,
 	PRIMARY KEY (`id`),
-	KEY `FK_orderProduct_product` (`product`),
-	CONSTRAINT `FK_orderProduct_product` FOREIGN KEY (`product`) REFERENCES `t_product` (`id`),
-	KEY `FK_orderProduct_order` (`belongOrder`),
-	CONSTRAINT `FK_orderProduct_order` FOREIGN KEY (`belongOrder`) REFERENCES `t_order` (`id`)
+	KEY `FK_orderproduct_product` (`product`),
+	CONSTRAINT `FK_orderproduct_product` FOREIGN KEY (`product`) REFERENCES `t_product` (`id`),
+	KEY `FK_orderproduct_order` (`belongOrder`),
+	CONSTRAINT `FK_orderproduct_order` FOREIGN KEY (`belongOrder`) REFERENCES `t_order` (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
 /* 新增 t_orderProduct 數據表的數據。 */
-INSERT  INTO `t_orderProduct`(`id`,`product`,`quantity`,`belongOrder`) VALUES 
+INSERT  INTO `t_orderproduct`(`id`,`product`,`quantity`,`belongOrder`) VALUES
 (0,1,2,1),
 (0,4,1,1),
 (0,5,1,1);
 
 /*===== 建表順序 5 =====*/
-/* 購物車項 - t_trolleyItem */
-CREATE TABLE IF NOT EXISTS `t_trolleyItem` (
+/* 購物車項 - t_trolley */
+CREATE TABLE IF NOT EXISTS `t_trolley` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`product` INT NOT NULL,
 	`quantity` MEDIUMINT UNSIGNED NOT NULL DEFAULT 1,
 	`owner` INT NOT NULL,
 	PRIMARY KEY (`id`),
-	KEY `FK_trolleyItem_product` (`product`),
-	CONSTRAINT `FK_trolleyItem_product` FOREIGN KEY (`product`) REFERENCES `t_product` (`id`),
-	KEY `FK_trolleyItem_user` (`owner`),
-	CONSTRAINT `FK_trolleyItem_user` FOREIGN KEY (`owner`) REFERENCES `t_user` (`id`)
+	KEY `FK_trolley_product` (`product`),
+	CONSTRAINT `FK_trolley_product` FOREIGN KEY (`product`) REFERENCES `t_product` (`id`),
+	KEY `FK_trolley_user` (`owner`),
+	CONSTRAINT `FK_trolley_user` FOREIGN KEY (`owner`) REFERENCES `t_user` (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
 /* 新增 t_trolleyItem 數據表的數據。 */
-INSERT  INTO `t_trolleyItem`(`id`,`product`,`quantity`,`owner`) VALUES 
+INSERT  INTO `t_trolley`(`id`,`product`,`quantity`,`owner`) VALUES
 (0,3,1,1),
 (0,2,1,3),
 (0,3,1,3),

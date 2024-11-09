@@ -18,7 +18,8 @@ public class JDBCUtils {
 
         try {
             //1.讀取配置文件中的基本訊息。
-            fis = new FileInputStream("C:\\Users\\LIN-YAOHUA\\Desktop\\GitHub_local\\mumu_guitar\\src\\main\\java\\jdbc.properties");
+            //fis = new FileInputStream("C:\\Users\\LIN-YAOHUA\\Desktop\\GitHub_local\\mumu_guitar\\src\\main\\java\\jdbc.properties");
+            fis = new FileInputStream("/home/lin-yaohua/myApplication/tomcat/apache-tomcat-8.5.81/webapps/mumu_guitar/WEB-INF/classes/jdbc.properties");
 
             Properties pros = new Properties();
             pros.load(fis);

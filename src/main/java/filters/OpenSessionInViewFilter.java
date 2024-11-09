@@ -20,19 +20,19 @@ public class OpenSessionInViewFilter implements Filter {
         try {
             //開啟事務
             TransationManager.beginTrans();
-            System.out.println("事務已開啟!");
+            //System.out.println("事務已開啟!");
 
             //放行
-            System.out.println("請求已放行!");
+            //System.out.println("請求已放行!");
             filterChain.doFilter(servletRequest, servletResponse);
 
             //提交
             TransationManager.commit();
-            System.out.println("事務已提交!");
+            //System.out.println("事務已提交!");
 
             //關閉事務(連線)
             TransationManager.close();
-            System.out.println("事務已關閉!");
+            //System.out.println("事務已關閉!");
         } catch (Exception e) {
             TransationManager.rollback();
             e.printStackTrace();
