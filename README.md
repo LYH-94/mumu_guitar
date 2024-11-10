@@ -21,6 +21,12 @@ GitHub：[mumu_guitar](https://github.com/LYH-94/mumu_guitar)
 
 UI 設計：[MuMu guitar](https://www.figma.com/design/cb58OeimG6CF2uZLy9faNW/E-commerce-website?node-id=0-1&t=Ni6ESHiDjQv5NcCY-1) - 第一次使用 Figma 也是第一次設計前端頁面，因此有許多細節沒有注意到，在切板時也並未完全按照設計圖。
 
+Demo - http://linyaohua.ddns.net:8080/mumu_guitar/index.do
+
+測試帳號
+* 一般用戶 - 帳：user001 密：pwd001
+* 管理員 - 帳：root 密：abc123
+
 # 頁面與功能
 
 一共有 13 個頁面，如下：

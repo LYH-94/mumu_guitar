@@ -3,7 +3,7 @@ package dao;
 import pojo.Order;
 
 import java.sql.Connection;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderDAO {
@@ -17,7 +17,7 @@ public interface OrderDAO {
 
     public Order getOrderByNumber(Connection conn, Class<Order> clazz, String number);
 
-    public void addOrder(Connection conn, String number, Date date, Integer totalAmount, Integer owner, String purchaser, String phone, String address);
+    public void addOrder(Connection conn, String number, LocalDateTime date, Integer totalAmount, Integer owner, String purchaser, String phone, String address);
 
     public void addOrderProduct(Connection conn, Integer product, Integer quantity, Integer belongOrder);
 

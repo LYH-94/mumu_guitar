@@ -6,7 +6,7 @@ import dao.exception.OrderDAOImplException;
 import pojo.Order;
 
 import java.sql.Connection;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderDAOImpl extends BaseDAO implements OrderDAO {
@@ -152,7 +152,7 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
      * @throws OrderDAOImplException
      */
     @Override
-    public void addOrder(Connection conn, String number, Date date, Integer totalAmount, Integer owner, String purchaser, String phone, String address) throws OrderDAOImplException {
+    public void addOrder(Connection conn, String number, LocalDateTime date, Integer totalAmount, Integer owner, String purchaser, String phone, String address) throws OrderDAOImplException {
         try {
             String sql = "INSERT INTO t_order(number,date,totalAmount,owner,purchaser,phone,address) VALUES(?,?,?,?,?,?,?)";
             super.update(conn, sql, number, date, totalAmount, owner, purchaser, phone, address);
@@ -174,7 +174,7 @@ public class OrderDAOImpl extends BaseDAO implements OrderDAO {
     @Override
     public void addOrderProduct(Connection conn, Integer product, Integer quantity, Integer belongOrder) throws OrderDAOImplException {
         try {
-            String sql = "INSERT INTO t_orderProduct(product,quantity,belongOrder) VALUES(?,?,?)";
+            String sql = "INSERT INTO t_orderproduct(product,quantity,belongOrder) VALUES(?,?,?)";
             super.update(conn, sql, product, quantity, belongOrder);
         } catch (Exception e) {
             e.printStackTrace();

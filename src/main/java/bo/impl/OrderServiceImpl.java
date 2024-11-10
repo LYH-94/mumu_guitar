@@ -11,8 +11,9 @@ import util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
 
@@ -272,12 +273,12 @@ public class OrderServiceImpl implements OrderService {
             HttpSession session = req.getSession();
 
             // 設置訂單需要的資料。(1.訂單編號 2.下單日期 3.訂單總額 4.發貨狀態 5.所屬用戶 6.購買人 7.連絡電話 8.付款方式(固定的不用設置) 9.配送地址)
-            // 1.下單日期-獲取當前時間。
-            Date date = new Date();
+            // 1.下單日期-獲取指定時區的時間（例如亞洲台北）
+            LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Asia/Taipei"));
 
             // 2.訂單編號-獲取將當前時間轉成一整個字串並加上四位隨機數。
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
-            String number = sdf.format(date);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddhhmmss");
+            String number = localDateTime.format(formatter);
 
             // 生成四位隨機數。
             Random random = new Random();
@@ -306,7 +307,7 @@ public class OrderServiceImpl implements OrderService {
             // 9.配送地址 - address
 
             // 調用 DAO，於 t_order 數據表中新增訂單。
-            orderDAO.addOrder(ConnUtils.getConn(), number, date, totalAmount, owner, purchaser, phone, address);
+            orderDAO.addOrder(ConnUtils.getConn(), number, localDateTime, totalAmount, owner, purchaser, phone, address);
 
             // 於 t_orderProduct 數據表中新增該訂單的商品內容。
             // 獲取訂單 id。
