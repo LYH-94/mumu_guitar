@@ -22,7 +22,7 @@
 - 網站開發的基本技術 ( 無框架 )
 - MVC 架構設計
 - Thymeleaf 模板技術
-- MySQL 關聯型數據庫設計
+- 數據庫串接與設計 ( SQL )
 
 GitHub：[mumu_guitar](https://github.com/LYH-94/mumu_guitar)
 
