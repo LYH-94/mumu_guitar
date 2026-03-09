@@ -179,7 +179,6 @@ Demo - http://linyaohua.ddns.net:8080/mumu_guitar/index.do
    * 用戶：訂單 ⇒ 1：n
    * 用戶：購物車 ⇒ 1：n
    * 用戶：商品收藏 ⇒ 1：n
-   * 訂單：商品 ⇒ 1：n
    * 購物車：商品 ⇒ 1：1
    * 商品收藏：商品 ⇒ 1：1
    * 訂單：訂單商品 ⇒ 1：n
