@@ -2,7 +2,7 @@ CREATE DATABASE mumu_guitar_db CHARACTER SET 'utf8mb4';
 
 USE mumu_guitar_db;
 
-/* 根據 E-R 模型創建各實體的數據表。 */
+/* 根據 E-R 模型創建各實體的資料表。 */
 /*===== 建表順序 1 =====*/
 /* 用戶 - t_user */
 CREATE TABLE IF NOT EXISTS `t_user` (
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `t_user` (
 	PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
-/* 新增 t_user 數據表的數據。 */
+/* 新增 t_user 資料表的資料。 */
 INSERT  INTO `t_user`(`id`,`account`,`password`,`username`,`gender`,`birthday`,`phone`,`email`,`identity`,`status`) VALUES
 (0,'user001','pwd001','LYH',1,'1995-09-04','0912345678','user001@gmail.com','general','正常'),
 (0,'user002','pwd002','阿華',1,'1991-05-05','0987654321','user002@gmail.com','general','正常'),
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `t_product` (
 	PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
-/* 新增 t_product 數據表的數據。 */
+/* 新增 t_product 資料表的資料。 */
 INSERT  INTO `t_product`(`id`,`number`,`photo`,`name`,`introduce`,`brand`,`model`,`type`,`inventory`,`sales`,`price`) VALUES 
 (0,'2001','2001.jpg','電吉他A-粉','粉白配色的電吉他，擁有獨特迷人的外觀和卓越的音樂表現。這款吉他採用了優質的木材和精密的工藝，確保了出色的音質和舒適的演奏體驗。','A','ABC','電吉他',5,10,42900,'正常'),
 (0,'2002','2002.jpg','電吉他B-黑','BBB123','B','B200','電吉他',3,17,55200,'正常'),
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `t_order` (
 	CONSTRAINT `FK_order_user` FOREIGN KEY (`owner`) REFERENCES `t_user` (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
-/* 新增 t_order 數據表的數據。 */
+/* 新增 t_order 資料表的資料。 */
 INSERT  INTO `t_order`(`id`,`number`,`date`,`totalAmount`,`status`,`owner`,`purchaser`,`phone`,`address`) VALUES 
 (0,'202305040115233278',NOW(),161600,0,1,'林阿華','0912345678','XX市YY區ZZ街');
 
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `t_orderproduct` (
 	CONSTRAINT `FK_orderproduct_order` FOREIGN KEY (`belongOrder`) REFERENCES `t_order` (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
-/* 新增 t_orderProduct 數據表的數據。 */
+/* 新增 t_orderProduct 資料表的資料。 */
 INSERT  INTO `t_orderproduct`(`id`,`product`,`quantity`,`belongOrder`) VALUES
 (0,1,2,1),
 (0,4,1,1),
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `t_trolley` (
 	CONSTRAINT `FK_trolley_user` FOREIGN KEY (`owner`) REFERENCES `t_user` (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
-/* 新增 t_trolleyItem 數據表的數據。 */
+/* 新增 t_trolleyItem 資料表的資料。 */
 INSERT  INTO `t_trolley`(`id`,`product`,`quantity`,`owner`) VALUES
 (0,3,1,1),
 (0,2,1,3),
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `t_favorite` (
 	CONSTRAINT `FK_favorite_user` FOREIGN KEY (`owner`) REFERENCES `t_user` (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
-/* 新增 t_favorite 數據表的數據。 */
+/* 新增 t_favorite 資料表的資料。 */
 INSERT  INTO `t_favorite`(`id`,`product`,`owner`) VALUES 
 (0,6,1),
 (0,6,2),

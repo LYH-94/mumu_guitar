@@ -7,7 +7,7 @@
 
 [頁面與功能](#頁面與功能)
 
-[數據庫設計](#數據庫設計)
+[資料庫設計](#資料庫設計)
 
 [用到的技術](#用到的技術)
 
@@ -20,15 +20,15 @@
 主要使用以下技術：
 
 - Java Web 基礎技術：使用 Servlet、Filter、Listener 處理請求與應用事件。
-- MVC 架構設計：劃分控制器、業務邏輯與數據層，提升系統的模組化與可維護性。
-- Thymeleaf：根據頁面需求動態渲染系統數據，呈現給使用者。
-- MySQL：透過 JDBC 與其進行交互，用於保存系統業務數據，並根據 ER 模型圖創建數據表，確保結構清晰，方便維護與查詢。
+- MVC 架構設計：劃分控制器、業務邏輯與資料層，提升系統的模組化與可維護性。
+- Thymeleaf：根據頁面需求動態渲染系統資料，呈現給使用者。
+- MySQL：透過 JDBC 與其進行交互，用於保存系統業務資料，並根據 ER 模型圖創建資料表，確保結構清晰，方便維護與查詢。
 
 GitHub：[mumu_guitar](https://github.com/LYH-94/mumu_guitar)
 
 UI 設計：[MuMu guitar](https://www.figma.com/design/cb58OeimG6CF2uZLy9faNW/E-commerce-website?node-id=0-1&t=Ni6ESHiDjQv5NcCY-1) - 第一次使用 Figma 也是第一次設計前端頁面，有許多細節沒有注意到。
 
-Demo - https://kenny-tables-appraisal-tools.trycloudflare.com/mumu_guitar/index.do
+Demo - [MuMu guitar](https://kenny-tables-appraisal-tools.trycloudflare.com/mumu_guitar/index.do)
 
 測試帳號
 * 一般用戶 - 帳：user001 密：pwd001
@@ -158,9 +158,9 @@ Demo - https://kenny-tables-appraisal-tools.trycloudflare.com/mumu_guitar/index.
 - 根據商品編號搜尋商品。
 - 有分頁功能，每頁展示十項商品。
 
-# 數據庫設計
+# 資料庫設計
 
-1. 抽取實體 ( 應與數據表對應 ) 並分析其中的屬性
+1. 抽取實體 ( 應與資料表對應 ) 並分析其中的屬性
    * 用戶 - User <br>
      帳號、密碼、姓名、性別、生日、聯絡電話、電子信箱、用戶狀態
    * 商品 - Product <br>
@@ -173,7 +173,7 @@ Demo - https://kenny-tables-appraisal-tools.trycloudflare.com/mumu_guitar/index.
      商品、所屬用戶
    * 購物車 - Trolley <br>
      商品、數量、所屬用戶
-     ( 後端開發中還要有一個 “購物車類”，這個類並不和數據表進行對應。 )
+     ( 後端開發中還要有一個 “購物車類”，這個類並不和資料表進行對應。)
 2. 分析實體之間的關係
    * 用戶：訂單 ⇒ 1：n
    * 用戶：訂單 ⇒ 1：n
