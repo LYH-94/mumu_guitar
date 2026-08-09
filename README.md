@@ -28,7 +28,7 @@ GitHub：[mumu_guitar](https://github.com/LYH-94/mumu_guitar)
 
 UI 設計：[MuMu guitar](https://www.figma.com/design/cb58OeimG6CF2uZLy9faNW/E-commerce-website?node-id=0-1&t=Ni6ESHiDjQv5NcCY-1) - 第一次使用 Figma 也是第一次設計前端頁面，有許多細節沒有注意到。
 
-Demo - [MuMu guitar](https://kenny-tables-appraisal-tools.trycloudflare.com/mumu_guitar/index.do)
+Demo - [MuMu guitar](https://handhelds-decade-meals-watching.trycloudflare.com/mumu_guitar/index.do)
 
 測試帳號
 * 一般用戶 - 帳：user001 密：pwd001
